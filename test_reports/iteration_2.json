@@ -1,0 +1,87 @@
+{
+  "summary": "Frontend testing completed for P1 task - Watchlist & Alerts integration on EntitiesPage and TokensPage. Core functionality working correctly with one minor bug identified.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "AlertModal",
+        "issue": "Entity name not pre-filled correctly when modal reopens - useState only uses initial value, doesn't update when defaultEntity prop changes",
+        "selector": "AlertModal entity select",
+        "priority": "LOW",
+        "details": "When clicking alert button for different entities (e.g., Binance, then a16z), the modal always shows 'Alameda Research' as default instead of the clicked entity name. Fix: Add useEffect to update entity state when defaultEntity prop changes."
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/test_reports/iteration_2.json"
+  ],
+  "action_items": [
+    "Fix AlertModal to update entity state when defaultEntity prop changes (add useEffect hook)"
+  ],
+  "critical_code_review_comments": [
+    "AlertModal.jsx line 12: useState(defaultEntity || 'Alameda Research') only sets initial value - needs useEffect to sync with prop changes",
+    "EntitiesPage.jsx: Watchlist and Alert handlers properly implemented with correct data-testid attributes",
+    "TokensPage.jsx: Watchlist and Alert handlers properly implemented with correct data-testid attributes"
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A - frontend only testing",
+    "frontend": "95%"
+  },
+  "seed_data_creation": "N/A - all data is MOCKED on frontend",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "P1 Watchlist & Alerts integration tested. All data-testid attributes working: watchlist-btn-{entityId}, alert-btn-{entityId}, token-watchlist-btn, token-alert-btn. Minor bug: AlertModal doesn't update entity when reopened with different defaultEntity prop.",
+  "features_tested": {
+    "EntitiesPage_Watchlist_Toggle": {
+      "status": "PASS",
+      "details": "Watchlist button toggles state correctly - Eye icon changes to Check icon with green color when clicked, reverts when clicked again"
+    },
+    "EntitiesPage_Alert_Button": {
+      "status": "PASS",
+      "details": "Alert button opens AlertModal correctly"
+    },
+    "EntitiesPage_AlertModal_Conditions": {
+      "status": "PASS",
+      "details": "AlertModal allows selecting different conditions (Accumulation, Distribution, New Position, Large Transfer)"
+    },
+    "EntitiesPage_Multiple_Watchlist": {
+      "status": "PASS",
+      "details": "Multiple entities can be added to watchlist simultaneously"
+    },
+    "EntitiesPage_AlertModal_EntityPrefill": {
+      "status": "FAIL",
+      "details": "Entity name not pre-filled correctly - shows 'Alameda Research' instead of clicked entity name"
+    },
+    "TokensPage_Watchlist_Toggle": {
+      "status": "PASS",
+      "details": "Token watchlist button toggles state correctly - Eye icon changes to Check icon with green color"
+    },
+    "TokensPage_Alert_Button": {
+      "status": "PASS",
+      "details": "Token alert button opens AlertModal correctly"
+    },
+    "TokensPage_AlertModal_TokenSymbol": {
+      "status": "PASS",
+      "details": "Alert Preview correctly shows token symbol (ETH) in the notification text"
+    },
+    "TokensPage_Token_Switching": {
+      "status": "PASS",
+      "details": "Switching between tokens (ETH, SOL, etc.) maintains independent watchlist state per token"
+    },
+    "TokensPage_Hero_AlertButton": {
+      "status": "PASS",
+      "details": "'Create Token Alert' button in hero section opens AlertModal correctly"
+    },
+    "data_testid_attributes": {
+      "status": "PASS",
+      "details": "All required data-testid attributes present: watchlist-btn-{entityId}, alert-btn-{entityId}, token-watchlist-btn, token-alert-btn"
+    }
+  },
+  "mocked_data_note": "All data is MOCKED on frontend - watchlist state is local React state, not persisted to backend"
+}
