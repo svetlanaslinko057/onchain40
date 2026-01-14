@@ -102,6 +102,25 @@ export default function Header() {
                 </Tooltip>
               )}
 
+              {/* Watchlist Icon */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link 
+                    to="/watchlist"
+                    className={`p-2.5 rounded-full transition-colors ${
+                      isActive('/watchlist') 
+                        ? 'text-gray-900 bg-gray-100' 
+                        : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100'
+                    }`}
+                  >
+                    <Eye className="w-5 h-5" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent className="bg-gray-900 text-white">
+                  <p className="text-xs">Watchlist</p>
+                </TooltipContent>
+              </Tooltip>
+
               {/* Alerts Icon */}
               <Tooltip>
                 <TooltipTrigger asChild>
