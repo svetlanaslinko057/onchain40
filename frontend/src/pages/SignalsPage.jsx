@@ -709,7 +709,6 @@ const RuleBasedAlert = ({ item, onSaveRule }) => {
 
 export default function Watchlist() {
   const [watchlist, setWatchlist] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAlertsPanelOpen, setIsAlertsPanelOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [filterType, setFilterType] = useState('all');
