@@ -791,7 +791,9 @@ const actorDetailedData = {
   },
   'pantera': {
     id: 'pantera',
-    label: 'Pantera Capital',
+    real_name: 'Pantera Capital',
+    strategy_name: 'AI Narrative Accumulator',
+    identity_confidence: 0.94,
     address: '0x9876543210fedcba9876543210fedcba98765432',
     type: 'Fund',
     avatar: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png',
@@ -805,6 +807,21 @@ const actorDetailedData = {
       { trigger: 'Fund rebalancing detected', action: 'Pause new entries for 48h', priority: 'medium' },
       { trigger: 'Edge Score < 60', action: 'Reduce allocation by 40%', priority: 'high' },
     ],
+    correlation: {
+      movesWith: [
+        { id: 'alameda', strategy_name: 'SOL Ecosystem Accumulator', similarity: 76, overlap: 'Narrative timing' },
+        { id: 'a16z', strategy_name: 'Institutional Infrastructure Play', similarity: 74, overlap: 'Infrastructure thesis' },
+        { id: 'vitalik', strategy_name: 'L2 Infrastructure Builder', similarity: 71, overlap: 'ETH ecosystem' },
+      ],
+      frontRunners: [
+        { id: 'vitalik', strategy_name: 'L2 Infrastructure Builder', avgLeadTime: '+4.2h', frequency: '34%' },
+      ],
+      followedBy: [
+        { id: 'dwf-labs', strategy_name: 'Meme Momentum Rider', avgLagTime: '+6.2h', frequency: '28%' },
+        { id: 'a16z', strategy_name: 'Institutional Infrastructure Play', avgLagTime: '+12.4h', frequency: '18%' },
+      ],
+      cluster: { name: 'AI/Narrative', phase: 'Accumulating', size: 9 },
+    },
     cluster: {
       size: 9,
       confidence: 93,
