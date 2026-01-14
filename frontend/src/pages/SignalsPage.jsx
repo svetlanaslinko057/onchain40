@@ -345,8 +345,11 @@ const calculateSignalScore = (item) => {
 };
 
 // SIGNAL CARD — про событие + сущность + почему важно
-const SignalCard = ({ item, onRemove, onOpenAlerts }) => {
-  const { score, topReasons, tier } = calculateSignalScore(item);
+const SignalCard = ({ item, onRemove, onOpenAlerts, onUserAction }) => {
+  const { score, originalScore, decayed, decay, ageInHours, topReasons, tier, lifecycle } = calculateSignalScore(item);
+  const [showActionsMenu, setShowActionsMenu] = useState(false);
+  const [isMuted, setIsMuted] = useState(item.muted || false);
+  const [isTracking, setIsTracking] = useState(item.tracking || false);
 
   // Event + Why it matters
   const getEventInfo = () => {
