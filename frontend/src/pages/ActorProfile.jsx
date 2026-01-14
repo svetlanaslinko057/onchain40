@@ -1404,105 +1404,102 @@ export default function ActorProfile() {
               </div>
 
               {/* Why Follow */}
-              <div className="bg-white border border-gray-200 rounded-2xl p-5">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">Why follow this actor</h2>
-                <div className="space-y-2.5">
-                  {actor.whyFollow.map((item, i) => (
-                    <div key={i} className="flex items-start gap-3">
-                      {item.positive ? (
-                        <Check className="w-5 h-5 text-[#16C784] mt-0.5 flex-shrink-0" />
-                      ) : (
-                        <AlertTriangle className="w-5 h-5 text-[#F5A524] mt-0.5 flex-shrink-0" />
-                      )}
-                      <span className={item.positive ? 'text-gray-900' : 'text-gray-600'}>{item.text}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Performance Snapshot */}
-              <div className="bg-white border border-gray-200 rounded-2xl p-5">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">Performance snapshot</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  <div className="p-3 bg-gray-50 rounded-xl">
-                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Realized PnL</div>
-                    <div className={`text-lg font-bold ${actor.performance.realizedPnl.startsWith('+') ? 'text-[#16C784]' : 'text-[#EF4444]'}`}>
-                      {actor.performance.realizedPnl}
-                    </div>
-                  </div>
-                  <div className="p-3 bg-gray-50 rounded-xl">
-                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Win Rate</div>
-                    <div className="text-lg font-bold text-gray-900">{actor.performance.winRate}</div>
-                  </div>
-                  <div className="p-3 bg-gray-50 rounded-xl">
-                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Avg Hold Time</div>
-                    <div className="text-lg font-bold text-gray-900">{actor.performance.avgHoldTime}</div>
-                  </div>
-                  <div className="p-3 bg-gray-50 rounded-xl">
-                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Avg Drawdown</div>
-                    <div className="text-lg font-bold text-gray-900">{actor.performance.avgDrawdown}</div>
-                  </div>
-                  <div className="p-3 bg-gray-50 rounded-xl">
-                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Entry Delay</div>
-                    <div className="text-lg font-bold text-gray-900">{actor.performance.entryDelay}</div>
-                  </div>
-                  <div className="p-3 bg-gray-50 rounded-xl">
-                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Trades Analyzed</div>
-                    <div className="text-lg font-bold text-gray-900">{actor.performance.tradesAnalyzed}</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Asset Behavior Map */}
-              <div className="bg-white border border-gray-200 rounded-2xl p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-bold text-gray-900">What this actor trades</h2>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button className="p-1 hover:bg-gray-100 rounded"><Info className="w-4 h-4 text-gray-400" /></button>
-                    </TooltipTrigger>
-                    <TooltipContent className="bg-gray-900 text-white max-w-xs">
-                      <p className="text-xs">Asset Behavior Map — shows HOW this actor trades each asset, not just holdings</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-                <div className="space-y-2">
-                  {actor.assetBehavior.map((asset, i) => (
-                    <Link 
-                      key={i} 
-                      to={`/tokens?search=${asset.token}`}
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="font-semibold text-gray-900 w-16">{asset.token}</span>
-                        <span className="text-sm text-gray-500">—</span>
-                        <span className="text-sm font-medium text-gray-700">{asset.behavior}</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-white border border-gray-200 rounded-xl p-4">
+                  <h3 className="text-sm font-bold text-gray-900 mb-3">Why follow this actor</h3>
+                  <div className="space-y-2">
+                    {actor.whyFollow.map((item, i) => (
+                      <div key={i} className="flex items-start gap-2">
+                        {item.positive ? (
+                          <Check className="w-4 h-4 text-[#16C784] mt-0.5 flex-shrink-0" />
+                        ) : (
+                          <AlertTriangle className="w-4 h-4 text-[#F5A524] mt-0.5 flex-shrink-0" />
+                        )}
+                        <span className={`text-sm ${item.positive ? 'text-gray-900' : 'text-gray-500'}`}>{item.text}</span>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <span className={`px-2 py-1 rounded-lg text-xs font-medium ${
+                    ))}
+                  </div>
+                </div>
+
+                {/* Performance Snapshot - compact */}
+                <div className="bg-white border border-gray-200 rounded-xl p-4">
+                  <h3 className="text-sm font-bold text-gray-900 mb-3">Performance snapshot</h3>
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="p-2 bg-gray-50 rounded-lg">
+                      <div className="text-[10px] text-gray-500 uppercase mb-0.5">PnL</div>
+                      <div className={`text-sm font-bold ${actor.performance.realizedPnl.startsWith('+') ? 'text-[#16C784]' : 'text-[#EF4444]'}`}>
+                        {actor.performance.realizedPnl}
+                      </div>
+                    </div>
+                    <div className="p-2 bg-gray-50 rounded-lg">
+                      <div className="text-[10px] text-gray-500 uppercase mb-0.5">Win Rate</div>
+                      <div className="text-sm font-bold text-gray-900">{actor.performance.winRate}</div>
+                    </div>
+                    <div className="p-2 bg-gray-50 rounded-lg">
+                      <div className="text-[10px] text-gray-500 uppercase mb-0.5">Hold Time</div>
+                      <div className="text-sm font-bold text-gray-900">{actor.performance.avgHoldTime}</div>
+                    </div>
+                    <div className="p-2 bg-gray-50 rounded-lg">
+                      <div className="text-[10px] text-gray-500 uppercase mb-0.5">Drawdown</div>
+                      <div className="text-sm font-bold text-gray-900">{actor.performance.avgDrawdown}</div>
+                    </div>
+                    <div className="p-2 bg-gray-50 rounded-lg">
+                      <div className="text-[10px] text-gray-500 uppercase mb-0.5">Delay</div>
+                      <div className="text-sm font-bold text-gray-900">{actor.performance.entryDelay}</div>
+                    </div>
+                    <div className="p-2 bg-gray-50 rounded-lg">
+                      <div className="text-[10px] text-gray-500 uppercase mb-0.5">Trades</div>
+                      <div className="text-sm font-bold text-gray-900">{actor.performance.tradesAnalyzed}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Asset Behavior + Risk in 2 cols */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Asset Behavior Map - compact */}
+                <div className="bg-white border border-gray-200 rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-sm font-bold text-gray-900">What this actor trades</h3>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button className="p-0.5 hover:bg-gray-100 rounded"><Info className="w-3.5 h-3.5 text-gray-400" /></button>
+                      </TooltipTrigger>
+                      <TooltipContent className="bg-gray-900 text-white max-w-xs">
+                        <p className="text-xs">Asset Behavior Map — HOW this actor trades, not just holdings</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                  <div className="space-y-1.5">
+                    {actor.assetBehavior.map((asset, i) => (
+                      <Link 
+                        key={i} 
+                        to={`/tokens?search=${asset.token}`}
+                        className="flex items-center justify-between p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-gray-900 text-sm w-12">{asset.token}</span>
+                          <span className="text-xs text-gray-500">—</span>
+                          <span className="text-xs text-gray-600">{asset.behavior}</span>
+                        </div>
+                        <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
                           asset.bias.includes('Bullish') ? 'bg-emerald-100 text-emerald-700' :
                           asset.bias === 'Neutral' ? 'bg-gray-100 text-gray-600' :
                           'bg-blue-100 text-blue-700'
                         }`}>
                           {asset.bias}
                         </span>
-                        <ArrowUpRight className="w-4 h-4 text-gray-400" />
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Risk & Flags */}
-              <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-                <button
-                  onClick={() => setShowRiskDetails(!showRiskDetails)}
-                  className="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <Shield className="w-5 h-5 text-gray-700" />
-                    <h2 className="text-lg font-bold text-gray-900">Risk & Flags</h2>
-                    <span className={`px-2 py-1 rounded-lg text-xs font-semibold ${
+                {/* Risk & Flags - compact, always visible */}
+                <div className="bg-white border border-gray-200 rounded-xl p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Shield className="w-4 h-4 text-gray-600" />
+                    <h3 className="text-sm font-bold text-gray-900">Risk & Flags</h3>
+                    <span className={`px-1.5 py-0.5 rounded text-[10px] font-semibold ${
                       actor.riskFlags.overallRisk < 30 ? 'bg-emerald-100 text-emerald-700' :
                       actor.riskFlags.overallRisk < 60 ? 'bg-amber-100 text-amber-700' :
                       'bg-red-100 text-red-700'
@@ -1510,51 +1507,37 @@ export default function ActorProfile() {
                       {actor.riskFlags.overallRisk}/100
                     </span>
                   </div>
-                  {showRiskDetails ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
-                </button>
-
-                {showRiskDetails && (
-                  <div className="px-5 pb-5">
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="p-3 bg-gray-50 rounded-xl">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600">Sanctions</span>
-                          {actor.riskFlags.sanctions ? (
-                            <span className="text-red-500 font-semibold text-sm">Yes</span>
-                          ) : (
-                            <span className="text-emerald-500 font-semibold text-sm flex items-center gap-1"><Check className="w-4 h-4" /> Clean</span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="p-3 bg-gray-50 rounded-xl">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600">Mixers</span>
-                          {actor.riskFlags.mixers ? (
-                            <span className="text-red-500 font-semibold text-sm">Detected</span>
-                          ) : (
-                            <span className="text-emerald-500 font-semibold text-sm flex items-center gap-1"><Check className="w-4 h-4" /> None</span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="p-3 bg-gray-50 rounded-xl">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600">Risky Approvals</span>
-                          <span className={`font-semibold text-sm ${actor.riskFlags.riskyApprovals > 0 ? 'text-amber-500' : 'text-emerald-500'}`}>
-                            {actor.riskFlags.riskyApprovals}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="p-3 bg-gray-50 rounded-xl">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600">Unverified Contracts</span>
-                          <span className={`font-semibold text-sm ${actor.riskFlags.unverifiedContracts > 0 ? 'text-amber-500' : 'text-emerald-500'}`}>
-                            {actor.riskFlags.unverifiedContracts}
-                          </span>
-                        </div>
-                      </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="p-2 bg-gray-50 rounded-lg flex items-center justify-between">
+                      <span className="text-xs text-gray-600">Sanctions</span>
+                      {!actor.riskFlags.sanctions ? (
+                        <span className="text-emerald-500 text-xs font-medium flex items-center gap-0.5"><Check className="w-3 h-3" /> Clean</span>
+                      ) : (
+                        <span className="text-red-500 text-xs font-medium">Yes</span>
+                      )}
+                    </div>
+                    <div className="p-2 bg-gray-50 rounded-lg flex items-center justify-between">
+                      <span className="text-xs text-gray-600">Mixers</span>
+                      {!actor.riskFlags.mixers ? (
+                        <span className="text-emerald-500 text-xs font-medium flex items-center gap-0.5"><Check className="w-3 h-3" /> None</span>
+                      ) : (
+                        <span className="text-red-500 text-xs font-medium">Detected</span>
+                      )}
+                    </div>
+                    <div className="p-2 bg-gray-50 rounded-lg flex items-center justify-between">
+                      <span className="text-xs text-gray-600">Risky Approvals</span>
+                      <span className={`text-xs font-semibold ${actor.riskFlags.riskyApprovals > 0 ? 'text-amber-500' : 'text-emerald-500'}`}>
+                        {actor.riskFlags.riskyApprovals}
+                      </span>
+                    </div>
+                    <div className="p-2 bg-gray-50 rounded-lg flex items-center justify-between">
+                      <span className="text-xs text-gray-600">Unverified</span>
+                      <span className={`text-xs font-semibold ${actor.riskFlags.unverifiedContracts > 0 ? 'text-amber-500' : 'text-emerald-500'}`}>
+                        {actor.riskFlags.unverifiedContracts}
+                      </span>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             </div>
 
