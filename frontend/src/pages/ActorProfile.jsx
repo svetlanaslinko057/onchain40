@@ -37,11 +37,13 @@ const getEdgeScoreColor = (score) => {
   return 'text-red-500 bg-red-50 border-red-200';
 };
 
-// Mock actor detailed data with new fields
+// Mock actor detailed data with HYBRID identity + Correlation data
 const actorDetailedData = {
   'vitalik': {
     id: 'vitalik',
-    label: 'Vitalik.eth',
+    real_name: 'Vitalik.eth',
+    strategy_name: 'L2 Infrastructure Builder',
+    identity_confidence: 0.95,
     address: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
     type: 'Whale',
     avatar: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
@@ -55,6 +57,27 @@ const actorDetailedData = {
       { trigger: 'Behavior shifts to Distribution', action: 'Exit all positions', priority: 'critical' },
       { trigger: 'Entry delay > 8h consistently', action: 'Stop following new entries', priority: 'medium' },
     ],
+    
+    // CORRELATION & INFLUENCE DATA
+    correlation: {
+      movesWith: [
+        { id: 'a16z', strategy_name: 'Institutional Infrastructure Play', similarity: 82, overlap: 'L2 accumulation' },
+        { id: 'pantera', strategy_name: 'AI Narrative Accumulator', similarity: 71, overlap: 'ETH ecosystem' },
+        { id: 'alameda', strategy_name: 'SOL Ecosystem Accumulator', similarity: 58, overlap: 'Macro positions' },
+      ],
+      frontRunners: [
+        { id: 'pantera', strategy_name: 'AI Narrative Accumulator', avgLeadTime: '+4.2h', frequency: '34%' },
+      ],
+      followedBy: [
+        { id: 'dwf-labs', strategy_name: 'Meme Momentum Rider', avgLagTime: '+6.8h', frequency: '28%' },
+        { id: 'unknown-whale-1', strategy_name: 'High-Risk Flip Trader', avgLagTime: '+12.4h', frequency: '15%' },
+      ],
+      cluster: {
+        name: 'L2/Infrastructure',
+        phase: 'Accumulating',
+        size: 12,
+      },
+    },
     
     // CLUSTER INFO - Source of Truth
     cluster: {
