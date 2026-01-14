@@ -1020,7 +1020,10 @@ export default function Watchlist() {
         deltaSignals: [],
         riskLevel: 'low',
         bridgeAligned: false,
-        dormantDays: 0
+        dormantDays: 0,
+        timestamp: Date.now() - (1000 * 60 * 60 * 12), // 12 hours ago
+        muted: false,
+        tracking: false
       },
       {
         id: 8,
