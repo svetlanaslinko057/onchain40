@@ -367,7 +367,9 @@ const actorDetailedData = {
   },
   'dwf-labs': {
     id: 'dwf-labs',
-    label: 'DWF Labs',
+    real_name: 'DWF Labs',
+    strategy_name: 'Meme Momentum Rider',
+    identity_confidence: 0.88,
     address: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb',
     type: 'Fund',
     avatar: 'https://s2.coinmarketcap.com/static/img/exchanges/64x64/89.png',
@@ -381,6 +383,20 @@ const actorDetailedData = {
       { trigger: 'Actor win rate < 50%', action: 'Stop following entirely', priority: 'critical' },
       { trigger: 'Market making spreads widen > 2%', action: 'Pause copy trading', priority: 'medium' },
     ],
+    correlation: {
+      movesWith: [
+        { id: 'unknown-whale-1', strategy_name: 'High-Risk Flip Trader', similarity: 68, overlap: 'Meme momentum' },
+        { id: 'wintermute', strategy_name: 'DeFi Yield Optimizer', similarity: 52, overlap: 'MM operations' },
+      ],
+      frontRunners: [
+        { id: 'alameda', strategy_name: 'SOL Ecosystem Accumulator', avgLeadTime: '+4.5h', frequency: '41%' },
+        { id: 'pantera', strategy_name: 'AI Narrative Accumulator', avgLeadTime: '+6.2h', frequency: '28%' },
+      ],
+      followedBy: [
+        { id: 'unknown-whale-1', strategy_name: 'High-Risk Flip Trader', avgLagTime: '+2.1h', frequency: '52%' },
+      ],
+      cluster: { name: 'Meme/Momentum', phase: 'Active', size: 15 },
+    },
     cluster: {
       size: 8,
       confidence: 86,
