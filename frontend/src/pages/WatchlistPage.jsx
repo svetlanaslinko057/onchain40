@@ -470,7 +470,7 @@ const WatchlistPage = () => {
           )}
         </div>
 
-        {/* Watchlist Grid - Светлые карточки */}
+        {/* Watchlist Grid - Fixed Structure Cards */}
         {filteredWatchlist.length === 0 ? (
           <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
             <Eye className="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -485,140 +485,153 @@ const WatchlistPage = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredWatchlist.map(item => (
-              <div
-                key={item.id}
-                className={`bg-white rounded-lg border p-4 hover:shadow-md transition-all ${
-                  item.behavior === 'accumulating' ? 'border-emerald-200' :
-                  item.behavior === 'distributing' ? 'border-red-200' :
-                  item.bridgeAligned ? 'border-blue-200' :
-                  'border-gray-200'
-                }`}
-              >
-                {/* Top: Name + Actions */}
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-sm font-bold text-gray-900 truncate">{item.name}</h3>
-                      {item.verified && <CheckCircle className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />}
+          <>
+            {/* Grid List - NOT masonry */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+              {paginatedWatchlist.map(item => (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow"
+                >
+                  {/* A. IDENTITY - Always same height */}
+                  <div className="flex items-start justify-between mb-3 pb-3 border-b border-gray-100">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-sm font-bold text-gray-900 truncate">{item.name}</h3>
+                        {item.verified && <CheckCircle className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" />}
+                      </div>
+                      <p className="text-xs text-gray-500">{item.type}</p>
                     </div>
-                    <p className="text-xs text-gray-500">{item.type}</p>
+                    
+                    <div className="flex items-center gap-1 ml-2">
+                      <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded transition-colors">
+                        <Bell className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => handleRemove(item.id)}
+                        className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
-                  
-                  <div className="flex items-center gap-1">
-                    <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded transition-colors">
-                      <Bell className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={() => handleRemove(item.id)}
-                      className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
 
-                {/* Status Pills - Цветные, но мягкие */}
-                <div className="flex items-center gap-1.5 mb-3">
-                  <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${
-                    item.behavior === 'accumulating' ? 'bg-emerald-100 text-emerald-700' :
-                    item.behavior === 'distributing' ? 'bg-red-100 text-red-700' :
-                    item.behavior === 'rotating' ? 'bg-blue-100 text-blue-700' :
-                    'bg-gray-100 text-gray-600'
-                  }`}>
-                    {item.behavior}
-                  </span>
-                  
-                  {item.risk !== 'low' && (
+                  {/* B. STATE - Color ONLY here */}
+                  <div className="flex items-center gap-2 mb-3 pb-3 border-b border-gray-100">
                     <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${
-                      item.risk === 'high' ? 'bg-red-50 text-red-600 border border-red-200' :
-                      'bg-amber-50 text-amber-600 border border-amber-200'
+                      item.behavior === 'accumulating' ? 'bg-emerald-100 text-emerald-700' :
+                      item.behavior === 'distributing' ? 'bg-red-100 text-red-700' :
+                      item.behavior === 'rotating' ? 'bg-blue-100 text-blue-700' :
+                      'bg-gray-100 text-gray-600'
                     }`}>
-                      {item.risk} risk
+                      {item.behavior}
                     </span>
-                  )}
-                  
-                  {item.bridgeAligned && (
-                    <span className="px-2 py-0.5 rounded text-[10px] font-semibold uppercase bg-blue-50 text-blue-600 border border-blue-200">
-                      Bridge
-                    </span>
-                  )}
-                  
-                  {item.dormant && (
-                    <span className="px-2 py-0.5 rounded text-[10px] font-semibold uppercase bg-gray-100 text-gray-500 flex items-center gap-1">
-                      <Clock className="w-2.5 h-2.5" />
-                      Dormant {item.dormantDays}d
-                    </span>
-                  )}
-                </div>
-
-                {/* Changes List - Если есть */}
-                {item.changes.length > 0 && (
-                  <div className="mb-3 space-y-1">
-                    {item.changes.map((change, idx) => {
-                      const Icon = change.icon;
-                      return (
-                        <div key={idx} className="flex items-center gap-1.5 text-xs text-gray-600">
-                          <Icon className="w-3 h-3 text-gray-400" />
-                          <span>{change.text}</span>
-                        </div>
-                      );
-                    })}
+                    
+                    {item.risk !== 'low' && (
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${
+                        item.risk === 'high' ? 'bg-red-100 text-red-700' :
+                        'bg-amber-100 text-amber-700'
+                      }`}>
+                        {item.risk}
+                      </span>
+                    )}
+                    
+                    {item.bridgeAligned && (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold uppercase bg-blue-100 text-blue-700">
+                        Bridge
+                      </span>
+                    )}
                   </div>
-                )}
 
-                {/* Mini Indicators */}
-                <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                  <div className="flex items-center gap-3 text-xs">
-                    <div>
-                      <div className="text-gray-500 text-[10px] uppercase mb-0.5">Balance</div>
-                      <div className="font-semibold text-gray-900">{item.balance}</div>
+                  {/* C. SNAPSHOT - Only 3 fields */}
+                  <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-100">
+                    <div className="flex-1">
+                      <div className="text-[10px] text-gray-500 uppercase mb-0.5">Balance</div>
+                      <div className="text-sm font-semibold text-gray-900">{item.balance}</div>
                     </div>
-                    <div>
-                      <div className="text-gray-500 text-[10px] uppercase mb-0.5">24h</div>
-                      <div className={`font-semibold flex items-center gap-0.5 ${
+                    <div className="flex-1 text-center">
+                      <div className="text-[10px] text-gray-500 uppercase mb-0.5">24h</div>
+                      <div className={`text-sm font-semibold ${
                         item.change24h > 0 ? 'text-emerald-600' :
                         item.change24h < 0 ? 'text-red-600' :
                         'text-gray-500'
                       }`}>
-                        {item.change24h > 0 ? <ArrowUpRight className="w-3 h-3" /> : 
-                         item.change24h < 0 ? <ArrowDownRight className="w-3 h-3" /> : null}
                         {item.change24h > 0 ? '+' : ''}{item.change24h}%
+                      </div>
+                    </div>
+                    <div className="flex-1 text-right">
+                      <div className="text-[10px] text-gray-500 uppercase mb-0.5">Score</div>
+                      <div className={`inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-bold ${
+                        item.watchScore >= 70 ? 'bg-red-100 text-red-700' :
+                        item.watchScore >= 40 ? 'bg-amber-100 text-amber-700' :
+                        'bg-gray-100 text-gray-600'
+                      }`}>
+                        {item.watchScore}
                       </div>
                     </div>
                   </div>
 
-                  {/* Signal Score - Вторичен */}
+                  {/* D. CTA - Actions */}
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] text-gray-400">Score</span>
-                    <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-bold ${
-                      item.signalScore >= 70 ? 'bg-red-100 text-red-700' :
-                      item.signalScore >= 40 ? 'bg-amber-100 text-amber-700' :
-                      'bg-gray-100 text-gray-500'
-                    }`}>
-                      {item.signalScore}
-                    </span>
+                    <Link
+                      to={`/wallet/${item.address}`}
+                      className="flex-1 text-center px-3 py-1.5 text-xs font-semibold text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded transition-colors"
+                    >
+                      View address →
+                    </Link>
+                    {item.hasActiveSignals && (
+                      <Link
+                        to="/signals"
+                        className="flex-1 text-center px-3 py-1.5 text-xs font-semibold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 rounded transition-colors"
+                      >
+                        View signals →
+                      </Link>
+                    )}
                   </div>
                 </div>
+              ))}
+            </div>
 
-                {/* Exposure Hint - Subtle */}
-                {item.exposure && (
-                  <div className="mt-2 pt-2 border-t border-gray-100">
-                    <span className="text-[10px] text-gray-500">{item.exposure}</span>
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-gray-600">
+                  Showing {startIndex + 1}-{Math.min(endIndex, filteredWatchlist.length)} of {filteredWatchlist.length}
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                    disabled={currentPage === 1}
+                    className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
+                          currentPage === page
+                            ? 'bg-gray-900 text-white'
+                            : 'text-gray-600 hover:bg-gray-100'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
                   </div>
-                )}
-
-                {/* View CTA */}
-                <Link
-                  to={`/wallet/${item.address}`}
-                  className="mt-3 block text-center text-xs font-semibold text-gray-600 hover:text-gray-900 transition-colors"
-                >
-                  View address →
-                </Link>
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                    disabled={currentPage === totalPages}
+                    className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </div>
 
