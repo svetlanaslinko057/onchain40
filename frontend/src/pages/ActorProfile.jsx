@@ -73,6 +73,31 @@ const actorDetailedData = {
       bestPerformsIn: 'Risk-On',
     },
     
+    // FOLLOWER REALITY CHECK - NEW
+    followerReality: {
+      avgEntryDelay: '5.2h',
+      expectedSlippage: '0.8%',
+      modeledROI30d: { actor: '+18%', follower: '+9%' },
+      maxDDFollower: '11.4%',
+      crowdingFactor: 'Low',
+    },
+    
+    // EDGE DECAY - NEW
+    edgeDecay: {
+      status: 'stable', // stable / degrading / exhausted
+      trend: 'Entry delay stable over 30d',
+      successRateTrend: '+2% vs last month',
+      crowdFollowing: '~120 followers',
+      lastUpdated: '2h ago',
+    },
+    
+    // DO NOT FOLLOW IF - NEW
+    doNotFollowIf: [
+      { condition: 'VIX > 30', reason: 'Actor underperforms in high volatility' },
+      { condition: 'Token liquidity < $5M', reason: 'Slippage kills edge' },
+      { condition: 'Entry delay > 6h', reason: 'Late entries show -40% ROI' },
+    ],
+    
     // COPY FEED - Recent Actions
     copyFeed: [
       { id: 1, type: 'BUY', token: 'ARB', size: '$45K', time: '2h ago', price: '$1.42', txHash: '0xabc...123', entryDelay: '1.2h' },
