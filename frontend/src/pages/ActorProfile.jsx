@@ -1637,7 +1637,7 @@ export default function ActorProfile() {
                         <button className="p-1 hover:bg-indigo-100 rounded"><Info className="w-4 h-4 text-indigo-400" /></button>
                       </TooltipTrigger>
                       <TooltipContent className="bg-gray-900 text-white max-w-xs">
-                        <p className="text-xs">What-if calculator showing hypothetical results if you had copied this actor's trades with realistic delays and slippage.</p>
+                        <p className="text-xs">What-if calculator showing hypothetical results if you had copied this actor&apos;s trades with realistic delays and slippage.</p>
                       </TooltipContent>
                     </Tooltip>
                   </div>
