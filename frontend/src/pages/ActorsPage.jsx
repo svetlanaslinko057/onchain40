@@ -263,18 +263,19 @@ const actionColors = {
   'BRIDGE': 'text-purple-600',
 };
 
-// Actor Card Component - Enhanced
+// Actor Card Component - Enhanced with Edge Score
 const ActorCard = ({ actor, isFollowed, onToggleFollow }) => {
   const confidence = confidenceColors[actor.confidence];
   const chain = chainConfig[actor.primaryChain] || { color: 'bg-gray-500', label: actor.primaryChain };
+  const edgeColor = getEdgeScoreColor(actor.edgeScore);
   
   return (
     <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-400 transition-all group h-full flex flex-col">
-      {/* Confidence strip */}
-      <div className={`h-1 ${confidence.bg}`} />
+      {/* Edge Score strip instead of confidence */}
+      <div className={`h-1 ${actor.edgeScore >= 75 ? 'bg-emerald-500' : actor.edgeScore >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
       
       <div className="p-4 flex flex-col flex-1">
-        {/* Header */}
+        {/* Header with Edge Score badge */}
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
             {/* Avatar */}
@@ -292,28 +293,36 @@ const ActorCard = ({ actor, isFollowed, onToggleFollow }) => {
                   {actor.type}
                 </span>
                 <span className="text-xs text-gray-400">•</span>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="text-xs text-gray-500">{actor.clusterSize} wallets</span>
-                  </TooltipTrigger>
-                  <TooltipContent className="bg-gray-900 text-white">
-                    <p className="text-xs">Cluster of {actor.clusterSize} linked addresses</p>
-                  </TooltipContent>
-                </Tooltip>
+                <span className="text-xs text-gray-500">{actor.clusterSize} wallets</span>
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-end gap-1">
-            <span className={`text-xs font-semibold ${confidence.text}`}>
-              {confidence.label.split(' ')[0]}
-            </span>
-            <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${latencyColors[actor.latency]}`}>
-              {actor.latency}
-            </span>
+          {/* EDGE SCORE BADGE */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className={`px-2 py-1 rounded-lg border text-sm font-bold ${edgeColor}`}>
+                {actor.edgeScore}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent className="bg-gray-900 text-white max-w-xs">
+              <p className="text-xs font-semibold mb-1">Edge Score: {actor.edgeScore}/100</p>
+              <p className="text-xs text-gray-300">Timing (30%) + ROI Adjusted (25%) + Stability (20%) + Risk (15%) + Signals (10%)</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+
+        {/* Latency + Chain row */}
+        <div className="flex items-center justify-between mb-3">
+          <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${latencyColors[actor.latency]}`}>
+            {actor.latency}
+          </span>
+          <div className="flex items-center gap-1.5">
+            <div className={`w-2 h-2 rounded-full ${chain.color}`} />
+            <span className="text-xs text-gray-500">{chain.label}</span>
           </div>
         </div>
 
-        {/* Last Action - NEW */}
+        {/* Last Action */}
         <div className="mb-3 p-2 bg-gray-50 rounded-lg flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Activity className="w-3.5 h-3.5 text-gray-400" />
