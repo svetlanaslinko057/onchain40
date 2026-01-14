@@ -387,14 +387,14 @@ export default function WalletsPage() {
               </div>
               <div className="flex items-center gap-3">
                 <div className="relative flex-1 max-w-md">
-                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none z-10" />
                   <input
                     type="text"
                     placeholder="Search wallets..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     data-testid="wallets-search-input"
-                    className="w-full pl-11 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-gray-900 transition-colors"
+                    className="w-full pl-11 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-gray-900 transition-colors"
                   />
                 </div>
                 <div className="flex items-center gap-2 bg-gray-50 rounded-xl p-1">
