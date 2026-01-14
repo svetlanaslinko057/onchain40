@@ -259,7 +259,6 @@ const actorDetailedData = {
       ],
       cluster: { name: 'SOL Ecosystem', phase: 'Rotating', size: 8 },
     },
-    ],
     cluster: {
       size: 12,
       confidence: 94,
