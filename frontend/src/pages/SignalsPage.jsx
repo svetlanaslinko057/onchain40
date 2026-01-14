@@ -323,11 +323,24 @@ const calculateSignalScore = (item) => {
   // Sort breakdown by score (highest first)
   breakdown.sort((a, b) => b.score - a.score);
 
+  // Apply confidence decay
+  const baseScore = Math.min(totalScore, 100);
+  const decayResult = applyConfidenceDecay(baseScore, item.timestamp, item.statusChange === '24h');
+  const finalScore = typeof decayResult === 'object' ? decayResult.score : decayResult;
+  
+  // Determine lifecycle based on final score
+  const lifecycle = getSignalLifecycle(item.timestamp, finalScore);
+
   return {
-    score: Math.min(totalScore, 100),
+    score: finalScore,
+    originalScore: typeof decayResult === 'object' ? decayResult.originalScore : baseScore,
+    decayed: typeof decayResult === 'object' ? decayResult.decayed : false,
+    decay: typeof decayResult === 'object' ? decayResult.decay : 0,
+    ageInHours: typeof decayResult === 'object' ? decayResult.ageInHours : 0,
     breakdown,
     topReasons: breakdown.slice(0, 3),
-    tier: totalScore >= 70 ? 'critical' : totalScore >= 40 ? 'notable' : 'low'
+    tier: finalScore >= 70 ? 'critical' : finalScore >= 40 ? 'notable' : 'low',
+    lifecycle
   };
 };
 
