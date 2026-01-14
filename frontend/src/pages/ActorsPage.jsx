@@ -159,7 +159,9 @@ const actorsData = [
   },
   {
     id: 'unknown-whale-1',
-    label: 'Smart Whale #4721',
+    real_name: 'Smart Whale #4721',
+    strategy_name: 'High-Risk Flip Trader',
+    identity_confidence: 0.32,
     address: '0xabcdef1234567890abcdef1234567890abcdef12',
     type: 'Whale',
     avatar: null,
@@ -182,7 +184,9 @@ const actorsData = [
   },
   {
     id: 'pantera',
-    label: 'Pantera Capital',
+    real_name: 'Pantera Capital',
+    strategy_name: 'AI Narrative Accumulator',
+    identity_confidence: 0.94,
     address: '0x9876543210fedcba9876543210fedcba98765432',
     type: 'Fund',
     avatar: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png',
