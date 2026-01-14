@@ -1145,7 +1145,7 @@ export default function Watchlist() {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [filterType, behaviorFilter, statusChangeFilter, riskSpikeFilter, bridgeAlignedFilter, dormantFilter, searchQuery, viewMode]);
+  }, [filterType, behaviorFilter, statusChangeFilter, riskSpikeFilter, bridgeAlignedFilter, dormantFilter, searchTerm, viewMode]);
 
   const activeWatching = watchlist.filter(item => item.watching).length;
   
