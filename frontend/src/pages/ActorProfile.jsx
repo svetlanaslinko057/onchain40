@@ -4,7 +4,7 @@ import {
   ArrowLeft, Star, Bell, Eye, Check, AlertTriangle, TrendingUp, TrendingDown,
   Shield, Activity, Zap, Target, Clock, Info, ChevronDown, ChevronUp, X, Users,
   Wallet, ExternalLink, Copy, ArrowUpRight, Globe, Play, Gauge, LogOut, Calculator,
-  DollarSign, TrendingUp as TrendUp, BarChart3
+  DollarSign, TrendingUp as TrendUp, BarChart3, Link2, GitBranch
 } from 'lucide-react';
 import Header from '../components/Header';
 import {
