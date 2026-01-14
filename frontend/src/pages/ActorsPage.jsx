@@ -326,9 +326,10 @@ const strategyFilters = ['Accumulator', 'Smart Money', 'Momentum', 'Early DEX', 
 const riskFilters = ['Low', 'Medium', 'High'];
 const latencyFilters = ['Early', 'Medium', 'Late'];
 
-// Sort options - Edge Score first as default
+// Sort options - Edge Score first as default, ETAP 4 adds Influence
 const sortOptions = [
   { value: 'edgeScore', label: 'Edge Score' },
+  { value: 'influence', label: 'Influence' },
   { value: 'activity', label: 'Newest activity' },
   { value: 'pnl', label: 'PnL (highest)' },
   { value: 'winRate', label: 'Win rate' },
