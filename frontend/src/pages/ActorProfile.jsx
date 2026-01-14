@@ -771,12 +771,27 @@ const actorDetailedData = {
       { condition: 'Entry delay > 12h', reason: 'Slippage exceeds expected gain' },
     ],
     copyFeed: [
-      { id: 1, type: 'BUY', token: 'TAO', size: '$1.2M', time: '6h ago', price: '$456', txHash: '0xpan...001', entryDelay: '4h' },
-      { id: 2, type: 'BUY', token: 'FET', size: '$680K', time: '1d ago', price: '$2.12', txHash: '0xpan...002', entryDelay: '6h' },
-      { id: 3, type: 'BUY', token: 'RNDR', size: '$420K', time: '2d ago', price: '$8.45', txHash: '0xpan...003', entryDelay: '8h' },
-      { id: 4, type: 'SWAP', token: 'ETH→USDC', size: '$2.5M', time: '3d ago', price: '-', txHash: '0xpan...004', entryDelay: '-' },
-      { id: 5, type: 'BUY', token: 'INJ', size: '$340K', time: '5d ago', price: '$28.5', txHash: '0xpan...005', entryDelay: '5h' },
+      { id: 1, type: 'BUY', token: 'TAO', size: '$1.2M', time: '6h ago', price: '$456', txHash: '0xpan...001', entryDelay: '4h', actorPnl: '+18.2%', followerPnl: '+14.1%' },
+      { id: 2, type: 'BUY', token: 'FET', size: '$680K', time: '1d ago', price: '$2.12', txHash: '0xpan...002', entryDelay: '6h', actorPnl: '+24.5%', followerPnl: '+18.8%' },
+      { id: 3, type: 'BUY', token: 'RNDR', size: '$420K', time: '2d ago', price: '$8.45', txHash: '0xpan...003', entryDelay: '8h', actorPnl: '+15.8%', followerPnl: '+10.2%' },
+      { id: 4, type: 'SWAP', token: 'ETH→USDC', size: '$2.5M', time: '3d ago', price: '-', txHash: '0xpan...004', entryDelay: '-', actorPnl: '-', followerPnl: '-' },
+      { id: 5, type: 'BUY', token: 'INJ', size: '$340K', time: '5d ago', price: '$28.5', txHash: '0xpan...005', entryDelay: '5h', actorPnl: '+32.1%', followerPnl: '+26.4%' },
     ],
+    simulatedPortfolio: {
+      startingCapital: 10000,
+      periods: [
+        { period: '7d', actorReturn: 6.2, followerReturn: 4.5, slippageLoss: 0.5, delayLoss: 1.2 },
+        { period: '30d', actorReturn: 21.4, followerReturn: 15.2, slippageLoss: 1.8, delayLoss: 4.4 },
+        { period: '90d', actorReturn: 58.2, followerReturn: 42.1, slippageLoss: 4.2, delayLoss: 11.9 },
+      ],
+      trades: { total: 41, profitable: 28, avgWin: '+22.4%', avgLoss: '-8.2%' },
+      impactByDelay: [
+        { delay: '1h', returnLoss: '-8%', recommendation: 'Optimal' },
+        { delay: '2h', returnLoss: '-14%', recommendation: 'Acceptable' },
+        { delay: '4h', returnLoss: '-22%', recommendation: 'Acceptable' },
+        { delay: '6h+', returnLoss: '-32%', recommendation: 'Risky' },
+      ],
+    },
     whyFollow: [
       { positive: true, text: 'Excellent PnL track record (+$3.8M realized)' },
       { positive: true, text: 'Very low risk profile (11/100)' },
