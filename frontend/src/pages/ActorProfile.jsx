@@ -1182,6 +1182,129 @@ export default function ActorProfile() {
                 </div>
               </div>
 
+              {/* FOLLOWER REALITY CHECK - NEW */}
+              {actor.followerReality && (
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <Target className="w-5 h-5 text-blue-600" />
+                      <h2 className="text-lg font-bold text-gray-900">Follower Reality Check</h2>
+                    </div>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button className="p-1 hover:bg-blue-100 rounded"><Info className="w-4 h-4 text-blue-400" /></button>
+                      </TooltipTrigger>
+                      <TooltipContent className="bg-gray-900 text-white max-w-xs">
+                        <p className="text-xs">Expected returns adjusted for entry delay, slippage, and crowding. This is what YOU can realistically expect.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                    <div className="p-3 bg-white rounded-xl border border-blue-100">
+                      <div className="text-xs text-gray-500 mb-1">Avg Entry Delay</div>
+                      <div className="text-lg font-bold text-gray-900">{actor.followerReality.avgEntryDelay}</div>
+                    </div>
+                    <div className="p-3 bg-white rounded-xl border border-blue-100">
+                      <div className="text-xs text-gray-500 mb-1">Expected Slippage</div>
+                      <div className="text-lg font-bold text-gray-900">{actor.followerReality.expectedSlippage}</div>
+                    </div>
+                    <div className="p-3 bg-white rounded-xl border border-blue-100">
+                      <div className="text-xs text-gray-500 mb-1">Actor ROI (30d)</div>
+                      <div className={`text-lg font-bold ${actor.followerReality.modeledROI30d.actor.startsWith('+') ? 'text-emerald-600' : 'text-red-500'}`}>
+                        {actor.followerReality.modeledROI30d.actor}
+                      </div>
+                    </div>
+                    <div className="p-3 bg-white rounded-xl border border-blue-200 shadow-sm">
+                      <div className="text-xs text-blue-600 font-medium mb-1">Your Modeled ROI</div>
+                      <div className={`text-xl font-bold ${actor.followerReality.modeledROI30d.follower.startsWith('+') ? 'text-emerald-600' : 'text-red-500'}`}>
+                        {actor.followerReality.modeledROI30d.follower}
+                      </div>
+                    </div>
+                    <div className="p-3 bg-white rounded-xl border border-blue-100">
+                      <div className="text-xs text-gray-500 mb-1">Max DD (Follower)</div>
+                      <div className="text-lg font-bold text-amber-600">{actor.followerReality.maxDDFollower}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-3 flex items-center gap-2 text-xs text-gray-500">
+                    <span>Crowding Factor:</span>
+                    <span className={`px-2 py-0.5 rounded font-medium ${
+                      actor.followerReality.crowdingFactor === 'Low' ? 'bg-emerald-100 text-emerald-700' :
+                      actor.followerReality.crowdingFactor === 'Medium' ? 'bg-amber-100 text-amber-700' :
+                      actor.followerReality.crowdingFactor === 'High' ? 'bg-orange-100 text-orange-700' :
+                      'bg-red-100 text-red-700'
+                    }`}>
+                      {actor.followerReality.crowdingFactor}
+                    </span>
+                    <span className="text-gray-400">•</span>
+                    <span>{actor.followerReality.crowdingFactor === 'Low' ? 'Minimal impact on entry' : 
+                           actor.followerReality.crowdingFactor === 'Medium' ? 'Some slippage expected' :
+                           'High competition for entries'}</span>
+                  </div>
+                </div>
+              )}
+
+              {/* EDGE DECAY INDICATOR - NEW */}
+              {actor.edgeDecay && (
+                <div className={`rounded-2xl p-5 border ${
+                  actor.edgeDecay.status === 'stable' ? 'bg-emerald-50 border-emerald-200' :
+                  actor.edgeDecay.status === 'degrading' ? 'bg-amber-50 border-amber-200' :
+                  'bg-red-50 border-red-200'
+                }`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-lg ${
+                        actor.edgeDecay.status === 'stable' ? 'bg-emerald-100' :
+                        actor.edgeDecay.status === 'degrading' ? 'bg-amber-100' :
+                        'bg-red-100'
+                      }`}>
+                        {actor.edgeDecay.status === 'stable' ? <Check className="w-5 h-5 text-emerald-600" /> :
+                         actor.edgeDecay.status === 'degrading' ? <AlertTriangle className="w-5 h-5 text-amber-600" /> :
+                         <X className="w-5 h-5 text-red-600" />}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-gray-900">
+                          Edge {actor.edgeDecay.status === 'stable' ? 'Stable ✓' : 
+                                actor.edgeDecay.status === 'degrading' ? 'Degrading ⚠' : 
+                                'Exhausted ✗'}
+                        </h3>
+                        <p className="text-sm text-gray-600">{actor.edgeDecay.trend}</p>
+                      </div>
+                    </div>
+                    <div className="text-right text-xs text-gray-500">
+                      <div>Success rate: <span className={`font-semibold ${
+                        actor.edgeDecay.successRateTrend.startsWith('+') ? 'text-emerald-600' :
+                        actor.edgeDecay.successRateTrend.startsWith('-') ? 'text-red-500' : 'text-gray-600'
+                      }`}>{actor.edgeDecay.successRateTrend}</span></div>
+                      <div className="mt-1">{actor.edgeDecay.crowdFollowing}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* DO NOT FOLLOW IF - NEW */}
+              {actor.doNotFollowIf && actor.doNotFollowIf.length > 0 && (
+                <div className="bg-white border border-red-200 rounded-2xl p-5">
+                  <div className="flex items-center gap-2 mb-4">
+                    <AlertTriangle className="w-5 h-5 text-red-500" />
+                    <h2 className="text-lg font-bold text-gray-900">Do NOT Follow If</h2>
+                  </div>
+                  <div className="space-y-2">
+                    {actor.doNotFollowIf.map((item, i) => (
+                      <div key={i} className="flex items-start gap-3 p-3 bg-red-50 rounded-xl">
+                        <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <span className="font-semibold text-gray-900">{item.condition}</span>
+                          <span className="text-gray-500"> — </span>
+                          <span className="text-gray-600">{item.reason}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* TIMING EDGE - NEW */}
               <div className="bg-white border border-gray-200 rounded-2xl p-5">
                 <div className="flex items-center gap-2 mb-4">
