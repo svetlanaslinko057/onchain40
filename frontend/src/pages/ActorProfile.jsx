@@ -655,7 +655,9 @@ const actorDetailedData = {
   },
   'jump-trading': {
     id: 'jump-trading',
-    label: 'Jump Trading',
+    real_name: 'Jump Trading',
+    strategy_name: 'HFT Arbitrage Engine',
+    identity_confidence: 0.85,
     address: '0x1234567890abcdef1234567890abcdef12345678',
     type: 'Trader',
     avatar: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png',
@@ -669,6 +671,14 @@ const actorDetailedData = {
       { trigger: 'Gas prices > 50 gwei', action: 'Arb edge disappears', priority: 'high' },
       { trigger: 'Cross-exchange spread < 0.1%', action: 'No profitable copy opportunity', priority: 'medium' },
     ],
+    correlation: {
+      movesWith: [
+        { id: 'wintermute', strategy_name: 'DeFi Yield Optimizer', similarity: 64, overlap: 'MM/Arb operations' },
+      ],
+      frontRunners: [],
+      followedBy: [],
+      cluster: { name: 'HFT/Arbitrage', phase: 'Active', size: 4 },
+    },
     cluster: {
       size: 23,
       confidence: 79,
