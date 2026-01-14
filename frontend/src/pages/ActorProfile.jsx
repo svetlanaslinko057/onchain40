@@ -415,6 +415,25 @@ const actorDetailedData = {
       lateEntryDropoff: '7 days',
       bestPerformsIn: 'All Regimes',
     },
+    followerReality: {
+      avgEntryDelay: '24h',
+      expectedSlippage: '0.3%',
+      modeledROI30d: { actor: '+8%', follower: '+7%' },
+      maxDDFollower: '5.2%',
+      crowdingFactor: 'Low',
+    },
+    edgeDecay: {
+      status: 'stable',
+      trend: 'Institutional-grade consistency',
+      successRateTrend: '+1% vs last month',
+      crowdFollowing: '~2.1K followers',
+      lastUpdated: '1d ago',
+    },
+    doNotFollowIf: [
+      { condition: 'Short-term trade (<7d)', reason: 'Actor holds 30-90 days minimum' },
+      { condition: 'Capital < $10K', reason: 'Position sizing mismatch' },
+      { condition: 'Expecting quick flip', reason: 'This is long-term accumulation only' },
+    ],
     copyFeed: [
       { id: 1, type: 'BUY', token: 'OP', size: '$2.1M', time: '1d ago', price: '$2.45', txHash: '0xa16z...001', entryDelay: '12h' },
       { id: 2, type: 'BUY', token: 'ARB', size: '$1.8M', time: '3d ago', price: '$1.38', txHash: '0xa16z...002', entryDelay: '24h' },
