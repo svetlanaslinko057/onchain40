@@ -1174,7 +1174,7 @@ export default function Watchlist() {
           {/* NEW SEARCH - Centered with proper spacing */}
           <div className="flex-1 max-w-md mx-auto">
             <div className={`relative transition-all ${searchFocused ? 'scale-105' : 'scale-100'}`}>
-              <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${
+              <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none z-10 transition-colors ${
                 searchFocused ? 'text-blue-500' : 'text-gray-400'
               }`} />
               <input 
@@ -1184,7 +1184,7 @@ export default function Watchlist() {
                 onFocus={() => setSearchFocused(true)}
                 onBlur={() => setSearchFocused(false)}
                 placeholder="Search signals..." 
-                className={`w-full pl-11 pr-10 py-2.5 rounded-xl text-sm transition-all ${
+                className={`w-full pl-11 pr-10 py-2.5 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 transition-all ${
                   searchFocused 
                     ? 'bg-white border-2 border-blue-500 shadow-lg shadow-blue-500/20' 
                     : 'bg-gray-50 border-2 border-transparent hover:bg-white hover:border-gray-200'
@@ -1193,7 +1193,7 @@ export default function Watchlist() {
               {searchTerm && (
                 <button
                   onClick={() => setSearchTerm('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors z-10"
                 >
                   <span className="text-gray-400 text-xs">✕</span>
                 </button>
