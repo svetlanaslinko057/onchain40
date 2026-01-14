@@ -1402,12 +1402,6 @@ export default function Watchlist() {
         )}
       </div>
 
-      <AddAddressModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)}
-        onAdd={handleAddAddress}
-      />
-
       {isAlertsPanelOpen && selectedItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <GlassCard className="w-[600px] max-h-[90vh] overflow-auto p-6">
