@@ -4,7 +4,8 @@ import axios from 'axios';
 import { 
   Plus, Search, Filter, Star, TrendingUp, TrendingDown, Eye, EyeOff, Trash2, 
   Wallet, ChevronLeft, ExternalLink, AlertTriangle, CheckCircle, Activity,
-  Bell, BellRing, Settings, Coins, Users, Info
+  Bell, BellRing, Settings, Coins, Users, Info, MoreVertical, Volume2, VolumeX,
+  Repeat, Bookmark, BellPlus, Clock, Zap, Link2, HelpCircle
 } from 'lucide-react';
 import Header from '../components/Header';
 import { PageHeader } from '../components/PageHeader';
