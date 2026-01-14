@@ -145,6 +145,7 @@ const actorsData = [
     hasActiveSignals: true,
     signalsCount: 1,
     lastActivityTime: Date.now() - 30 * 60 * 1000,
+    edgeScore: 28,
   },
   {
     id: 'unknown-whale-1',
@@ -167,6 +168,7 @@ const actorsData = [
     hasActiveSignals: false,
     signalsCount: 0,
     lastActivityTime: Date.now() - 15 * 60 * 1000,
+    edgeScore: 15,
   },
   {
     id: 'pantera',
@@ -189,6 +191,7 @@ const actorsData = [
     hasActiveSignals: true,
     signalsCount: 4,
     lastActivityTime: Date.now() - 6 * 60 * 60 * 1000,
+    edgeScore: 84,
   },
   {
     id: 'wintermute',
