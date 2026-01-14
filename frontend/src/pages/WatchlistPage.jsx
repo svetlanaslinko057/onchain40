@@ -249,13 +249,16 @@ const WatchlistPage = () => {
   const [showOnlyChanges, setShowOnlyChanges] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
 
-  // Quick summary stats
+  // Quick summary stats - CLICKABLE for filtering
   const stats = {
     behaviorChanged: watchlist.filter(w => w.behaviorChanged).length,
     highRisk: watchlist.filter(w => w.risk === 'high').length,
-    bridgeAligned: watchlist.filter(w => w.bridgeAligned).length,
-    dormant: watchlist.filter(w => w.dormant).length
+    bridgeAligned: watchlist.filter(w => w.bridgeAligned).length
   };
 
   // Filtering logic
