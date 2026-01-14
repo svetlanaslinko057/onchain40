@@ -31,6 +31,8 @@ function App() {
         <Route path="/watchlist" element={<WatchlistPage />} />
         <Route path="/alerts" element={<AlertsPageNew />} />
         <Route path="/strategies" element={<StrategiesPage />} />
+        <Route path="/actors" element={<ActorsPage />} />
+        <Route path="/actors/:actorId" element={<ActorProfile />} />
         
         {/* Detail Pages */}
         <Route path="/token/:tokenId" element={<TokenDetail />} />
