@@ -36,7 +36,7 @@ const SEVERITY = {
   info: { label: 'Info', color: 'blue' }
 };
 
-// Mock Alerts Data - NEW STRUCTURE
+// Mock Alerts Data - NEW STRUCTURE with better titles
 const mockAlerts = [
   {
     id: 1,
@@ -45,7 +45,8 @@ const mockAlerts = [
     read: false,
     timestamp: Date.now() - 1000 * 60 * 2, // 2 min ago
     
-    title: 'Entity changed behavior to DISTRIBUTING',
+    title: 'Behavior Shift Detected',
+    subtitle: 'Accumulating → Distributing (Binance Hot Wallet)',
     source: {
       type: 'entity',
       name: 'Binance Hot Wallet',
@@ -55,9 +56,9 @@ const mockAlerts = [
     whatHappened: 'Behavior switched from ACCUMULATING → DISTRIBUTING. Large outflows detected to 12+ CEX addresses.',
     whyMatters: 'Exchange distribution patterns historically precede 2-3% price drops within 48h.',
     whatToDo: [
-      { action: 'Monitor BTC/ETH price', link: '/tokens' },
-      { action: 'Review active signals', link: '/signals' },
-      { action: 'Check portfolio exposure', link: '/portfolio' }
+      { action: 'Monitor BTC/ETH price for volatility spikes (24-48h)', link: '/tokens' },
+      { action: 'Review ETH-related signals for confirmation patterns', link: '/signals' },
+      { action: 'Check portfolio exposure and adjust hedges', link: '/portfolio' }
     ],
     
     links: [
@@ -72,7 +73,8 @@ const mockAlerts = [
     read: false,
     timestamp: Date.now() - 1000 * 60 * 15, // 15 min ago
     
-    title: 'Large ETH deposit to Coinbase',
+    title: 'Large CEX Deposit',
+    subtitle: 'ETH → Coinbase (Vitalik.eth)',
     source: {
       type: 'wallet',
       name: 'Vitalik.eth',
@@ -80,11 +82,11 @@ const mockAlerts = [
     },
     
     whatHappened: '500 ETH deposited to CEX (↑ 4.2x vs 7d avg). Total value: $1.67M.',
-    whyMatters: 'Large holder moving to exchange. Historically correlates with short-term sell pressure.',
+    whyMatters: 'Large holder moving to exchange. Historically correlates with short-term sell pressure within 6-12h.',
     whatToDo: [
-      { action: 'Monitor ETH price action', link: '/tokens/eth' },
-      { action: 'Review ETH signals', link: '/signals' },
-      { action: 'Set alert threshold', link: '/alerts/settings' }
+      { action: 'Monitor ETH price action for immediate dips', link: '/tokens/eth' },
+      { action: 'Review active ETH distribution signals', link: '/signals?token=eth' },
+      { action: 'Set price alert at -2% threshold', link: '/alerts/settings' }
     ],
     
     links: [
@@ -99,7 +101,8 @@ const mockAlerts = [
     read: false,
     timestamp: Date.now() - 1000 * 60 * 32, // 32 min ago
     
-    title: 'Bridge alignment detected with 3 entities',
+    title: 'Bridge Coordination Detected',
+    subtitle: '3 entities aligned (Jump Trading)',
     source: {
       type: 'entity',
       name: 'Jump Trading',
@@ -107,11 +110,11 @@ const mockAlerts = [
     },
     
     whatHappened: 'Coordinated distribution pattern detected. Aligned with Binance, Bybit within 6h window.',
-    whyMatters: 'Multi-entity coordination suggests planned market movement. High confidence: 87%.',
+    whyMatters: 'Multi-entity coordination suggests planned market movement. High confidence: 87%. Typically precedes 3-5% price swings.',
     whatToDo: [
-      { action: 'Review bridge signals', link: '/signals?filter=bridge' },
-      { action: 'Check aligned entities', link: '/entities' },
-      { action: 'Monitor cluster activity', link: '/entities/jump-trading' }
+      { action: 'Review bridge signals for coordination strength', link: '/signals?filter=bridge' },
+      { action: 'Check all aligned entities for flow patterns', link: '/entities' },
+      { action: 'Monitor cluster activity for next 12-24h', link: '/entities/jump-trading' }
     ],
     
     links: [
@@ -126,19 +129,20 @@ const mockAlerts = [
     read: false,
     timestamp: Date.now() - 1000 * 60 * 45, // 45 min ago
     
-    title: 'Accumulation signal strengthened',
+    title: 'Signal Strengthened',
+    subtitle: 'Confidence ↑ 72 → 89 (ETH Accumulation)',
     source: {
       type: 'signal',
       name: 'Unknown Whale - ETH Accumulation',
       id: 'signal-123'
     },
     
-    whatHappened: 'Signal confidence upgraded from 72 → 89. Additional confirmation: inflow acceleration.',
-    whyMatters: 'High-confidence accumulation signal. Strengthening pattern indicates continued buying.',
+    whatHappened: 'Signal confidence upgraded from 72 → 89. Additional confirmation: inflow acceleration detected.',
+    whyMatters: 'High-confidence accumulation signal. Strengthening pattern indicates continued buying pressure over 48-72h.',
     whatToDo: [
-      { action: 'View signal details', link: '/signal/signal-123' },
-      { action: 'Track similar signals', link: '/signals?type=accumulation' },
-      { action: 'Add to watchlist', link: '/watchlist' }
+      { action: 'View full signal breakdown and timeline', link: '/signal/signal-123' },
+      { action: 'Track similar accumulation signals for correlation', link: '/signals?type=accumulation' },
+      { action: 'Add wallet to watchlist for monitoring', link: '/watchlist' }
     ],
     
     links: [
@@ -153,7 +157,8 @@ const mockAlerts = [
     read: true,
     timestamp: Date.now() - 1000 * 60 * 60 * 2, // 2h ago
     
-    title: 'Buy spike detected on ARB',
+    title: 'Accumulation Spike',
+    subtitle: 'ARB buy volume ↑ 3.8x (Wintermute)',
     source: {
       type: 'entity',
       name: 'Wintermute',
@@ -161,11 +166,11 @@ const mockAlerts = [
     },
     
     whatHappened: 'Accumulated $4.2M worth of ARB in 1h. Volume spike: ↑ 3.8x vs baseline.',
-    whyMatters: 'Market maker accumulation. Bullish signal for short-term price movement.',
+    whyMatters: 'Market maker accumulation. Bullish signal for short-term price movement (6-24h window).',
     whatToDo: [
-      { action: 'Consider ARB position', link: '/token/arb' },
-      { action: 'Track Wintermute moves', link: '/entity/wintermute' },
-      { action: 'Set ARB price alert', link: '/alerts/settings' }
+      { action: 'Consider ARB position within next 12h window', link: '/token/arb' },
+      { action: 'Track Wintermute for follow-up moves', link: '/entity/wintermute' },
+      { action: 'Set ARB price alert at +5% for profit taking', link: '/alerts/settings' }
     ],
     
     links: [
@@ -180,19 +185,20 @@ const mockAlerts = [
     read: true,
     timestamp: Date.now() - 1000 * 60 * 60 * 3, // 3h ago
     
-    title: 'Distribution signal invalidated',
+    title: 'Signal Invalidated',
+    subtitle: 'Confidence ↓ 68 → 23 (ETH Distribution)',
     source: {
       type: 'signal',
       name: 'Coinbase - ETH Distribution',
       id: 'signal-456'
     },
     
-    whatHappened: 'Signal confidence dropped from 68 → 23. Pattern broken: accumulation resumed.',
-    whyMatters: 'False alarm. Distribution expected but accumulation pattern emerged instead.',
+    whatHappened: 'Signal confidence dropped from 68 → 23. Pattern broken: accumulation resumed instead of distribution.',
+    whyMatters: 'False alarm. Distribution expected but accumulation pattern emerged instead. Market sentiment shifted.',
     whatToDo: [
-      { action: 'Review signal history', link: '/signal/signal-456' },
-      { action: 'Check current behavior', link: '/entity/coinbase' },
-      { action: 'Update watchlist rules', link: '/watchlist' }
+      { action: 'Review signal history for false positive patterns', link: '/signal/signal-456' },
+      { action: 'Check current entity behavior for reversal', link: '/entity/coinbase' },
+      { action: 'Update watchlist rules to reduce noise', link: '/watchlist' }
     ],
     
     links: [
