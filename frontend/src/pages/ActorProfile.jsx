@@ -904,12 +904,27 @@ const actorDetailedData = {
       { condition: 'Following LP moves', reason: 'Not directional trades' },
     ],
     copyFeed: [
-      { id: 1, type: 'BRIDGE', token: 'ETH→BASE', size: '$780K', time: '1h ago', price: '-', txHash: '0xwint...001', entryDelay: '-' },
-      { id: 2, type: 'SWAP', token: 'ETH→wstETH', size: '$1.2M', time: '3h ago', price: '-', txHash: '0xwint...002', entryDelay: '-' },
-      { id: 3, type: 'SWAP', token: 'USDC→DAI', size: '$2.4M', time: '6h ago', price: '-', txHash: '0xwint...003', entryDelay: '-' },
-      { id: 4, type: 'BUY', token: 'CRV', size: '$145K', time: '1d ago', price: '$0.52', txHash: '0xwint...004', entryDelay: '3h' },
-      { id: 5, type: 'SELL', token: 'LDO', size: '$89K', time: '2d ago', price: '$2.18', txHash: '0xwint...005', entryDelay: '-' },
+      { id: 1, type: 'BRIDGE', token: 'ETH→BASE', size: '$780K', time: '1h ago', price: '-', txHash: '0xwint...001', entryDelay: '-', actorPnl: '-', followerPnl: '-' },
+      { id: 2, type: 'SWAP', token: 'ETH→wstETH', size: '$1.2M', time: '3h ago', price: '-', txHash: '0xwint...002', entryDelay: '-', actorPnl: '-', followerPnl: '-' },
+      { id: 3, type: 'SWAP', token: 'USDC→DAI', size: '$2.4M', time: '6h ago', price: '-', txHash: '0xwint...003', entryDelay: '-', actorPnl: '-', followerPnl: '-' },
+      { id: 4, type: 'BUY', token: 'CRV', size: '$145K', time: '1d ago', price: '$0.52', txHash: '0xwint...004', entryDelay: '3h', actorPnl: '+8.4%', followerPnl: '+2.1%' },
+      { id: 5, type: 'SELL', token: 'LDO', size: '$89K', time: '2d ago', price: '$2.18', txHash: '0xwint...005', entryDelay: '-', actorPnl: '+4.2%', followerPnl: '+1.8%' },
     ],
+    simulatedPortfolio: {
+      startingCapital: 10000,
+      periods: [
+        { period: '7d', actorReturn: 1.4, followerReturn: 0.4, slippageLoss: 0.2, delayLoss: 0.8 },
+        { period: '30d', actorReturn: 6.2, followerReturn: 2.1, slippageLoss: 0.8, delayLoss: 3.3 },
+        { period: '90d', actorReturn: 18.4, followerReturn: 5.8, slippageLoss: 2.4, delayLoss: 10.2 },
+      ],
+      trades: { total: 389, profitable: 217, avgWin: '+4.8%', avgLoss: '-3.2%' },
+      impactByDelay: [
+        { delay: '1h', returnLoss: '-45%', recommendation: 'Risky' },
+        { delay: '2h', returnLoss: '-58%', recommendation: 'Not recommended' },
+        { delay: '4h', returnLoss: '-72%', recommendation: 'Avoid' },
+        { delay: '6h+', returnLoss: '-85%', recommendation: 'Avoid' },
+      ],
+    },
     whyFollow: [
       { positive: true, text: 'Consistent profitability (+$567K realized)' },
       { positive: true, text: 'Low risk market making (22/100)' },
