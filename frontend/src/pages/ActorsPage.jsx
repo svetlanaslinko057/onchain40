@@ -279,11 +279,15 @@ const actionColors = {
   'BRIDGE': 'text-purple-600',
 };
 
-// Actor Card Component - Enhanced with Edge Score
-const ActorCard = ({ actor, isFollowed, onToggleFollow }) => {
+// Actor Card Component - Enhanced with Edge Score and HYBRID identity
+const ActorCard = ({ actor, isFollowed, onToggleFollow, showRealNames }) => {
   const confidence = confidenceColors[actor.confidence];
   const chain = chainConfig[actor.primaryChain] || { color: 'bg-gray-500', label: actor.primaryChain };
   const edgeColor = getEdgeScoreColor(actor.edgeScore);
+  
+  // HYBRID identity: show strategy_name by default, real_name when toggle is on
+  const displayName = showRealNames ? actor.real_name : actor.strategy_name;
+  const secondaryName = showRealNames ? actor.strategy_name : (actor.identity_confidence >= 0.8 ? actor.real_name : null);
   
   return (
     <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-400 transition-all group h-full flex flex-col">
@@ -297,13 +301,17 @@ const ActorCard = ({ actor, isFollowed, onToggleFollow }) => {
             {/* Avatar */}
             <div className="w-11 h-11 rounded-xl bg-gray-100 flex items-center justify-center overflow-hidden">
               {actor.avatar ? (
-                <img src={actor.avatar} alt={actor.label} className="w-full h-full object-cover" />
+                <img src={actor.avatar} alt={displayName} className="w-full h-full object-cover" />
               ) : (
                 <Users className="w-5 h-5 text-gray-400" />
               )}
             </div>
             <div>
-              <div className="font-bold text-gray-900 text-sm">{actor.label}</div>
+              <div className="font-bold text-gray-900 text-sm">{displayName}</div>
+              {/* Show secondary name as hint */}
+              {secondaryName && (
+                <div className="text-xs text-gray-400 truncate max-w-[140px]">{secondaryName}</div>
+              )}
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span className={`inline-block px-1.5 py-0.5 rounded text-xs font-medium ${typeBadgeColors[actor.type]}`}>
                   {actor.type}
