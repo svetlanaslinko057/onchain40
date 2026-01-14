@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { 
   Search, Star, Bell, Filter, TrendingUp, TrendingDown, 
   ArrowUpRight, ChevronDown, X, Users, Zap, Target, Clock,
-  ArrowUpDown, Activity, Globe
+  ArrowUpDown, Activity, Globe, Gauge
 } from 'lucide-react';
 import Header from '../components/Header';
 import {
@@ -22,7 +22,14 @@ const chainConfig = {
   'OP': { color: 'bg-red-500', label: 'Optimism' },
 };
 
-// Mock actors data with enhanced fields
+// Edge Score color helper
+const getEdgeScoreColor = (score) => {
+  if (score >= 75) return 'text-emerald-600 bg-emerald-50 border-emerald-200';
+  if (score >= 50) return 'text-amber-600 bg-amber-50 border-amber-200';
+  return 'text-red-500 bg-red-50 border-red-200';
+};
+
+// Mock actors data with Edge Score
 const actorsData = [
   {
     id: 'vitalik',
@@ -38,14 +45,15 @@ const actorsData = [
     currentBehavior: 'Accumulating',
     behaviorTrend: 'Stable → Bullish',
     tokens: ['ETH', 'L2', 'AI'],
-    // NEW FIELDS
     clusterSize: 4,
     lastAction: { type: 'BUY', token: 'ARB', time: '2h ago', size: '$45K' },
     primaryChain: 'ETH',
     latency: 'Early',
     hasActiveSignals: true,
     signalsCount: 3,
-    lastActivityTime: Date.now() - 2 * 60 * 60 * 1000, // 2h ago
+    lastActivityTime: Date.now() - 2 * 60 * 60 * 1000,
+    // EDGE SCORE (0-100)
+    edgeScore: 78,
   },
   {
     id: 'alameda',
