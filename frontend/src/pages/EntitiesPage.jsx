@@ -345,43 +345,7 @@ const EntityCard = ({ entity, cluster, isInActiveCluster, isDimmed, bridgeMode }
           </Tooltip>
         </div>
       </div>
-        
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div>
-            <div className="text-xs text-gray-500 mb-0.5">Holdings</div>
-            <div className="text-sm font-bold text-gray-900">{entity.holdings}</div>
-          </div>
-          <div>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="cursor-help">
-                  <div className="text-xs text-gray-500 mb-0.5">Net Flow (24h)</div>
-                  <div className={`text-sm font-bold flex items-center gap-1 ${
-                    entity.netflow24h.startsWith('+') ? 'text-gray-900' : 'text-gray-500'
-                  }`}>
-                    {entity.netflow24h.startsWith('+') ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                    {entity.netflow24h}
-                  </div>
-                </div>
-              </TooltipTrigger>
-              <TooltipContent className="bg-gray-900 text-white max-w-xs border border-white/20">
-                <p className="text-xs">Net flow = Total inflows - Total outflows across all entity addresses</p>
-              </TooltipContent>
-            </Tooltip>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-          <div>
-            <div className="text-xs text-gray-500">Market Share</div>
-            <div className="text-sm font-semibold text-gray-900">{entity.marketShare}%</div>
-          </div>
-          <div className="flex items-center text-gray-900 text-sm font-medium">
-            View Details <ArrowUpRight className="w-4 h-4 ml-1" />
-          </div>
-        </div>
-      </div>
-    </Link>
+    </div>
   );
 };
 
