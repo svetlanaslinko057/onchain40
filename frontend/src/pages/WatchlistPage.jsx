@@ -328,35 +328,55 @@ const WatchlistPage = () => {
       <Header />
       
       <div className="max-w-7xl mx-auto px-4 py-6">
-        {/* Page Header - Светлый, спокойный */}
+        {/* Page Header */}
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-3">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Watchlist</h1>
-              <p className="text-sm text-gray-500 mt-1">My tracked wallets & entities</p>
+              <p className="text-sm text-gray-500 mt-1">Tracked wallets & entities</p>
             </div>
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-sm font-semibold transition-all"
-            >
-              <Plus className="w-4 h-4" />
-              Add address
-            </button>
+            <div className="flex items-center gap-2">
+              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                <Settings className="w-5 h-5 text-gray-600" />
+              </button>
+              <button 
+                onClick={() => setIsModalOpen(true)}
+                className="flex items-center gap-2 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-sm font-semibold transition-all"
+              >
+                <Plus className="w-4 h-4" />
+                Add address
+              </button>
+            </div>
           </div>
 
-          {/* Quick Summary - Светлый блок */}
+          {/* Clickable Global Snapshot */}
           {(stats.behaviorChanged > 0 || stats.highRisk > 0 || stats.bridgeAligned > 0) && (
             <div className="bg-white rounded-lg p-3 border border-gray-200">
               <div className="flex items-center gap-4 text-sm">
-                <span className="text-gray-500">Quick summary:</span>
+                <span className="text-gray-500 font-medium">Quick summary (24h):</span>
                 {stats.behaviorChanged > 0 && (
-                  <span className="text-gray-700">• {stats.behaviorChanged} address{stats.behaviorChanged > 1 ? 'es' : ''} changed behavior (24h)</span>
+                  <button
+                    onClick={() => handleSummaryClick('behaviorChanged')}
+                    className="text-gray-700 hover:text-gray-900 hover:underline transition-colors"
+                  >
+                    • {stats.behaviorChanged} address{stats.behaviorChanged > 1 ? 'es' : ''} changed behavior
+                  </button>
                 )}
                 {stats.highRisk > 0 && (
-                  <span className="text-gray-700">• {stats.highRisk} high-risk address{stats.highRisk > 1 ? 'es' : ''}</span>
+                  <button
+                    onClick={() => handleSummaryClick('highRisk')}
+                    className="text-gray-700 hover:text-gray-900 hover:underline transition-colors"
+                  >
+                    • {stats.highRisk} high-risk address{stats.highRisk > 1 ? 'es' : ''}
+                  </button>
                 )}
                 {stats.bridgeAligned > 0 && (
-                  <span className="text-gray-700">• {stats.bridgeAligned} bridge-aligned cluster{stats.bridgeAligned > 1 ? 's' : ''}</span>
+                  <button
+                    onClick={() => handleSummaryClick('bridgeAligned')}
+                    className="text-gray-700 hover:text-gray-900 hover:underline transition-colors"
+                  >
+                    • {stats.bridgeAligned} bridge-aligned cluster{stats.bridgeAligned > 1 ? 's' : ''}
+                  </button>
                 )}
               </div>
             </div>
