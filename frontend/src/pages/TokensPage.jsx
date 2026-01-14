@@ -284,18 +284,57 @@ export default function TokensPage() {
         </div>
       </div>
 
-      {/* Token Header */}
+      {/* Token Header with Actions */}
       <div className="px-4 py-3 border-b border-gray-100">
-        <div className="flex items-center gap-4 text-sm mb-1">
-          <span className="text-lg font-bold text-gray-900">{token.symbol}</span>
-          <span className="text-gray-300">|</span>
-          <span className="font-semibold text-gray-700">${token.price.toLocaleString()}</span>
-          <span className="text-gray-500">{token.change >= 0 ? '+' : ''}{token.change}%</span>
-        </div>
-        <div className="text-xs text-gray-500">
-          Market Signal: <span className="font-semibold text-gray-700">{token.marketSignal.type} ({token.marketSignal.confidence}%)</span>
-          <span className="mx-2">→</span>
-          <span className="font-medium text-gray-700">Structure {token.intelligence.marketAlignment.toLowerCase()}</span>
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <div className="flex items-center gap-4 text-sm mb-1">
+              <span className="text-lg font-bold text-gray-900">{token.symbol}</span>
+              <span className="text-gray-300">|</span>
+              <span className="font-semibold text-gray-700">${token.price.toLocaleString()}</span>
+              <span className="text-gray-500">{token.change >= 0 ? '+' : ''}{token.change}%</span>
+            </div>
+            <div className="text-xs text-gray-500">
+              Market Signal: <span className="font-semibold text-gray-700">{token.marketSignal.type} ({token.marketSignal.confidence}%)</span>
+              <span className="mx-2">→</span>
+              <span className="font-medium text-gray-700">Structure {token.intelligence.marketAlignment.toLowerCase()}</span>
+            </div>
+          </div>
+          
+          {/* Quick Actions */}
+          <div className="flex items-center gap-2">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    to="/watchlist"
+                    className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <Eye className="w-4 h-4" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="text-xs">Add to Watchlist</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    to="/alerts"
+                    className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <Bell className="w-4 h-4" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="text-xs">Create Alert</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
       </div>
 
