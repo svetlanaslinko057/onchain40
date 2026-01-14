@@ -294,6 +294,27 @@ const WatchlistPage = () => {
     setWatchlist(watchlist.filter(item => item.id !== id));
   };
 
+  const handleAdd = (newItem) => {
+    const newWatchlistItem = {
+      id: Math.max(...watchlist.map(w => w.id)) + 1,
+      name: newItem.label,
+      address: newItem.address,
+      type: newItem.type,
+      verified: false,
+      behavior: 'unknown',
+      behaviorChanged: false,
+      risk: 'medium',
+      bridgeAligned: false,
+      balance: '$0',
+      change24h: 0,
+      signalScore: 0,
+      changes: [],
+      dormant: false,
+      exposure: 'Unknown'
+    };
+    setWatchlist([...watchlist, newWatchlistItem]);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30">
       <Header />
