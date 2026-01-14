@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { 
   Star, Bell, Filter, TrendingUp, TrendingDown, 
   ArrowUpRight, ChevronDown, X, Users, Zap, Target, Clock,
-  ArrowUpDown, Activity, Globe, Gauge
+  ArrowUpDown, Activity, Globe, Gauge, Eye, EyeOff
 } from 'lucide-react';
 import Header from '../components/Header';
 import SearchInput from '../components/shared/SearchInput';
@@ -30,11 +30,13 @@ const getEdgeScoreColor = (score) => {
   return 'text-red-500 bg-red-50 border-red-200';
 };
 
-// Mock actors data with Edge Score
+// Mock actors data with HYBRID identity (real_name + strategy_name)
 const actorsData = [
   {
     id: 'vitalik',
-    label: 'Vitalik.eth',
+    real_name: 'Vitalik.eth',
+    strategy_name: 'L2 Infrastructure Builder',
+    identity_confidence: 0.95,
     address: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
     type: 'Whale',
     avatar: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
@@ -53,12 +55,13 @@ const actorsData = [
     hasActiveSignals: true,
     signalsCount: 3,
     lastActivityTime: Date.now() - 2 * 60 * 60 * 1000,
-    // EDGE SCORE (0-100)
     edgeScore: 78,
   },
   {
     id: 'alameda',
-    label: 'Alameda Research',
+    real_name: 'Alameda Research',
+    strategy_name: 'SOL Ecosystem Accumulator',
+    identity_confidence: 0.92,
     address: '0x28C6c06298d514Db089934071355E5743bf21d60',
     type: 'Fund',
     avatar: 'https://s2.coinmarketcap.com/static/img/exchanges/64x64/270.png',
@@ -81,7 +84,9 @@ const actorsData = [
   },
   {
     id: 'dwf-labs',
-    label: 'DWF Labs',
+    real_name: 'DWF Labs',
+    strategy_name: 'Meme Momentum Rider',
+    identity_confidence: 0.88,
     address: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb',
     type: 'Fund',
     avatar: 'https://s2.coinmarketcap.com/static/img/exchanges/64x64/89.png',
@@ -104,7 +109,9 @@ const actorsData = [
   },
   {
     id: 'a16z',
-    label: 'a16z Crypto',
+    real_name: 'a16z Crypto',
+    strategy_name: 'Institutional Infrastructure Play',
+    identity_confidence: 0.97,
     address: '0x47ac0Fb4F2D84898e4D9E7b4DaB3C24507a6D503',
     type: 'Fund',
     avatar: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png',
@@ -127,7 +134,9 @@ const actorsData = [
   },
   {
     id: 'jump-trading',
-    label: 'Jump Trading',
+    real_name: 'Jump Trading',
+    strategy_name: 'HFT Arbitrage Engine',
+    identity_confidence: 0.85,
     address: '0x1234567890abcdef1234567890abcdef12345678',
     type: 'Trader',
     avatar: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png',
