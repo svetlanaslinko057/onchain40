@@ -214,6 +214,7 @@ const actorsData = [
     hasActiveSignals: false,
     signalsCount: 0,
     lastActivityTime: Date.now() - 60 * 60 * 1000,
+    edgeScore: 45,
   },
 ];
 
@@ -222,8 +223,9 @@ const strategyFilters = ['Accumulator', 'Smart Money', 'Momentum', 'Early DEX', 
 const riskFilters = ['Low', 'Medium', 'High'];
 const latencyFilters = ['Early', 'Medium', 'Late'];
 
-// Sort options
+// Sort options - Edge Score first as default
 const sortOptions = [
+  { value: 'edgeScore', label: 'Edge Score' },
   { value: 'activity', label: 'Newest activity' },
   { value: 'pnl', label: 'PnL (highest)' },
   { value: 'winRate', label: 'Win rate' },
