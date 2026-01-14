@@ -892,59 +892,11 @@ export default function TokensPage() {
       )}
 
       {/* Create Alert Modal */}
-      {showAlertModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={() => setShowAlertModal(false)}>
-          <div className="bg-white rounded-2xl p-6 max-w-lg w-full mx-4 shadow-2xl" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Bell className="w-5 h-5 text-gray-700" />
-                <h3 className="text-lg font-bold text-gray-900">Create Token Alert for {token.symbol}</h3>
-              </div>
-              <button onClick={() => setShowAlertModal(false)} className="p-1 hover:bg-gray-100 rounded-lg">
-                <X className="w-5 h-5 text-gray-500" />
-              </button>
-            </div>
-            
-            <p className="text-sm text-gray-600 mb-4">
-              Choose an alert type to monitor {token.symbol} structure changes
-            </p>
-            
-            <div className="space-y-3">
-              {alertTypes.map((alert) => {
-                const Icon = alert.icon;
-                return (
-                  <div key={alert.id} className="p-4 border border-gray-200 rounded-xl hover:border-gray-900 transition-colors cursor-pointer group">
-                    <div className="flex items-start gap-3">
-                      <div className="p-2 bg-gray-100 rounded-lg group-hover:bg-gray-900 transition-colors">
-                        <Icon className="w-5 h-5 text-gray-600 group-hover:text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900 mb-1">{alert.name}</h4>
-                        <p className="text-xs text-gray-600 mb-2">{alert.description}</p>
-                        <div className="text-xs text-gray-500">
-                          <div className="font-medium mb-1">Triggers when:</div>
-                          <ul className="space-y-0.5">
-                            {alert.triggers.map((trigger, i) => (
-                              <li key={i} className="flex items-start gap-1.5">
-                                <span className="text-gray-400">•</span>
-                                <span>{trigger}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            
-            <div className="mt-4 pt-4 border-t border-gray-100 text-xs text-gray-500">
-              <span className="font-medium">Note:</span> Alerts are UI-level only. Backend implementation coming soon.
-            </div>
-          </div>
-        </div>
-      )}
+      <AlertModal 
+        isOpen={showAlertModal}
+        onClose={() => setShowAlertModal(false)}
+        defaultEntity={token.symbol}
+      />
 
       {/* Strategy Logic Modal */}
       {showStrategyModal && (
