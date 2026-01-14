@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { X, Bell } from 'lucide-react';
 import {
   Select,
@@ -9,19 +9,20 @@ import {
 } from './ui/select';
 
 export default function AlertModal({ isOpen, onClose, defaultEntity = '' }) {
-  const [entity, setEntity] = useState(defaultEntity || 'Alameda Research');
   const [threshold, setThreshold] = useState('$10M');
   const [timeframe, setTimeframe] = useState('24h');
   const [condition, setCondition] = useState('accumulation');
-
-  // Sync entity state with defaultEntity prop changes
-  useEffect(() => {
-    if (defaultEntity) {
-      setEntity(defaultEntity);
-    }
-  }, [defaultEntity]);
+  
+  // Use prop directly, with local state only for select interaction
+  const [entity, setEntity] = useState('');
+  const displayEntity = entity || defaultEntity || 'Alameda Research';
 
   if (!isOpen) return null;
+
+  const handleClose = () => {
+    setEntity(''); // Reset to allow new defaultEntity on next open
+    onClose();
+  };
 
   const entities = [
     'Any Smart Money',
