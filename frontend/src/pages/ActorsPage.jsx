@@ -209,7 +209,9 @@ const actorsData = [
   },
   {
     id: 'wintermute',
-    label: 'Wintermute',
+    real_name: 'Wintermute',
+    strategy_name: 'DeFi Yield Optimizer',
+    identity_confidence: 0.87,
     address: '0xfedcba0987654321fedcba0987654321fedcba09',
     type: 'Trader',
     avatar: 'https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png',
