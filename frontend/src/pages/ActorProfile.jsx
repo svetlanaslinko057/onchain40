@@ -1217,11 +1217,19 @@ const actorDetailedData = {
 // Default actor
 const defaultActor = {
   id: 'unknown',
-  label: 'Unknown Actor',
+  real_name: 'Unknown Actor',
+  strategy_name: 'Unknown Strategy',
+  identity_confidence: 0,
   type: 'Unknown',
   confidence: 0,
   edgeScore: 0,
   exitConditions: [],
+  correlation: {
+    movesWith: [],
+    frontRunners: [],
+    followedBy: [],
+    cluster: { name: '-', phase: '-', size: 0 },
+  },
   cluster: { size: 0, confidence: 0, wallets: [], linkReason: '-' },
   playbook: { currentAction: '-', tokensToWatch: [], suggestedAction: 'Avoid', latencyStatus: '-', confidenceLevel: 0, reasoning: '-' },
   timingEdge: { medianPrecedePrice: '-', successRateWithin6h: '-', lateEntryDropoff: '-', bestPerformsIn: '-' },
