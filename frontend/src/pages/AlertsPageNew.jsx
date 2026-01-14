@@ -533,10 +533,50 @@ const AlertsPage = () => {
                           <ExternalLink className="w-3 h-3" />
                         </Link>
                       ))}
-                      <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-gray-500 hover:text-gray-700 bg-gray-50 hover:bg-gray-100 rounded transition-colors">
-                        <BellOff className="w-3 h-3" />
-                        Mute similar
-                      </button>
+                      
+                      {/* Mute similar with popover */}
+                      <div className="relative">
+                        <button 
+                          onClick={() => setMutePopover(mutePopover?.alertId === alert.id ? null : { alertId: alert.id })}
+                          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-gray-500 hover:text-gray-700 bg-gray-50 hover:bg-gray-100 rounded transition-colors"
+                        >
+                          <BellOff className="w-3 h-3" />
+                          Mute similar
+                        </button>
+                        
+                        {/* Mute Popover */}
+                        {mutePopover?.alertId === alert.id && (
+                          <div className="absolute left-0 top-full mt-1 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20 min-w-[180px]">
+                            <button
+                              onClick={() => {
+                                console.log('Mute this entity:', alert.source.name);
+                                setMutePopover(null);
+                              }}
+                              className="w-full px-3 py-2 text-left text-xs hover:bg-gray-50 text-gray-700"
+                            >
+                              Mute this entity
+                            </button>
+                            <button
+                              onClick={() => {
+                                console.log('Mute alert type:', alert.category);
+                                setMutePopover(null);
+                              }}
+                              className="w-full px-3 py-2 text-left text-xs hover:bg-gray-50 text-gray-700"
+                            >
+                              Mute this alert type
+                            </button>
+                            <button
+                              onClick={() => {
+                                console.log('Mute for 24h');
+                                setMutePopover(null);
+                              }}
+                              className="w-full px-3 py-2 text-left text-xs hover:bg-gray-50 text-gray-700"
+                            >
+                              Mute for 24h
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
