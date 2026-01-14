@@ -1079,7 +1079,9 @@ const actorDetailedData = {
   },
   'unknown-whale-1': {
     id: 'unknown-whale-1',
-    label: 'Smart Whale #4721',
+    real_name: 'Smart Whale #4721',
+    strategy_name: 'High-Risk Flip Trader',
+    identity_confidence: 0.32,
     address: '0xabcdef1234567890abcdef1234567890abcdef12',
     type: 'Whale',
     avatar: null,
@@ -1093,6 +1095,17 @@ const actorDetailedData = {
       { trigger: 'Any entry signal', action: 'Ignore — negative expected value', priority: 'critical' },
       { trigger: 'Behavior change', action: 'Still avoid — track record too poor', priority: 'high' },
     ],
+    correlation: {
+      movesWith: [
+        { id: 'dwf-labs', strategy_name: 'Meme Momentum Rider', similarity: 68, overlap: 'Meme momentum' },
+      ],
+      frontRunners: [
+        { id: 'dwf-labs', strategy_name: 'Meme Momentum Rider', avgLeadTime: '+2.1h', frequency: '52%' },
+        { id: 'alameda', strategy_name: 'SOL Ecosystem Accumulator', avgLeadTime: '+8.4h', frequency: '31%' },
+      ],
+      followedBy: [],
+      cluster: { name: 'High-Risk Momentum', phase: 'Exiting', size: 3 },
+    },
     cluster: {
       size: 2,
       confidence: 67,
