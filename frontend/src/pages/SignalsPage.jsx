@@ -1451,6 +1451,7 @@ export default function Watchlist() {
                   onRemove={handleRemove}
                   onToggleWatch={handleToggleWatch}
                   onOpenAlerts={handleOpenAlerts}
+                  onUserAction={handleUserAction}
                 />
               ))}
             </div>
