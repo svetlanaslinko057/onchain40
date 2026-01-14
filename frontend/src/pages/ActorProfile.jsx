@@ -737,6 +737,25 @@ const actorDetailedData = {
       lateEntryDropoff: '4 hours',
       bestPerformsIn: 'Sideways',
     },
+    followerReality: {
+      avgEntryDelay: '1.8h',
+      expectedSlippage: '0.4%',
+      modeledROI30d: { actor: '+6%', follower: '+2%' },
+      maxDDFollower: '12.1%',
+      crowdingFactor: 'Low',
+    },
+    edgeDecay: {
+      status: 'stable',
+      trend: 'MM strategies consistent but low alpha',
+      successRateTrend: '0% vs last month',
+      crowdFollowing: '~180 followers',
+      lastUpdated: '1h ago',
+    },
+    doNotFollowIf: [
+      { condition: 'Expecting directional alpha', reason: 'Actor is market-neutral' },
+      { condition: 'High volatility regime', reason: 'MM spreads widen, edge disappears' },
+      { condition: 'Following LP moves', reason: 'Not directional trades' },
+    ],
     copyFeed: [
       { id: 1, type: 'BRIDGE', token: 'ETH→BASE', size: '$780K', time: '1h ago', price: '-', txHash: '0xwint...001', entryDelay: '-' },
       { id: 2, type: 'SWAP', token: 'ETH→wstETH', size: '$1.2M', time: '3h ago', price: '-', txHash: '0xwint...002', entryDelay: '-' },
