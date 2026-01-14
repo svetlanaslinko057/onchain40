@@ -250,7 +250,7 @@ export default function WalletsPage() {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">Wallet Intelligence</h1>
-                <p className="text-sm text-gray-500">Analyze any wallet's behavior, risk, and strategy fit</p>
+                <p className="text-sm text-gray-500">Analyze any wallet behavior, risk, and strategy fit</p>
               </div>
               {trackedWallets.length > 0 && (
                 <Link 
