@@ -1180,15 +1180,6 @@ export default function Watchlist() {
                 className="w-48 pl-9 pr-3 py-2 bg-gray-50 border-0 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-900/10"
               />
             </div>
-
-            {/* Add to Watchlist */}
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-semibold hover:bg-gray-800"
-            >
-              <Plus className="w-4 h-4" />
-              Add
-            </button>
           </div>
         </div>
       </div>
