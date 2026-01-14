@@ -969,7 +969,10 @@ export default function Watchlist() {
         statusChange: null,
         riskLevel: 'low',
         bridgeAligned: false,
-        dormantDays: 14
+        dormantDays: 14,
+        timestamp: Date.now() - (1000 * 60 * 60 * 80), // 80 hours ago (archived)
+        muted: false,
+        tracking: false
       },
       {
         id: 6,
@@ -991,7 +994,14 @@ export default function Watchlist() {
         statusChange: null,
         riskLevel: 'medium',
         bridgeAligned: true,
-        dormantDays: 0
+        alignedCount: 2,
+        alignedEntities: ['Binance', 'Bybit'],
+        coordinationWindow: '12h',
+        coordinationConfidence: 78,
+        dormantDays: 0,
+        timestamp: Date.now() - (1000 * 60 * 60 * 5), // 5 hours ago
+        muted: false,
+        tracking: false
       },
       // Дополнительные карточки для pagination
       {
