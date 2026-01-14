@@ -37,7 +37,7 @@ const getEdgeScoreColor = (score) => {
   return 'text-red-500 bg-red-50 border-red-200';
 };
 
-// Mock actor detailed data with HYBRID identity + Correlation data
+// Mock actor detailed data with HYBRID identity + Correlation + INFLUENCE data (ETAP 4)
 const actorDetailedData = {
   'vitalik': {
     id: 'vitalik',
@@ -52,30 +52,49 @@ const actorDetailedData = {
     primaryChain: 'ETH',
     latency: 'Early',
     edgeScore: 78,
+    
+    // ETAP 4: INFLUENCE METRICS
+    influenceScore: 72,
+    influenceRole: 'Leader',
+    followers_count: 4,
+    leads_count: 1,
+    follows_count: 1,
+    avgFollowerLag: 5.8,
+    consistency: 0.78,
+    
     exitConditions: [
       { trigger: 'Edge Score < 50', action: 'Reduce position by 50%', priority: 'high' },
       { trigger: 'Behavior shifts to Distribution', action: 'Exit all positions', priority: 'critical' },
       { trigger: 'Entry delay > 8h consistently', action: 'Stop following new entries', priority: 'medium' },
     ],
     
-    // CORRELATION & INFLUENCE DATA
+    // ETAP 4: ENHANCED CORRELATION & INFLUENCE DATA
     correlation: {
       movesWith: [
-        { id: 'a16z', strategy_name: 'Institutional Infrastructure Play', similarity: 82, overlap: 'L2 accumulation' },
-        { id: 'pantera', strategy_name: 'AI Narrative Accumulator', similarity: 71, overlap: 'ETH ecosystem' },
-        { id: 'alameda', strategy_name: 'SOL Ecosystem Accumulator', similarity: 58, overlap: 'Macro positions' },
+        { id: 'a16z', real_name: 'a16z Crypto', strategy_name: 'Institutional Infrastructure Play', similarity: 82, overlap: 'L2 accumulation', overlapType: 'timing' },
+        { id: 'pantera', real_name: 'Pantera Capital', strategy_name: 'AI Narrative Accumulator', similarity: 71, overlap: 'ETH ecosystem', overlapType: 'token' },
+        { id: 'alameda', real_name: 'Alameda Research', strategy_name: 'SOL Ecosystem Accumulator', similarity: 58, overlap: 'Macro positions', overlapType: 'size' },
       ],
       frontRunners: [
-        { id: 'pantera', strategy_name: 'AI Narrative Accumulator', avgLeadTime: '+4.2h', frequency: '34%' },
+        { id: 'pantera', real_name: 'Pantera Capital', strategy_name: 'AI Narrative Accumulator', avgLeadTime: '+4.2h', frequency: '34%', tradesMatched: 18 },
       ],
       followedBy: [
-        { id: 'dwf-labs', strategy_name: 'Meme Momentum Rider', avgLagTime: '+6.8h', frequency: '28%' },
-        { id: 'unknown-whale-1', strategy_name: 'High-Risk Flip Trader', avgLagTime: '+12.4h', frequency: '15%' },
+        { id: 'dwf-labs', real_name: 'DWF Labs', strategy_name: 'Meme Momentum Rider', avgLagTime: '+6.8h', frequency: '28%', tradesMatched: 14 },
+        { id: 'unknown-whale-1', real_name: 'Smart Whale #4721', strategy_name: 'High-Risk Flip Trader', avgLagTime: '+12.4h', frequency: '15%', tradesMatched: 7 },
       ],
       cluster: {
         name: 'L2/Infrastructure',
         phase: 'Accumulating',
         size: 12,
+        dominantStrategy: 'Smart Money',
+      },
+      // ETAP 4: INFLUENCE SUMMARY
+      influenceSummary: {
+        role: 'Early Leader',
+        ecosystem: 'ETH/L2',
+        avgLag: '~4–6h',
+        recommendation: 'Best used as a primary signal in early rotation phases. Strong in L2 narrative plays.',
+        strength: 'high',
       },
     },
     
