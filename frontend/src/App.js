@@ -14,6 +14,7 @@ import SignalsPage from "./pages/SignalsPage";
 import SignalSnapshot from "./pages/SignalSnapshot";
 import AlertsPage from "./pages/AlertsPage";
 import StrategiesPage from "./pages/StrategiesPage";
+import WatchlistPage from "./pages/WatchlistPage";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/wallets" element={<WalletsPage />} />
         <Route path="/entities" element={<EntitiesPage />} />
         <Route path="/signals" element={<SignalsPage />} />
+        <Route path="/watchlist" element={<WatchlistPage />} />
         <Route path="/alerts" element={<AlertsPage />} />
         <Route path="/strategies" element={<StrategiesPage />} />
         
