@@ -29,6 +29,13 @@ const actionColors = {
   'BRIDGE': { bg: 'bg-purple-100', text: 'text-purple-700', icon: Globe },
 };
 
+// Edge Score color helper
+const getEdgeScoreColor = (score) => {
+  if (score >= 75) return 'text-emerald-600 bg-emerald-50 border-emerald-200';
+  if (score >= 50) return 'text-amber-600 bg-amber-50 border-amber-200';
+  return 'text-red-500 bg-red-50 border-red-200';
+};
+
 // Mock actor detailed data with new fields
 const actorDetailedData = {
   'vitalik': {
@@ -41,6 +48,12 @@ const actorDetailedData = {
     confidence: 87,
     primaryChain: 'ETH',
     latency: 'Early',
+    edgeScore: 78,
+    exitConditions: [
+      { trigger: 'Edge Score < 50', action: 'Reduce position by 50%', priority: 'high' },
+      { trigger: 'Behavior shifts to Distribution', action: 'Exit all positions', priority: 'critical' },
+      { trigger: 'Entry delay > 8h consistently', action: 'Stop following new entries', priority: 'medium' },
+    ],
     
     // CLUSTER INFO - Source of Truth
     cluster: {
