@@ -593,6 +593,13 @@ const WatchlistPage = () => {
           </div>
         )}
       </div>
+
+      {/* Add Address Modal */}
+      <AddAddressModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAdd={handleAdd}
+      />
     </div>
   );
 };
