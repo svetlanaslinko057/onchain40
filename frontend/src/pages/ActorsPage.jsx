@@ -523,6 +523,8 @@ export default function ActorsPage() {
     // Sort
     result.sort((a, b) => {
       switch (sortBy) {
+        case 'edgeScore':
+          return b.edgeScore - a.edgeScore;
         case 'activity':
           return a.lastActivityTime - b.lastActivityTime;
         case 'pnl':
