@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, TrendingUp, TrendingDown, ArrowUpRight, Users, Info, ChevronLeft, ChevronRight, Link2, X } from 'lucide-react';
+import { Search, TrendingUp, TrendingDown, ArrowUpRight, Users, Info, ChevronLeft, ChevronRight, Link2, X, Eye, Bell } from 'lucide-react';
 import Header from '../components/Header';
 import {
   Tooltip,
