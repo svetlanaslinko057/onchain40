@@ -939,7 +939,9 @@ const actorDetailedData = {
   },
   'wintermute': {
     id: 'wintermute',
-    label: 'Wintermute',
+    real_name: 'Wintermute',
+    strategy_name: 'DeFi Yield Optimizer',
+    identity_confidence: 0.87,
     address: '0xfedcba0987654321fedcba0987654321fedcba09',
     type: 'Trader',
     avatar: 'https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png',
@@ -953,6 +955,15 @@ const actorDetailedData = {
       { trigger: 'LP impermanent loss > 5%', action: 'Exit LP-related copies', priority: 'high' },
       { trigger: 'Volatility regime change', action: 'MM edge disappears in trending markets', priority: 'medium' },
     ],
+    correlation: {
+      movesWith: [
+        { id: 'jump-trading', strategy_name: 'HFT Arbitrage Engine', similarity: 64, overlap: 'MM/Arb operations' },
+        { id: 'dwf-labs', strategy_name: 'Meme Momentum Rider', similarity: 52, overlap: 'MM operations' },
+      ],
+      frontRunners: [],
+      followedBy: [],
+      cluster: { name: 'Market Making', phase: 'Neutral', size: 5 },
+    },
     cluster: {
       size: 31,
       confidence: 82,
