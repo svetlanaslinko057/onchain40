@@ -712,7 +712,7 @@ export default function Watchlist() {
   const [bridgeAlignedFilter, setBridgeAlignedFilter] = useState(false);
   const [dormantFilter, setDormantFilter] = useState(false);
   const [lifecycleFilter, setLifecycleFilter] = useState('all'); // all, new, active, cooling, archived
-  const [searchQuery, setSearchQuery] = useState('');
+  // Removed old buggy search - creating new one from scratch
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState('overview');
   const [showAdvanced, setShowAdvanced] = useState(false);
