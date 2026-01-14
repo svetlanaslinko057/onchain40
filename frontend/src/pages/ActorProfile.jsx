@@ -388,12 +388,27 @@ const actorDetailedData = {
       { condition: 'Within 24h of listing', reason: 'Extreme volatility window' },
     ],
     copyFeed: [
-      { id: 1, type: 'BUY', token: 'PEPE', size: '$120K', time: '4h ago', price: '$0.0000142', txHash: '0xdwf...001', entryDelay: '0.8h' },
-      { id: 2, type: 'SELL', token: 'WIF', size: '$89K', time: '8h ago', price: '$2.34', txHash: '0xdwf...002', entryDelay: '-' },
-      { id: 3, type: 'BUY', token: 'FLOKI', size: '$45K', time: '1d ago', price: '$0.000189', txHash: '0xdwf...003', entryDelay: '1.5h' },
-      { id: 4, type: 'SWAP', token: 'ETH→USDT', size: '$500K', time: '1d ago', price: '-', txHash: '0xdwf...004', entryDelay: '-' },
-      { id: 5, type: 'BUY', token: 'BONK', size: '$67K', time: '2d ago', price: '$0.0000234', txHash: '0xdwf...005', entryDelay: '2.1h' },
+      { id: 1, type: 'BUY', token: 'PEPE', size: '$120K', time: '4h ago', price: '$0.0000142', txHash: '0xdwf...001', entryDelay: '0.8h', actorPnl: '+22%', followerPnl: '+8%' },
+      { id: 2, type: 'SELL', token: 'WIF', size: '$89K', time: '8h ago', price: '$2.34', txHash: '0xdwf...002', entryDelay: '-', actorPnl: '+45%', followerPnl: '+28%' },
+      { id: 3, type: 'BUY', token: 'FLOKI', size: '$45K', time: '1d ago', price: '$0.000189', txHash: '0xdwf...003', entryDelay: '1.5h', actorPnl: '-12%', followerPnl: '-18%' },
+      { id: 4, type: 'SWAP', token: 'ETH→USDT', size: '$500K', time: '1d ago', price: '-', txHash: '0xdwf...004', entryDelay: '-', actorPnl: '-', followerPnl: '-' },
+      { id: 5, type: 'BUY', token: 'BONK', size: '$67K', time: '2d ago', price: '$0.0000234', txHash: '0xdwf...005', entryDelay: '2.1h', actorPnl: '+34%', followerPnl: '+12%' },
     ],
+    simulatedPortfolio: {
+      startingCapital: 10000,
+      periods: [
+        { period: '7d', actorReturn: 12.8, followerReturn: 4.2, slippageLoss: 2.4, delayLoss: 6.2 },
+        { period: '30d', actorReturn: 28.4, followerReturn: 8.9, slippageLoss: 6.8, delayLoss: 12.7 },
+        { period: '90d', actorReturn: 52.1, followerReturn: 14.2, slippageLoss: 12.4, delayLoss: 25.5 },
+      ],
+      trades: { total: 124, profitable: 72, avgWin: '+28.4%', avgLoss: '-14.2%' },
+      impactByDelay: [
+        { delay: '1h', returnLoss: '-35%', recommendation: 'Risky' },
+        { delay: '2h', returnLoss: '-52%', recommendation: 'Not recommended' },
+        { delay: '4h', returnLoss: '-68%', recommendation: 'Avoid' },
+        { delay: '6h+', returnLoss: '-82%', recommendation: 'Avoid' },
+      ],
+    },
     whyFollow: [
       { positive: true, text: 'Strong market making presence (+$890K realized)' },
       { positive: true, text: 'Early access to new listings' },
