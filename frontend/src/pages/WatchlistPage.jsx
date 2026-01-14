@@ -307,12 +307,6 @@ const WatchlistPage = () => {
     return matchesSearch && matchesType && matchesBehavior && matchesRisk && matchesChanges;
   });
 
-  // Pagination
-  const totalPages = Math.ceil(filteredWatchlist.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedWatchlist = filteredWatchlist.slice(startIndex, endIndex);
-
   // Clickable summary handlers
   const handleSummaryClick = (filterType) => {
     switch(filterType) {
@@ -324,12 +318,10 @@ const WatchlistPage = () => {
         break;
       case 'bridgeAligned':
         setFilterBehavior('all');
-        // Could add bridge filter if needed
         break;
       default:
         break;
     }
-    setCurrentPage(1);
   };
 
   const handleRemove = (id) => {
