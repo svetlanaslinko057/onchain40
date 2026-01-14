@@ -320,15 +320,20 @@ export default function TokensPage() {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link
-                    to="/watchlist"
-                    className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                  <button
+                    onClick={handleAddToWatchlist}
+                    className={`p-2 rounded-lg transition-colors ${
+                      isTokenInWatchlist 
+                        ? 'text-green-600 bg-green-50 hover:bg-green-100' 
+                        : 'text-gray-400 hover:text-gray-900 hover:bg-gray-100'
+                    }`}
+                    data-testid="token-watchlist-btn"
                   >
-                    <Eye className="w-4 h-4" />
-                  </Link>
+                    {isTokenInWatchlist ? <Check className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p className="text-xs">Add to Watchlist</p>
+                  <p className="text-xs">{isTokenInWatchlist ? 'In Watchlist' : 'Add to Watchlist'}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -336,12 +341,13 @@ export default function TokensPage() {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link
-                    to="/alerts"
-                    className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                  <button
+                    onClick={() => setShowAlertModal(true)}
+                    className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
+                    data-testid="token-alert-btn"
                   >
                     <Bell className="w-4 h-4" />
-                  </Link>
+                  </button>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="text-xs">Create Alert</p>
