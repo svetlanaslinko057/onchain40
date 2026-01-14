@@ -238,10 +238,25 @@ export default function TokensPage() {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [showStrategyModal, setShowStrategyModal] = useState(null);
   
+  // Watchlist state
+  const [tokenWatchlist, setTokenWatchlist] = useState([]);
+  
   const token = tokenData[selectedToken] || tokenData.eth;
   const filteredTokens = topTokens.filter(t => 
     t.symbol.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Watchlist handler
+  const handleAddToWatchlist = () => {
+    setTokenWatchlist(prev => {
+      if (prev.includes(selectedToken)) {
+        return prev.filter(id => id !== selectedToken);
+      }
+      return [...prev, selectedToken];
+    });
+  };
+
+  const isTokenInWatchlist = tokenWatchlist.includes(selectedToken);
 
   const getTrendIcon = (trend) => {
     if (trend === 'improving') return <TrendingUp className="w-3.5 h-3.5" />;
