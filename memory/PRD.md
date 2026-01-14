@@ -7,7 +7,7 @@ Deploy and iteratively enhance a crypto analytics platform focusing on on-chain 
 
 ### Implemented Features
 
-#### Actors Feature (ETAP 1 Complete)
+#### Actors Feature (ETAP 1 + ETAP 2 Complete)
 - **ActorsPage** (`/actors`): Overview catalog with actor cards showing:
   - Edge Score (0-100) with color coding (green/amber/red)
   - Default sort by Edge Score
@@ -21,19 +21,22 @@ Deploy and iteratively enhance a crypto analytics platform focusing on on-chain 
   - Do NOT Follow If conditions
   - Exit Conditions block
   - Timing Edge metrics
-  - Copy Feed with recent transactions
+  - **Simulated Portfolio (NEW - ETAP 2)**:
+    - What-If Calculator with capital input
+    - Period selector (7d/30d/90d)
+    - Actor Return vs Follower Return comparison
+    - Return Gap breakdown (Slippage + Delay costs)
+    - Impact by Entry Delay table with recommendations
+    - Trade Statistics collapsible section
+  - Recent Trades with PnL comparison (Actor vs You)
   - Strategy Fingerprint radar
   - Cluster wallet management
 
 #### Watchlist & Alerts Integration (P1 Complete)
-- **EntitiesPage**: 
-  - Add to Watchlist button (toggles Eye/Check icon)
-  - Create Alert button opens AlertModal with entity name pre-filled
-- **TokensPage**:
-  - Add token to Watchlist button
-  - Create Alert button opens AlertModal with token symbol pre-filled
-- **WalletsPage**: Already had full implementation
-- **AlertModal**: Shared component with dynamic entity/token pre-fill
+- **EntitiesPage**: Watchlist toggle + AlertModal integration
+- **TokensPage**: Watchlist toggle + AlertModal integration  
+- **WalletsPage**: Full watchlist/alert functionality
+- **AlertModal**: Shared component with dynamic entity pre-fill
 
 #### Signals Page
 - Signal lifecycle (New → Active → Cooling → Archived)
@@ -53,15 +56,8 @@ Deploy and iteratively enhance a crypto analytics platform focusing on on-chain 
 - Bridge alignment alerts
 - Risk spike notifications
 
-#### Market Intelligence
-- Token analysis with structure signals
-- Entity tracking (exchanges, funds, smart money)
-- CEX vs DEX pressure analysis
-
 ### UI/UX Improvements
 - **SearchInput Component**: Reusable component fixing icon overlap bug
-  - Location: `/app/frontend/src/components/shared/SearchInput.jsx`
-  - Used on: ActorsPage, EntitiesPage, SignalsPage, WatchlistPage, TokensPage
 
 ## Architecture
 
@@ -71,14 +67,14 @@ Deploy and iteratively enhance a crypto analytics platform focusing on on-chain 
 ├── components/
 │   ├── shared/
 │   │   └── SearchInput.jsx
-│   ├── AlertModal.jsx (updated with dynamic entity)
+│   ├── AlertModal.jsx
 │   ├── Header.jsx
 │   └── ...
 ├── pages/
 │   ├── ActorsPage.jsx
-│   ├── ActorProfile.jsx
-│   ├── EntitiesPage.jsx (watchlist/alerts integrated)
-│   ├── TokensPage.jsx (watchlist/alerts integrated)
+│   ├── ActorProfile.jsx (ETAP 2 - Simulated Portfolio)
+│   ├── EntitiesPage.jsx
+│   ├── TokensPage.jsx
 │   ├── SignalsPage.jsx
 │   ├── WatchlistPage.jsx
 │   ├── WalletsPage.jsx
@@ -93,38 +89,36 @@ Deploy and iteratively enhance a crypto analytics platform focusing on on-chain 
 ## Completed Work
 
 ### December 2025
-- ✅ **ETAP 1 - Actors Enhancement**:
-  - Added Edge Score (0-100) to all actors
-  - Added Edge Score badge to ActorProfile header
-  - Added Exit Conditions block with priority levels
-  - Default sort by Edge Score on ActorsPage
-- ✅ **Search Input Bug Fix**:
-  - Created reusable SearchInput component
-  - Replaced all inline search implementations
-- ✅ **P1 - Watchlist & Alerts Integration**:
-  - EntitiesPage: watchlist toggle + alert modal
-  - TokensPage: watchlist toggle + alert modal
-  - AlertModal: dynamic entity pre-fill fix
+- ✅ **ETAP 1**: Edge Score + Exit Conditions
+- ✅ **P1**: Watchlist & Alerts integration across pages
+- ✅ **Search Input Bug Fix**: Reusable SearchInput component
+- ✅ **ETAP 2**: Simulated Portfolio (Copy-Mechanics)
+  - What-If Calculator with starting capital input
+  - Period selector (7d/30d/90d) with dynamic calculations
+  - Actor vs Follower return comparison
+  - Return Gap breakdown (slippage + delay costs)
+  - Impact by Entry Delay table with recommendations
+  - Trade Statistics section
+  - PnL comparison in Recent Trades
 
 ## Pending Tasks
 
 ### Upcoming (P2)
-- **ETAP 2 - Copy-Mechanics**: Transform Copy Feed into Simulated Portfolio
 - **ETAP 3 - Anonymize Actors**: Strategy-based names instead of persona names
+  - "AI Narrative Accumulator", "L2 Infrastructure Builder", etc.
 - **Actors Correlation**: Show which actors move together
+  - Correlation matrix, front-running detection, cluster behavior
 
 ### Future (P2+)
 - **Backend Integration**: Persist all data to MongoDB
 - **Lazy Load for Watchlist**: Handle large item counts
-- Component refactoring (ActorProfile.jsx is 1800+ lines)
-
-## Known Issues
-- None critical
+- Component refactoring (ActorProfile.jsx is now ~1900 lines)
 
 ## Testing Status
-- Latest tests: `/app/test_reports/iteration_2.json`
-- All P1 features tested and passing (95% → 100% after bug fix)
+- Latest tests: `/app/test_reports/iteration_3.json`
+- ETAP 2 Simulated Portfolio: 100% frontend success rate
+- All features tested across different actor types
 
 ## Important Notes
 - **ALL DATA IS MOCKED** on frontend - no backend persistence yet
-- Watchlist state is local React state, not persisted
+- Watchlist/Alert state is local React state, not persisted
