@@ -439,7 +439,7 @@ export default function ActorsPage() {
   const [activeSignalsOnly, setActiveSignalsOnly] = useState(false);
   const [earlyOnly, setEarlyOnly] = useState(false);
   const [followedActors, setFollowedActors] = useState(['alameda', 'a16z']);
-  const [sortBy, setSortBy] = useState('activity');
+  const [sortBy, setSortBy] = useState('edgeScore');
   
   // Filters state
   const [selectedStrategies, setSelectedStrategies] = useState([]);
