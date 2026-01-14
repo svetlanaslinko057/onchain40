@@ -1,0 +1,84 @@
+{
+  "summary": "ETAP 2 Simulated Portfolio (Copy-Mechanics) testing completed on ActorProfile page. All features working correctly across different actor types.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "ActorProfile - Simulated Portfolio",
+        "issues": ["Missing data-testid attributes for automated testing - recommend adding for Starting Capital input, period selector buttons, and key display elements"]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/test_reports/iteration_3.json"
+  ],
+  "action_items": [
+    "Consider adding data-testid attributes to Simulated Portfolio components for better test automation"
+  ],
+  "critical_code_review_comments": [
+    "Calculation formula correctly implemented: actorFinalValue = simCapital * (1 + periodData.actorReturn / 100)",
+    "Different actors show appropriate risk levels (Vitalik: good copy candidate, Jump Trading: HFT impossible to copy, a16z: institutional stable returns)",
+    "Impact by Entry Delay table correctly shows Optimal/Acceptable/Risky/Avoid recommendations based on actor type"
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A - frontend only testing",
+    "frontend": "100%"
+  },
+  "seed_data_creation": "N/A - all data is MOCKED on frontend",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "ETAP 2 Simulated Portfolio fully tested. All simulatedPortfolio data is mocked in ActorProfile.jsx for each actor.",
+  "features_tested": {
+    "Simulated_Portfolio_Block_Renders": {
+      "status": "PASS",
+      "details": "Simulated Portfolio block renders correctly on ActorProfile page with Calculator icon, BETA badge, and all sub-components"
+    },
+    "Starting_Capital_Input": {
+      "status": "PASS",
+      "details": "Starting Capital input accepts numbers (tested 10000, 25000) and updates calculations correctly"
+    },
+    "Period_Selector_7d_30d_90d": {
+      "status": "PASS",
+      "details": "Period selector buttons (7d/30d/90d) switch between periods correctly with visual feedback (bg-indigo-600 for selected)"
+    },
+    "Actor_Return_Display": {
+      "status": "PASS",
+      "details": "Actor's Return shows correct calculated values - Vitalik 30d: +18.5%, Jump Trading 30d: +22.4%, a16z 30d: +8.4%"
+    },
+    "Follower_Return_Display": {
+      "status": "PASS",
+      "details": "Your Simulated Return shows correct values - Vitalik: +9.2%, Jump Trading: -5.2% (negative as expected for HFT), a16z: +7.8%"
+    },
+    "Return_Gap_Breakdown": {
+      "status": "PASS",
+      "details": "Return Gap breakdown shows slippage and delay costs with visual bar representation"
+    },
+    "Impact_By_Entry_Delay_Table": {
+      "status": "PASS",
+      "details": "Impact by Entry Delay table shows correct recommendations - Vitalik: Optimal/Acceptable/Risky/Not recommended, Jump Trading: all Avoid, a16z: Optimal/Optimal/Acceptable/Acceptable"
+    },
+    "Trade_Statistics_Collapse_Expand": {
+      "status": "PASS",
+      "details": "Trade Statistics section expands/collapses correctly showing Trades, Winners, Avg Win, Avg Loss"
+    },
+    "Recent_Trades_PnL_Comparison": {
+      "status": "PASS",
+      "details": "Recent Trades shows Actor vs You PnL comparison - e.g., ARB trade: Actor +8.2%, You +5.1%"
+    },
+    "Different_Actors_Different_Data": {
+      "status": "PASS",
+      "details": "Tested Vitalik (good copy candidate), Jump Trading (HFT - negative follower returns), a16z (institutional - stable returns) - all show appropriate different data"
+    },
+    "Calculation_Formula_Verification": {
+      "status": "PASS",
+      "details": "Formula actorFinalValue = simCapital * (1 + periodData.actorReturn / 100) verified - $10,000 @ 18.5% = $11,850 ✓"
+    }
+  },
+  "mocked_data_note": "All simulatedPortfolio data is MOCKED on frontend in ActorProfile.jsx - includes periods, trades, impactByDelay for each actor"
+}
