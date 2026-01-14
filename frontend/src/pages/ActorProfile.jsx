@@ -265,9 +265,24 @@ const actorDetailedData = {
       { condition: 'After major narrative shift', reason: 'Actor needs 24-48h to reposition' },
     ],
     copyFeed: [
-      { id: 1, type: 'SWAP', token: 'SOL→USDC', size: '$890K', time: '45m ago', price: '-', txHash: '0xabc...111', entryDelay: '-' },
-      { id: 2, type: 'BUY', token: 'JUP', size: '$340K', time: '4h ago', price: '$0.89', txHash: '0xdef...222', entryDelay: '1.8h' },
+      { id: 1, type: 'SWAP', token: 'SOL→USDC', size: '$890K', time: '45m ago', price: '-', txHash: '0xabc...111', entryDelay: '-', actorPnl: '-', followerPnl: '-' },
+      { id: 2, type: 'BUY', token: 'JUP', size: '$340K', time: '4h ago', price: '$0.89', txHash: '0xdef...222', entryDelay: '1.8h', actorPnl: '+15.2%', followerPnl: '+11.8%' },
     ],
+    simulatedPortfolio: {
+      startingCapital: 10000,
+      periods: [
+        { period: '7d', actorReturn: 8.4, followerReturn: 6.2, slippageLoss: 0.6, delayLoss: 1.6 },
+        { period: '30d', actorReturn: 32.1, followerReturn: 24.5, slippageLoss: 1.8, delayLoss: 5.8 },
+        { period: '90d', actorReturn: 78.5, followerReturn: 58.2, slippageLoss: 4.8, delayLoss: 15.5 },
+      ],
+      trades: { total: 89, profitable: 63, avgWin: '+18.2%', avgLoss: '-5.4%' },
+      impactByDelay: [
+        { delay: '1h', returnLoss: '-12%', recommendation: 'Optimal' },
+        { delay: '2h', returnLoss: '-22%', recommendation: 'Acceptable' },
+        { delay: '4h', returnLoss: '-38%', recommendation: 'Risky' },
+        { delay: '6h+', returnLoss: '-55%', recommendation: 'Not recommended' },
+      ],
+    },
     whyFollow: [
       { positive: true, text: 'Exceptional track record (+$2.4M realized)' },
       { positive: true, text: 'Very low risk profile (8/100)' },
