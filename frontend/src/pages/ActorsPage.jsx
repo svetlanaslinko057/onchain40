@@ -367,7 +367,7 @@ const actionColors = {
   'BRIDGE': 'text-purple-600',
 };
 
-// Actor Card Component - Enhanced with Edge Score and HYBRID identity
+// Actor Card Component - Enhanced with Edge Score, HYBRID identity, and INFLUENCE ROLE (ETAP 4)
 const ActorCard = ({ actor, isFollowed, onToggleFollow, showRealNames }) => {
   const confidence = confidenceColors[actor.confidence];
   const chain = chainConfig[actor.primaryChain] || { color: 'bg-gray-500', label: actor.primaryChain };
@@ -377,21 +377,31 @@ const ActorCard = ({ actor, isFollowed, onToggleFollow, showRealNames }) => {
   const displayName = showRealNames ? actor.real_name : actor.strategy_name;
   const secondaryName = showRealNames ? actor.strategy_name : (actor.identity_confidence >= 0.8 ? actor.real_name : null);
   
+  // ETAP 4: Calculate influence role
+  const influenceRole = getInfluenceRole(actor);
+  const roleConfig = influenceRoleConfig[influenceRole];
+  
   return (
     <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-400 transition-all group h-full flex flex-col">
       {/* Edge Score strip instead of confidence */}
       <div className={`h-1 ${actor.edgeScore >= 75 ? 'bg-emerald-500' : actor.edgeScore >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} />
       
       <div className="p-4 flex flex-col flex-1">
-        {/* Header with Edge Score badge */}
+        {/* Header with Edge Score badge + Influence Role */}
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
             {/* Avatar */}
-            <div className="w-11 h-11 rounded-xl bg-gray-100 flex items-center justify-center overflow-hidden">
+            <div className="w-11 h-11 rounded-xl bg-gray-100 flex items-center justify-center overflow-hidden relative">
               {actor.avatar ? (
                 <img src={actor.avatar} alt={displayName} className="w-full h-full object-cover" />
               ) : (
                 <Users className="w-5 h-5 text-gray-400" />
+              )}
+              {/* Leader crown indicator */}
+              {influenceRole === 'Leader' && (
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full flex items-center justify-center">
+                  <Crown className="w-2.5 h-2.5 text-white" />
+                </div>
               )}
             </div>
             <div>
@@ -409,18 +419,40 @@ const ActorCard = ({ actor, isFollowed, onToggleFollow, showRealNames }) => {
               </div>
             </div>
           </div>
-          {/* EDGE SCORE BADGE */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className={`px-2 py-1 rounded-lg border text-sm font-bold ${edgeColor}`}>
-                {actor.edgeScore}
-              </div>
-            </TooltipTrigger>
-            <TooltipContent className="bg-gray-900 text-white max-w-xs">
-              <p className="text-xs font-semibold mb-1">Edge Score: {actor.edgeScore}/100</p>
-              <p className="text-xs text-gray-300">Timing (30%) + ROI Adjusted (25%) + Stability (20%) + Risk (15%) + Signals (10%)</p>
-            </TooltipContent>
-          </Tooltip>
+          {/* EDGE SCORE + INFLUENCE ROLE BADGES */}
+          <div className="flex flex-col items-end gap-1">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className={`px-2 py-1 rounded-lg border text-sm font-bold ${edgeColor}`}>
+                  {actor.edgeScore}
+                </div>
+              </TooltipTrigger>
+              <TooltipContent className="bg-gray-900 text-white max-w-xs">
+                <p className="text-xs font-semibold mb-1">Edge Score: {actor.edgeScore}/100</p>
+                <p className="text-xs text-gray-300">Timing (30%) + ROI Adjusted (25%) + Stability (20%) + Risk (15%) + Signals (10%)</p>
+              </TooltipContent>
+            </Tooltip>
+            {/* ETAP 4: Influence Role Badge */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className={`px-1.5 py-0.5 rounded text-xs font-medium flex items-center gap-1 ${roleConfig.bg} ${roleConfig.text}`}>
+                  <span>{roleConfig.icon}</span>
+                  <span>{influenceRole}</span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent className="bg-gray-900 text-white max-w-xs">
+                <p className="text-xs font-semibold mb-1">Influence Role: {influenceRole}</p>
+                <p className="text-xs text-gray-300">
+                  {influenceRole === 'Leader' && 'This actor sets trends. Others follow their moves.'}
+                  {influenceRole === 'Follower' && 'This actor reacts to others. Better for confirmation.'}
+                  {influenceRole === 'Neutral' && 'Independent actor. No strong influence pattern.'}
+                </p>
+                {actor.influenceScore && (
+                  <p className="text-xs text-gray-400 mt-1">Influence Score: {actor.influenceScore}</p>
+                )}
+              </TooltipContent>
+            </Tooltip>
+          </div>
         </div>
 
         {/* Latency + Chain row */}
