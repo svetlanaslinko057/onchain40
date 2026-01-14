@@ -327,7 +327,10 @@ const WatchlistPage = () => {
               <h1 className="text-2xl font-bold text-gray-900">Watchlist</h1>
               <p className="text-sm text-gray-500 mt-1">My tracked wallets & entities</p>
             </div>
-            <button className="flex items-center gap-2 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-sm font-semibold transition-all">
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center gap-2 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-sm font-semibold transition-all"
+            >
               <Plus className="w-4 h-4" />
               Add address
             </button>
