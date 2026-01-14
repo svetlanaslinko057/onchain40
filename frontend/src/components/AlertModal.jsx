@@ -94,7 +94,7 @@ export default function AlertModal({ isOpen, onClose, defaultEntity = '' }) {
               <label className="block text-xs font-semibold text-gray-700 mb-1.5">
                 Smart Money Entity
               </label>
-              <Select value={entity} onValueChange={setEntity}>
+              <Select value={displayEntity} onValueChange={setEntity}>
                 <SelectTrigger className="w-full h-10 px-3 bg-gray-50 border-gray-200 text-sm font-medium text-gray-900 rounded-xl">
                   <SelectValue placeholder="Select entity" />
                 </SelectTrigger>
