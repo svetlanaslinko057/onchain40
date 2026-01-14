@@ -35,7 +35,7 @@ const AddAddressModal = ({ isOpen, onClose, onAdd }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">Add to Watchlist</h2>
@@ -62,9 +62,9 @@ const AddAddressModal = ({ isOpen, onClose, onAdd }) => {
                   <button
                     key={option.value}
                     onClick={() => setWatchType(option.value)}
-                    className={`flex flex-col items-center justify-center gap-2 px-3 py-3 rounded-xl border-2 transition-all ${
+                    className={`flex flex-col items-center justify-center gap-2 px-3 py-3 rounded-lg border-2 transition-all ${
                       watchType === option.value 
-                        ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-sm' 
+                        ? 'border-gray-900 bg-gray-50 text-gray-900 shadow-sm' 
                         : 'border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300'
                     }`}
                   >
@@ -87,7 +87,8 @@ const AddAddressModal = ({ isOpen, onClose, onAdd }) => {
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder={watchType === 'cluster' ? 'Cluster ID or seed address...' : '0x...'} 
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm transition-all"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent font-mono text-sm transition-all bg-white"
+                style={{color: '#111827'}}
               />
             </div>
           )}
@@ -102,7 +103,8 @@ const AddAddressModal = ({ isOpen, onClose, onAdd }) => {
               value={label}
               onChange={(e) => setLabel(e.target.value)}
               placeholder={watchType === 'token' ? 'e.g., ETH, BTC, UNI' : 'e.g., Vitalik Buterin'} 
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all bg-white"
+              style={{color: '#111827'}}
             />
           </div>
           
@@ -114,7 +116,8 @@ const AddAddressModal = ({ isOpen, onClose, onAdd }) => {
                 <select 
                   value={type}
                   onChange={(e) => setType(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none cursor-pointer transition-all bg-white"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent appearance-none cursor-pointer transition-all bg-white"
+                  style={{color: '#111827'}}
                 >
                   <option value="whale">🐋 Whale</option>
                   <option value="influencer">📢 Influencer</option>
@@ -131,13 +134,13 @@ const AddAddressModal = ({ isOpen, onClose, onAdd }) => {
           <div className="flex gap-3 pt-2">
             <button 
               onClick={onClose}
-              className="flex-1 px-4 py-3 border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-all"
+              className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-all"
             >
               Cancel
             </button>
             <button 
               onClick={handleSubmit}
-              className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40"
+              className="flex-1 px-4 py-3 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 transition-all"
             >
               Add to Watchlist
             </button>
