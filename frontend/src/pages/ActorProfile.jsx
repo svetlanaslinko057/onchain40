@@ -305,6 +305,25 @@ const actorDetailedData = {
       lateEntryDropoff: '6 hours',
       bestPerformsIn: 'Risk-On',
     },
+    followerReality: {
+      avgEntryDelay: '2.8h',
+      expectedSlippage: '2.4%',
+      modeledROI30d: { actor: '+12%', follower: '+3%' },
+      maxDDFollower: '22.5%',
+      crowdingFactor: 'High',
+    },
+    edgeDecay: {
+      status: 'degrading',
+      trend: 'Success rate declining',
+      successRateTrend: '-8% vs last month',
+      crowdFollowing: '~890 followers',
+      lastUpdated: '4h ago',
+    },
+    doNotFollowIf: [
+      { condition: 'Meme token < $1M mcap', reason: 'Rug pull risk too high' },
+      { condition: 'Actor in MM mode', reason: 'Not directional alpha' },
+      { condition: 'Within 24h of listing', reason: 'Extreme volatility window' },
+    ],
     copyFeed: [
       { id: 1, type: 'BUY', token: 'PEPE', size: '$120K', time: '4h ago', price: '$0.0000142', txHash: '0xdwf...001', entryDelay: '0.8h' },
       { id: 2, type: 'SELL', token: 'WIF', size: '$89K', time: '8h ago', price: '$2.34', txHash: '0xdwf...002', entryDelay: '-' },
