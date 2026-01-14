@@ -1171,19 +1171,42 @@ export default function Watchlist() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          {/* NEW SEARCH - Centered and prominent */}
+          <div className="flex-1 max-w-md mx-auto">
+            <div className={`relative transition-all ${searchFocused ? 'scale-105' : 'scale-100'}`}>
+              <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${
+                searchFocused ? 'text-blue-500' : 'text-gray-400'
+              }`} />
               <input 
                 type="text" 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search..." 
-                className="w-48 pl-9 pr-3 py-2 bg-gray-50 border-0 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-900/10"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
+                placeholder="Search by name, address, or type..." 
+                className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-sm transition-all ${
+                  searchFocused 
+                    ? 'bg-white border-2 border-blue-500 shadow-lg shadow-blue-500/20' 
+                    : 'bg-gray-50 border-2 border-transparent hover:bg-white hover:border-gray-200'
+                } focus:outline-none`}
               />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <span className="text-gray-400 text-xs">✕</span>
+                </button>
+              )}
             </div>
+            {searchTerm && (
+              <div className="mt-1 text-xs text-gray-500 text-center">
+                {filteredWatchlist.length} result{filteredWatchlist.length !== 1 ? 's' : ''} found
+              </div>
+            )}
           </div>
+          
+          <div className="w-32"></div> {/* Spacer for balance */}
         </div>
       </div>
 
