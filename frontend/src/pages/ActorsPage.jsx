@@ -641,6 +641,8 @@ export default function ActorsPage() {
       switch (sortBy) {
         case 'edgeScore':
           return b.edgeScore - a.edgeScore;
+        case 'influence':
+          return (b.influenceScore || 0) - (a.influenceScore || 0);
         case 'activity':
           return a.lastActivityTime - b.lastActivityTime;
         case 'pnl':
