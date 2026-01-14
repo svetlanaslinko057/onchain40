@@ -1106,6 +1106,12 @@ const defaultActor = {
   playbook: { currentAction: '-', tokensToWatch: [], suggestedAction: 'Avoid', latencyStatus: '-', confidenceLevel: 0, reasoning: '-' },
   timingEdge: { medianPrecedePrice: '-', successRateWithin6h: '-', lateEntryDropoff: '-', bestPerformsIn: '-' },
   copyFeed: [],
+  simulatedPortfolio: {
+    startingCapital: 10000,
+    periods: [],
+    trades: { total: 0, profitable: 0, avgWin: '-', avgLoss: '-' },
+    impactByDelay: [],
+  },
   whyFollow: [],
   performance: { realizedPnl: '-', winRate: '-', avgHoldTime: '-', avgDrawdown: '-', entryDelay: '-', tradesAnalyzed: 0 },
   strategyFingerprint: { dexUsage: 0, holdDuration: 0, riskTolerance: 0, narrativeFocus: 0, entryTiming: 0 },
