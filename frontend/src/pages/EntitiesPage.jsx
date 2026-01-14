@@ -369,6 +369,11 @@ export default function EntitiesPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [bridgeMode, setBridgeMode] = useState(false);
   const [activeCluster, setActiveCluster] = useState(null);
+  
+  // Watchlist & Alerts state
+  const [watchlist, setWatchlist] = useState([]);
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [alertEntity, setAlertEntity] = useState('');
 
   const filteredEntities = entitiesData.filter(entity => {
     const matchesSearch = entity.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -381,6 +386,21 @@ export default function EntitiesPage() {
   const totalPages = Math.ceil(filteredEntities.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedEntities = filteredEntities.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  // Watchlist & Alert handlers
+  const handleAddToWatchlist = (entity) => {
+    setWatchlist(prev => {
+      if (prev.includes(entity.id)) {
+        return prev.filter(id => id !== entity.id);
+      }
+      return [...prev, entity.id];
+    });
+  };
+
+  const handleCreateAlert = (entity) => {
+    setAlertEntity(entity.name);
+    setShowAlertModal(true);
+  };
 
   const handleFilterChange = (type) => {
     setFilterType(type);
