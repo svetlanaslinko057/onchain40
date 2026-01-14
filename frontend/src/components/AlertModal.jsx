@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Bell } from 'lucide-react';
 import {
   Select,
@@ -13,6 +13,13 @@ export default function AlertModal({ isOpen, onClose, defaultEntity = '' }) {
   const [threshold, setThreshold] = useState('$10M');
   const [timeframe, setTimeframe] = useState('24h');
   const [condition, setCondition] = useState('accumulation');
+
+  // Sync entity state with defaultEntity prop changes
+  useEffect(() => {
+    if (defaultEntity) {
+      setEntity(defaultEntity);
+    }
+  }, [defaultEntity]);
 
   if (!isOpen) return null;
 
