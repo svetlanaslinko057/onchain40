@@ -1238,6 +1238,10 @@ export default function Watchlist() {
     const matchesBridgeAligned = !bridgeAlignedFilter || item.bridgeAligned === true;
     const matchesDormant = !dormantFilter || item.dormantDays > 7;
     
+    // Lifecycle filter
+    const itemLifecycle = getSignalLifecycle(item.timestamp, calculateSignalScore(item).score);
+    const matchesLifecycle = lifecycleFilter === 'all' || itemLifecycle === lifecycleFilter;
+    
     // Mode filters
     const matchesMode = 
       viewMode === 'overview' ? true :
@@ -1248,7 +1252,7 @@ export default function Watchlist() {
     
     return matchesType && matchesSearch && matchesBehavior && 
            matchesStatusChange && matchesRiskSpike && 
-           matchesBridgeAligned && matchesDormant && matchesMode;
+           matchesBridgeAligned && matchesDormant && matchesMode && matchesLifecycle;
   });
 
   // Pagination logic
