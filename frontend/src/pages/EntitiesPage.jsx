@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, TrendingUp, TrendingDown, ArrowUpRight, Users, Info, ChevronLeft, ChevronRight, Link2, X, Eye, Bell } from 'lucide-react';
+import { TrendingUp, TrendingDown, ArrowUpRight, Users, Info, ChevronLeft, ChevronRight, Link2, X, Eye, Bell } from 'lucide-react';
 import Header from '../components/Header';
+import SearchInput from '../components/shared/SearchInput';
 import {
   Tooltip,
   TooltipContent,
@@ -426,18 +427,13 @@ export default function EntitiesPage() {
           {/* Filters + View Mode Toggle */}
           <div className="flex items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-4">
-              <div className="flex-1 relative max-w-md">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" style={{pointerEvents: 'none', zIndex: 1}} />
-                <input
-                  type="text"
-                  placeholder="Search entities..."
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  data-testid="entities-search-input"
-                  style={{color: '#111827', position: 'relative', zIndex: 2}}
-                  className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-gray-900 transition-colors"
-                />
-              </div>
+              <SearchInput
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Search entities..."
+                className="max-w-md"
+                testId="entities-search-input"
+              />
               <div className="flex items-center gap-2 bg-gray-50 rounded-xl p-1">
                 {['all', 'Exchange', 'Smart Money', 'Fund', 'Market Maker'].map(type => (
                   <button
