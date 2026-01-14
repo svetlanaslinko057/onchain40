@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { TrendingUp, TrendingDown, ArrowUpRight, Users, Info, ChevronLeft, ChevronRight, Link2, X, Eye, Bell } from 'lucide-react';
+import { TrendingUp, TrendingDown, ArrowUpRight, Users, Info, ChevronLeft, ChevronRight, Link2, X, Eye, Bell, Check } from 'lucide-react';
 import Header from '../components/Header';
 import SearchInput from '../components/shared/SearchInput';
+import AlertModal from '../components/AlertModal';
 import {
   Tooltip,
   TooltipContent,
