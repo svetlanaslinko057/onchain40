@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { 
   Plus, Search, Filter, Star, TrendingUp, TrendingDown, Eye, EyeOff, Trash2, 
   Wallet, ChevronLeft, ExternalLink, AlertTriangle, CheckCircle, Activity,
@@ -8,9 +7,6 @@ import {
   Repeat, Bookmark, BellPlus, Clock, Zap, Link2, HelpCircle
 } from 'lucide-react';
 import Header from '../components/Header';
-import { PageHeader } from '../components/PageHeader';
-import { InfoIcon } from '../components/Tooltip';
-import AlertsPanel from '../components/AlertsPanel';
 
 const API_BASE = process.env.REACT_APP_BACKEND_URL + '/api';
 
