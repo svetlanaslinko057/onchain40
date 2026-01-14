@@ -507,14 +507,14 @@ const WatchlistPage = () => {
           </div>
         ) : (
           <>
-            {/* Grid List - NOT masonry */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-              {paginatedWatchlist.map(item => (
+            {/* Grid List - NO pagination, show all */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredWatchlist.map(item => (
                 <div
                   key={item.id}
                   className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow"
                 >
-                  {/* A. IDENTITY - Always same height */}
+                  {/* A. IDENTITY */}
                   <div className="flex items-start justify-between mb-3 pb-3 border-b border-gray-100">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
@@ -537,34 +537,38 @@ const WatchlistPage = () => {
                     </div>
                   </div>
 
-                  {/* B. STATE - Color ONLY here */}
-                  <div className="flex items-center gap-2 mb-3 pb-3 border-b border-gray-100">
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${
-                      item.behavior === 'accumulating' ? 'bg-emerald-100 text-emerald-700' :
-                      item.behavior === 'distributing' ? 'bg-red-100 text-red-700' :
-                      item.behavior === 'rotating' ? 'bg-blue-100 text-blue-700' :
-                      'bg-gray-100 text-gray-600'
-                    }`}>
-                      {item.behavior}
-                    </span>
-                    
-                    {item.risk !== 'low' && (
+                  {/* B. STATE - Color ONLY here + Mini-reason */}
+                  <div className="mb-3 pb-3 border-b border-gray-100">
+                    <div className="flex items-center gap-2 mb-2">
                       <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${
-                        item.risk === 'high' ? 'bg-red-100 text-red-700' :
-                        'bg-amber-100 text-amber-700'
+                        item.behavior === 'accumulating' ? 'bg-emerald-100 text-emerald-700' :
+                        item.behavior === 'distributing' ? 'bg-red-100 text-red-700' :
+                        item.behavior === 'rotating' ? 'bg-blue-100 text-blue-700' :
+                        'bg-gray-100 text-gray-600'
                       }`}>
-                        {item.risk}
+                        {item.behavior}
                       </span>
-                    )}
-                    
-                    {item.bridgeAligned && (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold uppercase bg-blue-100 text-blue-700">
-                        Bridge
-                      </span>
-                    )}
+                      
+                      {item.risk !== 'low' && (
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${
+                          item.risk === 'high' ? 'bg-red-100 text-red-700' :
+                          'bg-amber-100 text-amber-700'
+                        }`}>
+                          {item.risk}
+                        </span>
+                      )}
+                      
+                      {item.bridgeAligned && (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-semibold uppercase bg-blue-100 text-blue-700">
+                          Bridge
+                        </span>
+                      )}
+                    </div>
+                    {/* Mini-reason block */}
+                    <p className="text-[11px] text-gray-500 italic">{item.reason}</p>
                   </div>
 
-                  {/* C. SNAPSHOT - Only 3 fields */}
+                  {/* C. SNAPSHOT - Only 3 fields + Score tooltip */}
                   <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-100">
                     <div className="flex-1">
                       <div className="text-[10px] text-gray-500 uppercase mb-0.5">Balance</div>
@@ -582,17 +586,36 @@ const WatchlistPage = () => {
                     </div>
                     <div className="flex-1 text-right">
                       <div className="text-[10px] text-gray-500 uppercase mb-0.5">Score</div>
-                      <div className={`inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-bold ${
-                        item.watchScore >= 70 ? 'bg-red-100 text-red-700' :
-                        item.watchScore >= 40 ? 'bg-amber-100 text-amber-700' :
-                        'bg-gray-100 text-gray-600'
-                      }`}>
-                        {item.watchScore}
+                      {/* Score with tooltip */}
+                      <div className="relative inline-block group/score">
+                        <div className={`inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-bold cursor-help ${
+                          item.watchScore >= 70 ? 'bg-red-100 text-red-700' :
+                          item.watchScore >= 40 ? 'bg-amber-100 text-amber-700' :
+                          'bg-gray-100 text-gray-600'
+                        }`}>
+                          {item.watchScore}
+                        </div>
+                        {/* Tooltip */}
+                        <div className="absolute right-0 bottom-full mb-2 hidden group-hover/score:block z-20">
+                          <div className="bg-gray-900 text-white p-2 rounded-lg shadow-lg min-w-[160px]">
+                            <div className="text-[10px] font-bold text-gray-400 uppercase mb-1">Score Breakdown</div>
+                            {item.scoreBreakdown.map((s, i) => (
+                              <div key={i} className="flex items-center justify-between text-[10px] py-0.5">
+                                <span className="flex-1">{s.reason}</span>
+                                <span className="font-bold text-emerald-400 ml-2">+{s.impact}</span>
+                              </div>
+                            ))}
+                            <div className="border-t border-gray-700 mt-1 pt-1 flex justify-between text-[10px]">
+                              <span className="text-gray-400">Total</span>
+                              <span className="font-bold">{item.watchScore}/100</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* D. CTA - Actions */}
+                  {/* D. CTA - Improved signals button */}
                   <div className="flex items-center gap-2">
                     <Link
                       to={`/wallet/${item.address}`}
@@ -600,58 +623,25 @@ const WatchlistPage = () => {
                     >
                       View address →
                     </Link>
-                    {item.hasActiveSignals && (
+                    {item.hasActiveSignals ? (
                       <Link
                         to="/signals"
                         className="flex-1 text-center px-3 py-1.5 text-xs font-semibold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 rounded transition-colors"
                       >
-                        View signals →
+                        Signals ({item.activeSignalsCount})
                       </Link>
+                    ) : (
+                      <button
+                        disabled
+                        className="flex-1 text-center px-3 py-1.5 text-xs font-semibold text-gray-400 bg-gray-50 rounded cursor-not-allowed opacity-50"
+                      >
+                        No signals
+                      </button>
                     )}
                   </div>
                 </div>
               ))}
             </div>
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="flex items-center justify-between">
-                <div className="text-sm text-gray-600">
-                  Showing {startIndex + 1}-{Math.min(endIndex, filteredWatchlist.length)} of {filteredWatchlist.length}
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                    disabled={currentPage === 1}
-                    className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  <div className="flex items-center gap-1">
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                      <button
-                        key={page}
-                        onClick={() => setCurrentPage(page)}
-                        className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
-                          currentPage === page
-                            ? 'bg-gray-900 text-white'
-                            : 'text-gray-600 hover:bg-gray-100'
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                    disabled={currentPage === totalPages}
-                    className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            )}
           </>
         )}
       </div>
