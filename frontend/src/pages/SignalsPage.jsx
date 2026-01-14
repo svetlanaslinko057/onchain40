@@ -868,7 +868,10 @@ export default function Watchlist() {
         statusChange: null,
         riskLevel: 'low',
         bridgeAligned: false,
-        dormantDays: 0
+        dormantDays: 0,
+        timestamp: Date.now() - (1000 * 60 * 60 * 8), // 8 hours ago
+        muted: false,
+        tracking: false
       },
       {
         id: 2,
@@ -891,7 +894,14 @@ export default function Watchlist() {
         statusChange: '24h',
         riskLevel: 'high',
         bridgeAligned: true,
-        dormantDays: 0
+        alignedCount: 3,
+        alignedEntities: ['Bybit', 'OKX', 'Kraken'],
+        coordinationWindow: '6h',
+        coordinationConfidence: 87,
+        dormantDays: 0,
+        timestamp: Date.now() - (1000 * 60 * 60 * 1), // 1 hour ago
+        muted: false,
+        tracking: false
       },
       {
         id: 3,
@@ -913,7 +923,10 @@ export default function Watchlist() {
         statusChange: '24h',
         riskLevel: 'medium',
         bridgeAligned: false,
-        dormantDays: 0
+        dormantDays: 0,
+        timestamp: Date.now() - (1000 * 60 * 60 * 3), // 3 hours ago
+        muted: false,
+        tracking: false
       },
       {
         id: 4,
@@ -933,7 +946,10 @@ export default function Watchlist() {
         statusChange: null,
         riskLevel: 'low',
         bridgeAligned: false,
-        dormantDays: 0
+        dormantDays: 0,
+        timestamp: Date.now() - (1000 * 60 * 60 * 36), // 36 hours ago (cooling)
+        muted: false,
+        tracking: false
       },
       {
         id: 5,
