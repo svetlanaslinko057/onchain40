@@ -884,6 +884,7 @@ export default function ActorsPage() {
                 actor={actor}
                 isFollowed={followedActors.includes(actor.id)}
                 onToggleFollow={toggleFollow}
+                showRealNames={showRealNames}
               />
             ))}
           </div>
