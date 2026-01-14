@@ -1384,7 +1384,11 @@ export default function ActorProfile() {
                 </div>
                 <div>
                   <div className="flex items-center gap-3 mb-1">
-                    <h1 className="text-xl font-bold text-gray-900">{actor.label}</h1>
+                    <h1 className="text-xl font-bold text-gray-900">{displayName}</h1>
+                    {/* Secondary name hint */}
+                    {secondaryName && (
+                      <span className="text-sm text-gray-400">({secondaryName})</span>
+                    )}
                     <span className="px-2 py-0.5 bg-gray-100 rounded text-xs font-medium text-gray-600">{actor.type}</span>
                     <div className="flex items-center gap-1.5">
                       <div className={`w-2 h-2 rounded-full ${chain.color}`} />
@@ -1403,6 +1407,25 @@ export default function ActorProfile() {
                         <p className="text-xs text-gray-300">Timing (30%) + ROI Adjusted (25%) + Stability (20%) + Risk (15%) + Signals (10%)</p>
                       </TooltipContent>
                     </Tooltip>
+                    {/* IDENTITY TOGGLE */}
+                    <div className="flex items-center gap-0.5 bg-gray-100 rounded-lg p-0.5 ml-2">
+                      <button
+                        onClick={() => setShowRealNames(false)}
+                        className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                          !showRealNames ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+                        }`}
+                      >
+                        Strategy
+                      </button>
+                      <button
+                        onClick={() => setShowRealNames(true)}
+                        className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                          showRealNames ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+                        }`}
+                      >
+                        Real Name
+                      </button>
+                    </div>
                   </div>
                   <div className="flex items-center gap-4 text-sm">
                     <span className="text-gray-500">Strategy: <span className="font-semibold text-gray-900">{actor.strategy}</span></span>
@@ -1412,6 +1435,17 @@ export default function ActorProfile() {
                       <span className={`font-semibold ${confidenceColor.text}`}>{actor.confidence}%</span>
                       <span className="text-gray-500">confidence</span>
                     </div>
+                    {/* Identity confidence indicator */}
+                    {actor.identity_confidence && (
+                      <>
+                        <span className="text-gray-300">|</span>
+                        <span className="text-xs text-gray-500">
+                          ID: <span className={`font-semibold ${actor.identity_confidence >= 0.8 ? 'text-emerald-600' : actor.identity_confidence >= 0.5 ? 'text-amber-600' : 'text-red-500'}`}>
+                            {(actor.identity_confidence * 100).toFixed(0)}%
+                          </span>
+                        </span>
+                      </>
+                    )}
                   </div>
                   {/* Cluster info teaser */}
                   <button 
