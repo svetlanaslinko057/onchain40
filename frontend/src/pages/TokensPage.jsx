@@ -495,7 +495,7 @@ export default function TokensPage() {
                       </button>
                     </TooltipTrigger>
                     <TooltipContent className="bg-gray-900 text-white max-w-xs">
-                      <p>Breakdown of who holds this token: CEX, Smart Money, Funds, Retail. Strong Hands are holders with >30 day holding duration.</p>
+                      <p>Breakdown of who holds this token: CEX, Smart Money, Funds, Retail. Strong Hands are holders with {">"}30 day holding duration.</p>
                     </TooltipContent>
                   </Tooltip>
                 </h3>
