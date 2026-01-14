@@ -1198,6 +1198,31 @@ export default function Watchlist() {
     setIsAlertsPanelOpen(true);
   };
 
+  const handleUserAction = ({ action, itemId, value }) => {
+    console.log(`User action: ${action} for item ${itemId}`, value);
+    
+    setWatchlist(watchlist.map(item => {
+      if (item.id !== itemId) return item;
+      
+      switch (action) {
+        case 'mute':
+          return { ...item, muted: value };
+        case 'track':
+          return { ...item, tracking: value };
+        case 'watchlist':
+          // В реальном приложении здесь будет API call
+          console.log('Adding to watchlist:', item);
+          return item;
+        case 'escalation':
+          // В реальном приложении здесь будет API call для настройки alert
+          console.log('Setting escalation alert:', item);
+          return item;
+        default:
+          return item;
+      }
+    }));
+  };
+
   const filteredWatchlist = watchlist.filter(item => {
     const matchesType = filterType === 'all' || item.type === filterType || 
                        (filterType === 'cluster' && item.watchType === 'cluster') ||
