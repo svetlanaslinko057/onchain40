@@ -625,6 +625,25 @@ const actorDetailedData = {
       lateEntryDropoff: '24 hours',
       bestPerformsIn: 'Risk-On',
     },
+    followerReality: {
+      avgEntryDelay: '6h',
+      expectedSlippage: '0.9%',
+      modeledROI30d: { actor: '+21%', follower: '+15%' },
+      maxDDFollower: '9.8%',
+      crowdingFactor: 'Medium',
+    },
+    edgeDecay: {
+      status: 'stable',
+      trend: 'AI narrative still early',
+      successRateTrend: '+3% vs last month',
+      crowdFollowing: '~560 followers',
+      lastUpdated: '6h ago',
+    },
+    doNotFollowIf: [
+      { condition: 'AI narrative peak', reason: 'Late-cycle = bag holding risk' },
+      { condition: 'BTC < $50K', reason: 'Alts underperform in macro fear' },
+      { condition: 'Entry delay > 12h', reason: 'Slippage exceeds expected gain' },
+    ],
     copyFeed: [
       { id: 1, type: 'BUY', token: 'TAO', size: '$1.2M', time: '6h ago', price: '$456', txHash: '0xpan...001', entryDelay: '4h' },
       { id: 2, type: 'BUY', token: 'FET', size: '$680K', time: '1d ago', price: '$2.12', txHash: '0xpan...002', entryDelay: '6h' },
