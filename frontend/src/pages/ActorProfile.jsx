@@ -114,12 +114,34 @@ const actorDetailedData = {
     
     // COPY FEED - Recent Actions
     copyFeed: [
-      { id: 1, type: 'BUY', token: 'ARB', size: '$45K', time: '2h ago', price: '$1.42', txHash: '0xabc...123', entryDelay: '1.2h' },
-      { id: 2, type: 'SWAP', token: 'ETH→USDC', size: '$120K', time: '6h ago', price: '-', txHash: '0xdef...456', entryDelay: '-' },
-      { id: 3, type: 'BUY', token: 'OP', size: '$89K', time: '1d ago', price: '$2.18', txHash: '0xghi...789', entryDelay: '2.4h' },
-      { id: 4, type: 'BRIDGE', token: 'ETH→ARB', size: '$200K', time: '2d ago', price: '-', txHash: '0xjkl...012', entryDelay: '-' },
-      { id: 5, type: 'SELL', token: 'PEPE', size: '$28K', time: '3d ago', price: '$0.0000089', txHash: '0xmno...345', entryDelay: '-' },
+      { id: 1, type: 'BUY', token: 'ARB', size: '$45K', time: '2h ago', price: '$1.42', txHash: '0xabc...123', entryDelay: '1.2h', actorPnl: '+8.2%', followerPnl: '+5.1%' },
+      { id: 2, type: 'SWAP', token: 'ETH→USDC', size: '$120K', time: '6h ago', price: '-', txHash: '0xdef...456', entryDelay: '-', actorPnl: '-', followerPnl: '-' },
+      { id: 3, type: 'BUY', token: 'OP', size: '$89K', time: '1d ago', price: '$2.18', txHash: '0xghi...789', entryDelay: '2.4h', actorPnl: '+12.4%', followerPnl: '+6.8%' },
+      { id: 4, type: 'BRIDGE', token: 'ETH→ARB', size: '$200K', time: '2d ago', price: '-', txHash: '0xjkl...012', entryDelay: '-', actorPnl: '-', followerPnl: '-' },
+      { id: 5, type: 'SELL', token: 'PEPE', size: '$28K', time: '3d ago', price: '$0.0000089', txHash: '0xmno...345', entryDelay: '-', actorPnl: '+24%', followerPnl: '+18%' },
     ],
+    
+    // SIMULATED PORTFOLIO - NEW
+    simulatedPortfolio: {
+      startingCapital: 10000,
+      periods: [
+        { period: '7d', actorReturn: 4.2, followerReturn: 2.1, slippageLoss: 0.8, delayLoss: 1.3 },
+        { period: '30d', actorReturn: 18.5, followerReturn: 9.2, slippageLoss: 2.4, delayLoss: 6.9 },
+        { period: '90d', actorReturn: 42.8, followerReturn: 22.1, slippageLoss: 5.2, delayLoss: 15.5 },
+      ],
+      trades: {
+        total: 47,
+        profitable: 31,
+        avgWin: '+12.4%',
+        avgLoss: '-6.8%',
+      },
+      impactByDelay: [
+        { delay: '1h', returnLoss: '-15%', recommendation: 'Optimal' },
+        { delay: '2h', returnLoss: '-28%', recommendation: 'Acceptable' },
+        { delay: '4h', returnLoss: '-45%', recommendation: 'Risky' },
+        { delay: '6h+', returnLoss: '-62%', recommendation: 'Not recommended' },
+      ],
+    },
     
     // Why follow
     whyFollow: [
