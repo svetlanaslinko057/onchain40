@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { 
   Star, Bell, Filter, TrendingUp, TrendingDown, 
   ArrowUpRight, ChevronDown, X, Users, Zap, Target, Clock,
-  ArrowUpDown, Activity, Globe, Gauge, Eye, EyeOff
+  ArrowUpDown, Activity, Globe, Gauge, Eye, EyeOff, Crown
 } from 'lucide-react';
 import Header from '../components/Header';
 import SearchInput from '../components/shared/SearchInput';
