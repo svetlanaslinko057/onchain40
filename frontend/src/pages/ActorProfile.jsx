@@ -519,11 +519,26 @@ const actorDetailedData = {
       { condition: 'Expecting quick flip', reason: 'This is long-term accumulation only' },
     ],
     copyFeed: [
-      { id: 1, type: 'BUY', token: 'OP', size: '$2.1M', time: '1d ago', price: '$2.45', txHash: '0xa16z...001', entryDelay: '12h' },
-      { id: 2, type: 'BUY', token: 'ARB', size: '$1.8M', time: '3d ago', price: '$1.38', txHash: '0xa16z...002', entryDelay: '24h' },
-      { id: 3, type: 'BUY', token: 'EIGEN', size: '$950K', time: '5d ago', price: '$4.12', txHash: '0xa16z...003', entryDelay: '18h' },
-      { id: 4, type: 'BUY', token: 'ETH', size: '$5.2M', time: '7d ago', price: '$3,420', txHash: '0xa16z...004', entryDelay: '48h' },
+      { id: 1, type: 'BUY', token: 'OP', size: '$2.1M', time: '1d ago', price: '$2.45', txHash: '0xa16z...001', entryDelay: '12h', actorPnl: '+5.2%', followerPnl: '+4.8%' },
+      { id: 2, type: 'BUY', token: 'ARB', size: '$1.8M', time: '3d ago', price: '$1.38', txHash: '0xa16z...002', entryDelay: '24h', actorPnl: '+8.4%', followerPnl: '+7.9%' },
+      { id: 3, type: 'BUY', token: 'EIGEN', size: '$950K', time: '5d ago', price: '$4.12', txHash: '0xa16z...003', entryDelay: '18h', actorPnl: '+12.1%', followerPnl: '+11.2%' },
+      { id: 4, type: 'BUY', token: 'ETH', size: '$5.2M', time: '7d ago', price: '$3,420', txHash: '0xa16z...004', entryDelay: '48h', actorPnl: '+6.8%', followerPnl: '+6.5%' },
     ],
+    simulatedPortfolio: {
+      startingCapital: 10000,
+      periods: [
+        { period: '7d', actorReturn: 2.1, followerReturn: 1.9, slippageLoss: 0.1, delayLoss: 0.1 },
+        { period: '30d', actorReturn: 8.4, followerReturn: 7.8, slippageLoss: 0.2, delayLoss: 0.4 },
+        { period: '90d', actorReturn: 24.2, followerReturn: 22.8, slippageLoss: 0.6, delayLoss: 0.8 },
+      ],
+      trades: { total: 23, profitable: 17, avgWin: '+14.2%', avgLoss: '-4.8%' },
+      impactByDelay: [
+        { delay: '1h', returnLoss: '-2%', recommendation: 'Optimal' },
+        { delay: '2h', returnLoss: '-4%', recommendation: 'Optimal' },
+        { delay: '4h', returnLoss: '-6%', recommendation: 'Acceptable' },
+        { delay: '6h+', returnLoss: '-8%', recommendation: 'Acceptable' },
+      ],
+    },
     whyFollow: [
       { positive: true, text: 'Exceptional track record (+$4.2M realized)' },
       { positive: true, text: 'Extremely low risk (5/100)' },
