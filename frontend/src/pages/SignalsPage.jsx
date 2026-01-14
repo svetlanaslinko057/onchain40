@@ -1427,6 +1427,26 @@ export default function Watchlist() {
                 </button>
               ))}
             </div>
+            <div className="flex items-center gap-1">
+              <span className="text-[10px] text-gray-400 uppercase">Lifecycle:</span>
+              {[
+                { value: 'all', label: 'All' },
+                { value: 'new', label: 'New' },
+                { value: 'active', label: 'Active' },
+                { value: 'cooling', label: 'Cooling' },
+                { value: 'archived', label: 'Archived' }
+              ].map(l => (
+                <button
+                  key={l.value}
+                  onClick={() => setLifecycleFilter(l.value)}
+                  className={`px-2 py-0.5 rounded text-[10px] font-medium ${
+                    lifecycleFilter === l.value ? 'bg-gray-800 text-white' : 'text-gray-500 hover:bg-gray-100'
+                  }`}
+                >
+                  {l.label}
+                </button>
+              ))}
+            </div>
           </div>
         )}
       </div>
