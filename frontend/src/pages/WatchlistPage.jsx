@@ -162,7 +162,13 @@ const WatchlistPage = () => {
       bridgeAligned: false,
       balance: '$45.2M',
       change24h: 5.4,
-      watchScore: 45, // NOT signal score - attention weight
+      watchScore: 45,
+      scoreBreakdown: [
+        { reason: 'Steady accumulation', impact: 25 },
+        { reason: 'ETH-heavy portfolio', impact: 20 }
+      ],
+      reason: 'ETH-heavy · steady inflow',
+      activeSignalsCount: 0,
       hasActiveSignals: false
     },
     {
@@ -178,6 +184,13 @@ const WatchlistPage = () => {
       balance: '$2.8B',
       change24h: -2.1,
       watchScore: 87,
+      scoreBreakdown: [
+        { reason: 'Recent behavior change', impact: 30 },
+        { reason: 'High-risk distribution', impact: 35 },
+        { reason: 'Bridge-aligned cluster', impact: 22 }
+      ],
+      reason: 'exchange outflows · cluster-aligned',
+      activeSignalsCount: 3,
       hasActiveSignals: true
     },
     {
@@ -193,7 +206,14 @@ const WatchlistPage = () => {
       balance: '$127.5M',
       change24h: 12.8,
       watchScore: 72,
-      hasActiveSignals: false
+      scoreBreakdown: [
+        { reason: 'Behavior changed recently', impact: 28 },
+        { reason: 'Rapid accumulation', impact: 30 },
+        { reason: 'High balance growth', impact: 14 }
+      ],
+      reason: 'inflow acceleration · high growth',
+      activeSignalsCount: 1,
+      hasActiveSignals: true
     },
     {
       id: 4,
@@ -208,6 +228,11 @@ const WatchlistPage = () => {
       balance: '$890.2M',
       change24h: 0,
       watchScore: 12,
+      scoreBreakdown: [
+        { reason: 'No recent activity', impact: 12 }
+      ],
+      reason: 'no activity 14d',
+      activeSignalsCount: 0,
       hasActiveSignals: false
     },
     {
@@ -223,6 +248,13 @@ const WatchlistPage = () => {
       balance: '$345.8M',
       change24h: -5.2,
       watchScore: 58,
+      scoreBreakdown: [
+        { reason: 'Distribution pattern', impact: 25 },
+        { reason: 'Bridge coordination', impact: 20 },
+        { reason: 'Medium risk level', impact: 13 }
+      ],
+      reason: 'coordinated distribution · bridge pattern',
+      activeSignalsCount: 2,
       hasActiveSignals: true
     },
     {
@@ -238,6 +270,12 @@ const WatchlistPage = () => {
       balance: '$1.2B',
       change24h: 1.8,
       watchScore: 35,
+      scoreBreakdown: [
+        { reason: 'Normal rotation', impact: 20 },
+        { reason: 'Stable flows', impact: 15 }
+      ],
+      reason: 'normal rotation · stable',
+      activeSignalsCount: 0,
       hasActiveSignals: false
     }
   ]);
