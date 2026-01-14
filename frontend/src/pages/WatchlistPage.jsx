@@ -268,10 +268,35 @@ const WatchlistPage = () => {
     const matchesType = filterType === 'all' || item.type.toLowerCase() === filterType;
     const matchesBehavior = filterBehavior === 'all' || item.behavior === filterBehavior;
     const matchesRisk = filterRisk === 'all' || item.risk === filterRisk;
-    const matchesChanges = !showOnlyChanges || item.changes.length > 0;
+    const matchesChanges = !showOnlyChanges || item.behaviorChanged;
     
     return matchesSearch && matchesType && matchesBehavior && matchesRisk && matchesChanges;
   });
+
+  // Pagination
+  const totalPages = Math.ceil(filteredWatchlist.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedWatchlist = filteredWatchlist.slice(startIndex, endIndex);
+
+  // Clickable summary handlers
+  const handleSummaryClick = (filterType) => {
+    switch(filterType) {
+      case 'behaviorChanged':
+        setShowOnlyChanges(true);
+        break;
+      case 'highRisk':
+        setFilterRisk('high');
+        break;
+      case 'bridgeAligned':
+        setFilterBehavior('all');
+        // Could add bridge filter if needed
+        break;
+      default:
+        break;
+    }
+    setCurrentPage(1);
+  };
 
   const handleRemove = (id) => {
     setWatchlist(watchlist.filter(item => item.id !== id));
