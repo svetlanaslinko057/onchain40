@@ -318,28 +318,40 @@ const EntityCard = ({ entity, cluster, isInActiveCluster, isDimmed, bridgeMode, 
         <div className="flex items-center gap-1">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link
-                to="/watchlist"
-                onClick={(e) => e.stopPropagation()}
-                className="p-1.5 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onAddToWatchlist && onAddToWatchlist(entity);
+                }}
+                className={`p-1.5 rounded transition-colors ${
+                  isInWatchlist 
+                    ? 'text-green-600 bg-green-50 hover:bg-green-100' 
+                    : 'text-gray-400 hover:text-gray-900 hover:bg-gray-100'
+                }`}
+                data-testid={`watchlist-btn-${entity.id}`}
               >
-                <Eye className="w-3.5 h-3.5" />
-              </Link>
+                {isInWatchlist ? <Check className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+              </button>
             </TooltipTrigger>
             <TooltipContent>
-              <p className="text-xs">Add to Watchlist</p>
+              <p className="text-xs">{isInWatchlist ? 'In Watchlist' : 'Add to Watchlist'}</p>
             </TooltipContent>
           </Tooltip>
           
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link
-                to="/alerts"
-                onClick={(e) => e.stopPropagation()}
-                className="p-1.5 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onCreateAlert && onCreateAlert(entity);
+                }}
+                className="p-1.5 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded transition-colors"
+                data-testid={`alert-btn-${entity.id}`}
               >
                 <Bell className="w-3.5 h-3.5" />
-              </Link>
+              </button>
             </TooltipTrigger>
             <TooltipContent>
               <p className="text-xs">Create Alert</p>
