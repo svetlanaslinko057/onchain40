@@ -12,7 +12,7 @@ import EntitiesPage from "./pages/EntitiesPage";
 import EntityDetail from "./pages/EntityDetail";
 import SignalsPage from "./pages/SignalsPage";
 import SignalSnapshot from "./pages/SignalSnapshot";
-import AlertsPage from "./pages/AlertsPage";
+import AlertsPageNew from "./pages/AlertsPageNew";
 import StrategiesPage from "./pages/StrategiesPage";
 import WatchlistPage from "./pages/WatchlistPage";
 
@@ -27,7 +27,7 @@ function App() {
         <Route path="/entities" element={<EntitiesPage />} />
         <Route path="/signals" element={<SignalsPage />} />
         <Route path="/watchlist" element={<WatchlistPage />} />
-        <Route path="/alerts" element={<AlertsPage />} />
+        <Route path="/alerts" element={<AlertsPageNew />} />
         <Route path="/strategies" element={<StrategiesPage />} />
         
         {/* Detail Pages */}
