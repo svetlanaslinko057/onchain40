@@ -8,6 +8,7 @@ import {
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts';
 import Header from '../components/Header';
 import SearchInput from '../components/shared/SearchInput';
+import AlertModal from '../components/AlertModal';
 import {
   Tooltip,
   TooltipContent,
