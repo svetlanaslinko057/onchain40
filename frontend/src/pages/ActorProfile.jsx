@@ -1029,11 +1029,26 @@ const actorDetailedData = {
       { condition: 'During exit mode', reason: 'Sells into weakness' },
     ],
     copyFeed: [
-      { id: 1, type: 'SELL', token: 'BONK', size: '$89K', time: '15m ago', price: '$0.0000189', txHash: '0xwhale...001', entryDelay: '-' },
-      { id: 2, type: 'SELL', token: 'WIF', size: '$124K', time: '1h ago', price: '$2.01', txHash: '0xwhale...002', entryDelay: '-' },
-      { id: 3, type: 'SELL', token: 'POPCAT', size: '$45K', time: '3h ago', price: '$0.89', txHash: '0xwhale...003', entryDelay: '-' },
-      { id: 4, type: 'SWAP', token: 'SOL→USDC', size: '$340K', time: '6h ago', price: '-', txHash: '0xwhale...004', entryDelay: '-' },
+      { id: 1, type: 'SELL', token: 'BONK', size: '$89K', time: '15m ago', price: '$0.0000189', txHash: '0xwhale...001', entryDelay: '-', actorPnl: '-18%', followerPnl: '-24%' },
+      { id: 2, type: 'SELL', token: 'WIF', size: '$124K', time: '1h ago', price: '$2.01', txHash: '0xwhale...002', entryDelay: '-', actorPnl: '-12%', followerPnl: '-18%' },
+      { id: 3, type: 'SELL', token: 'POPCAT', size: '$45K', time: '3h ago', price: '$0.89', txHash: '0xwhale...003', entryDelay: '-', actorPnl: '-8%', followerPnl: '-14%' },
+      { id: 4, type: 'SWAP', token: 'SOL→USDC', size: '$340K', time: '6h ago', price: '-', txHash: '0xwhale...004', entryDelay: '-', actorPnl: '-', followerPnl: '-' },
     ],
+    simulatedPortfolio: {
+      startingCapital: 10000,
+      periods: [
+        { period: '7d', actorReturn: -4.2, followerReturn: -8.8, slippageLoss: 2.8, delayLoss: 1.8 },
+        { period: '30d', actorReturn: -8.4, followerReturn: -18.2, slippageLoss: 5.4, delayLoss: 4.4 },
+        { period: '90d', actorReturn: -22.1, followerReturn: -38.4, slippageLoss: 8.2, delayLoss: 8.1 },
+      ],
+      trades: { total: 18, profitable: 7, avgWin: '+12.4%', avgLoss: '-24.8%' },
+      impactByDelay: [
+        { delay: '1h', returnLoss: '+10%', recommendation: 'Makes losses worse' },
+        { delay: '2h', returnLoss: '+18%', recommendation: 'Avoid' },
+        { delay: '4h', returnLoss: '+28%', recommendation: 'Avoid' },
+        { delay: '6h+', returnLoss: '+35%', recommendation: 'Avoid' },
+      ],
+    },
     whyFollow: [
       { positive: false, text: 'Negative PnL (-$124K realized)' },
       { positive: false, text: 'High risk profile (67/100)' },
