@@ -1,11 +1,12 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Search, Star, Bell, Filter, TrendingUp, TrendingDown, 
+  Star, Bell, Filter, TrendingUp, TrendingDown, 
   ArrowUpRight, ChevronDown, X, Users, Zap, Target, Clock,
   ArrowUpDown, Activity, Globe, Gauge
 } from 'lucide-react';
 import Header from '../components/Header';
+import SearchInput from '../components/shared/SearchInput';
 import {
   Tooltip,
   TooltipContent,
@@ -631,25 +632,13 @@ export default function ActorsPage() {
 
           {/* Search Bar + Sort */}
           <div className="flex items-center gap-4 mb-6">
-            <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-              <input
-                type="text"
-                placeholder="Search by behavior, strategy, token, address..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10 transition-all"
-                style={{ color: '#111827' }}
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full"
-                >
-                  <X className="w-4 h-4 text-gray-400" />
-                </button>
-              )}
-            </div>
+            <SearchInput
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by behavior, strategy, token, address..."
+              className="flex-1"
+              testId="actors-search-input"
+            />
 
             {/* Sort dropdown */}
             <div className="flex items-center gap-2">
