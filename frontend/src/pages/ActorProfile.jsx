@@ -514,7 +514,9 @@ const actorDetailedData = {
   },
   'a16z': {
     id: 'a16z',
-    label: 'a16z Crypto',
+    real_name: 'a16z Crypto',
+    strategy_name: 'Institutional Infrastructure Play',
+    identity_confidence: 0.97,
     address: '0x47ac0Fb4F2D84898e4D9E7b4DaB3C24507a6D503',
     type: 'Fund',
     avatar: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png',
@@ -528,6 +530,18 @@ const actorDetailedData = {
       { trigger: 'Fund starts systematic distribution', action: 'Exit within 1 week', priority: 'critical' },
       { trigger: 'L2 narrative exhaustion', action: 'Rotate to new thesis', priority: 'medium' },
     ],
+    correlation: {
+      movesWith: [
+        { id: 'vitalik', strategy_name: 'L2 Infrastructure Builder', similarity: 82, overlap: 'L2 accumulation' },
+        { id: 'pantera', strategy_name: 'AI Narrative Accumulator', similarity: 74, overlap: 'Infrastructure thesis' },
+      ],
+      frontRunners: [],
+      followedBy: [
+        { id: 'alameda', strategy_name: 'SOL Ecosystem Accumulator', avgLagTime: '+8.2h', frequency: '22%' },
+        { id: 'pantera', strategy_name: 'AI Narrative Accumulator', avgLagTime: '+12.4h', frequency: '18%' },
+      ],
+      cluster: { name: 'Institutional/Infrastructure', phase: 'Accumulating', size: 6 },
+    },
     cluster: {
       size: 15,
       confidence: 97,
