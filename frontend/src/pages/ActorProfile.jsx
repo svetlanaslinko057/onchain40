@@ -1177,10 +1177,35 @@ export default function ActorProfile() {
   const [showClusterDetails, setShowClusterDetails] = useState(false);
   const [feedTimeframe, setFeedTimeframe] = useState('24h');
   const [copiedAddress, setCopiedAddress] = useState(null);
+  
+  // Simulated Portfolio state
+  const [simCapital, setSimCapital] = useState(10000);
+  const [simPeriod, setSimPeriod] = useState('30d');
+  const [showTradeDetails, setShowTradeDetails] = useState(false);
 
   const actor = actorDetailedData[actorId] || defaultActor;
   const confidenceColor = getConfidenceColor(actor.confidence);
   const chain = chainConfig[actor.primaryChain] || { color: 'bg-gray-500', label: actor.primaryChain };
+
+  // Calculate simulated results
+  const getSimulatedResults = () => {
+    const sim = actor.simulatedPortfolio;
+    if (!sim || !sim.periods || sim.periods.length === 0) return null;
+    const periodData = sim.periods.find(p => p.period === simPeriod) || sim.periods[0];
+    const actorFinalValue = simCapital * (1 + periodData.actorReturn / 100);
+    const followerFinalValue = simCapital * (1 + periodData.followerReturn / 100);
+    const returnGap = periodData.actorReturn - periodData.followerReturn;
+    return {
+      ...periodData,
+      actorFinalValue,
+      followerFinalValue,
+      returnGap,
+      slippageCost: simCapital * (periodData.slippageLoss / 100),
+      delayCost: simCapital * (periodData.delayLoss / 100),
+    };
+  };
+
+  const simResults = getSimulatedResults();
 
   const handleCopyAddress = (address) => {
     navigator.clipboard.writeText(address);
