@@ -1924,12 +1924,20 @@ export default function ActorProfile() {
                     </div>
                   )}
 
-                  {/* Followed By - WHO ACTS AFTER */}
+                  {/* Followed By - WHO ACTS AFTER - This actor is often followed by */}
                   {actor.correlation.followedBy && actor.correlation.followedBy.length > 0 && (
                     <div>
                       <div className="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1">
                         <Users className="w-3.5 h-3.5 text-blue-500" />
-                        Usually Follows This Actor
+                        This Actor is Often Followed By
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="w-3 h-3 text-gray-400 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent className="bg-gray-900 text-white max-w-xs">
+                            <p className="text-xs">These actors typically follow this one's moves. Indicates influence in the market.</p>
+                          </TooltipContent>
+                        </Tooltip>
                       </div>
                       <div className="space-y-2">
                         {actor.correlation.followedBy.map((follower, i) => (
@@ -1942,8 +1950,13 @@ export default function ActorProfile() {
                               <div className="font-medium text-gray-900 text-sm">{showRealNames ? follower.real_name || follower.strategy_name : follower.strategy_name}</div>
                               <div className="text-xs text-blue-600">Lags by {follower.avgLagTime}</div>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <div className="text-xs font-medium text-blue-600">{follower.frequency} of trades</div>
+                            <div className="flex items-center gap-3">
+                              <div className="text-right">
+                                <div className="text-xs font-medium text-blue-600">{follower.frequency} of trades</div>
+                                {follower.tradesMatched && (
+                                  <div className="text-xs text-gray-400">{follower.tradesMatched} matches</div>
+                                )}
+                              </div>
                               <ArrowUpRight className="w-4 h-4 text-blue-400" />
                             </div>
                           </Link>
