@@ -639,8 +639,23 @@ const SignalCard = ({ item, onRemove, onOpenAlerts, onUserAction }) => {
                     <span className="font-bold text-emerald-400">+{r.score}</span>
                   </div>
                 ))}
+                {decayed && (
+                  <>
+                    <div className="border-t border-gray-700 mt-1 pt-1 flex justify-between text-[10px]">
+                      <span className="text-gray-400">Base Score</span>
+                      <span className="font-bold">{originalScore}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-[10px] text-amber-400">
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-2.5 h-2.5" />
+                        <span>Decay ({ageInHours}h)</span>
+                      </div>
+                      <span className="font-bold">-{decay}</span>
+                    </div>
+                  </>
+                )}
                 <div className="border-t border-gray-700 mt-1 pt-1 flex justify-between text-[10px]">
-                  <span className="text-gray-400">Total</span>
+                  <span className="text-gray-400">{decayed ? 'Current' : 'Total'}</span>
                   <span className="font-bold">{score}/100</span>
                 </div>
               </div>
