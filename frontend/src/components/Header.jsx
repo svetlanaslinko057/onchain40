@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { 
   BarChart3, Coins, Wallet, Building, Bell, Zap, 
-  Search, Menu, X, Eye
+  Search, Menu, X, Eye, Users
 } from 'lucide-react';
 import { useState } from 'react';
 import {
@@ -17,6 +17,7 @@ const navItems = [
   { path: '/tokens', label: 'Tokens', icon: Coins },
   { path: '/wallets', label: 'Wallets', icon: Wallet },
   { path: '/entities', label: 'Entities', icon: Building },
+  { path: '/actors', label: 'Actors', icon: Users },
   { path: '/signals', label: 'Signals', icon: Zap },
 ];
 
