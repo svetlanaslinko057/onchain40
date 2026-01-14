@@ -158,7 +158,7 @@ const walletAlertTypes = [
   {
     id: 'exit_degradation',
     name: 'Exit / Degradation Alert',
-    description: 'Alert when it\'s time to stop following',
+    description: 'Alert when it's time to stop following',
     triggers: [
       'Shift from Accumulation → Distribution',
       'PnL decay over rolling 14 days',
