@@ -1402,8 +1402,6 @@ export default function ActorProfile() {
                   })}
                 </div>
               </div>
-
-              </div>
             </div>
 
             {/* Right Column - Sidebar */}
