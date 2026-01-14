@@ -841,6 +841,25 @@ const actorDetailedData = {
       lateEntryDropoff: '2 hours',
       bestPerformsIn: 'Unknown',
     },
+    followerReality: {
+      avgEntryDelay: '4.2h',
+      expectedSlippage: '4.5%',
+      modeledROI30d: { actor: '-8%', follower: '-18%' },
+      maxDDFollower: '42.8%',
+      crowdingFactor: 'Low',
+    },
+    edgeDecay: {
+      status: 'exhausted',
+      trend: 'No consistent edge detected',
+      successRateTrend: '-15% vs last month',
+      crowdFollowing: '~12 followers',
+      lastUpdated: '15m ago',
+    },
+    doNotFollowIf: [
+      { condition: 'Always', reason: 'Negative expected value' },
+      { condition: 'Actor has negative PnL', reason: 'Losing money consistently' },
+      { condition: 'During exit mode', reason: 'Sells into weakness' },
+    ],
     copyFeed: [
       { id: 1, type: 'SELL', token: 'BONK', size: '$89K', time: '15m ago', price: '$0.0000189', txHash: '0xwhale...001', entryDelay: '-' },
       { id: 2, type: 'SELL', token: 'WIF', size: '$124K', time: '1h ago', price: '$2.01', txHash: '0xwhale...002', entryDelay: '-' },
