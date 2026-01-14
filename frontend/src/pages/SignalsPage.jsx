@@ -1104,8 +1104,13 @@ export default function Watchlist() {
     const matchesType = filterType === 'all' || item.type === filterType || 
                        (filterType === 'cluster' && item.watchType === 'cluster') ||
                        (filterType === 'token' && item.watchType === 'token');
-    const matchesSearch = item.label.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         item.address.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    // NEW SEARCH LOGIC - Simple and reliable
+    const searchLower = searchTerm.toLowerCase().trim();
+    const matchesSearch = searchLower === '' || 
+                         item.label?.toLowerCase().includes(searchLower) || 
+                         item.address?.toLowerCase().includes(searchLower) ||
+                         item.type?.toLowerCase().includes(searchLower);
     
     // Поведенческие фильтры
     const matchesBehavior = behaviorFilter === 'all' || item.behavior === behaviorFilter;
