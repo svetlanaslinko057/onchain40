@@ -243,7 +243,7 @@ const BridgeClustersBlock = ({ clusters, activeCluster, onClusterClick, onClearC
 };
 
 // Entity Card with Bridge badge
-const EntityCard = ({ entity, cluster, isInActiveCluster, isDimmed, bridgeMode }) => {
+const EntityCard = ({ entity, cluster, isInActiveCluster, isDimmed, bridgeMode, onAddToWatchlist, onCreateAlert, isInWatchlist }) => {
   const clusterData = cluster ? bridgeClusters.find(c => c.clusterId === cluster) : null;
   
   return (
