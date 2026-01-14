@@ -287,10 +287,6 @@ const WatchlistPage = () => {
   const [showOnlyChanges, setShowOnlyChanges] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  // Pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
 
   // Quick summary stats - CLICKABLE for filtering
   const stats = {
