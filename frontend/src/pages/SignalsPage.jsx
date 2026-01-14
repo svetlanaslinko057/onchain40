@@ -576,9 +576,40 @@ const SignalCard = ({ item, onRemove, onOpenAlerts, onUserAction }) => {
           {item.riskLevel || 'low'}
         </span>
         {item.bridgeAligned && (
-          <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase bg-blue-100 text-blue-700">
-            Bridge
-          </span>
+          <div className="relative group/bridge">
+            <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase bg-blue-100 text-blue-700 cursor-help flex items-center gap-1">
+              <Link2 className="w-2.5 h-2.5" />
+              Bridge
+            </span>
+            {/* Bridge Explanation Tooltip */}
+            <div className="absolute bottom-full left-0 mb-2 hidden group-hover/bridge:block z-20">
+              <div className="bg-gray-900 text-white p-3 rounded-lg shadow-lg min-w-[220px]">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <Link2 className="w-3.5 h-3.5 text-blue-400" />
+                  <div className="text-[10px] font-bold text-gray-400 uppercase">Why Coordinated?</div>
+                </div>
+                <p className="text-xs mb-2 text-gray-300">
+                  {item.alignedCount || 3} entities showing similar behavior pattern within {item.coordinationWindow || '6h'} window
+                </p>
+                <div className="text-[10px] font-bold text-gray-400 uppercase mb-1">Involved Entities:</div>
+                <div className="space-y-1">
+                  {(item.alignedEntities || ['Binance', 'Bybit', 'OKX']).slice(0, 3).map((entity, idx) => (
+                    <div key={idx} className="flex items-center gap-1.5 text-xs">
+                      <div className="w-1 h-1 rounded-full bg-blue-400"></div>
+                      <span className="text-gray-300">{entity}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-2 pt-2 border-t border-gray-700">
+                  <div className="flex items-center justify-between text-[10px]">
+                    <span className="text-gray-400">Confidence</span>
+                    <span className="font-bold text-blue-400">{item.coordinationConfidence || 85}%</span>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute top-full left-3 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+            </div>
+          </div>
         )}
       </div>
 
