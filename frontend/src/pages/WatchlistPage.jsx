@@ -3,9 +3,149 @@ import { Link } from 'react-router-dom';
 import { 
   Plus, Search, Eye, Trash2, Bell, TrendingUp, TrendingDown,
   AlertTriangle, CheckCircle, Activity, Clock, Link2, ArrowUpRight, 
-  ArrowDownRight, ChevronDown
+  ArrowDownRight, ChevronDown, Wallet, Users, Coins, X
 } from 'lucide-react';
 import Header from '../components/Header';
+
+// Add Address Modal Component
+const AddAddressModal = ({ isOpen, onClose, onAdd }) => {
+  const [address, setAddress] = useState('');
+  const [label, setLabel] = useState('');
+  const [type, setType] = useState('whale');
+  const [watchType, setWatchType] = useState('address'); // address, cluster, token
+
+  const handleSubmit = () => {
+    if ((watchType !== 'token' && address && label) || (watchType === 'token' && label)) {
+      onAdd({ 
+        address: address || label, 
+        label, 
+        type: watchType === 'token' ? 'token' : type, 
+        watchType 
+      });
+      setAddress('');
+      setLabel('');
+      setType('whale');
+      setWatchType('address');
+      onClose();
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-gray-900">Add to Watchlist</h2>
+          <button 
+            onClick={onClose} 
+            className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <X className="w-5 h-5 text-gray-400" />
+          </button>
+        </div>
+        
+        <div className="space-y-4">
+          {/* Watch Type Selection */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-3">What to watch?</label>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { value: 'address', label: 'Address', icon: Wallet },
+                { value: 'cluster', label: 'Cluster', icon: Users },
+                { value: 'token', label: 'Token', icon: Coins },
+              ].map(option => {
+                const Icon = option.icon;
+                return (
+                  <button
+                    key={option.value}
+                    onClick={() => setWatchType(option.value)}
+                    className={`flex flex-col items-center justify-center gap-2 px-3 py-3 rounded-xl border-2 transition-all ${
+                      watchType === option.value 
+                        ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-sm' 
+                        : 'border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300'
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" />
+                    <span className="text-xs font-semibold">{option.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Wallet Address Input */}
+          {watchType !== 'token' && (
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                {watchType === 'cluster' ? 'Cluster ID / Address' : 'Wallet Address'}
+              </label>
+              <input 
+                type="text" 
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder={watchType === 'cluster' ? 'Cluster ID or seed address...' : '0x...'} 
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm transition-all"
+              />
+            </div>
+          )}
+          
+          {/* Label Input */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              {watchType === 'token' ? 'Token Symbol' : 'Label'}
+            </label>
+            <input 
+              type="text" 
+              value={label}
+              onChange={(e) => setLabel(e.target.value)}
+              placeholder={watchType === 'token' ? 'e.g., ETH, BTC, UNI' : 'e.g., Vitalik Buterin'} 
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            />
+          </div>
+          
+          {/* Type Selector - Only for non-tokens */}
+          {watchType !== 'token' && (
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Type</label>
+              <div className="relative">
+                <select 
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none cursor-pointer transition-all bg-white"
+                >
+                  <option value="whale">🐋 Whale</option>
+                  <option value="influencer">📢 Influencer</option>
+                  <option value="exchange">🏦 Exchange</option>
+                  <option value="fund">💼 Fund</option>
+                  <option value="smart_contract">📄 Smart Contract</option>
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
+          )}
+          
+          {/* Action Buttons */}
+          <div className="flex gap-3 pt-2">
+            <button 
+              onClick={onClose}
+              className="flex-1 px-4 py-3 border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-all"
+            >
+              Cancel
+            </button>
+            <button 
+              onClick={handleSubmit}
+              className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40"
+            >
+              Add to Watchlist
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const WatchlistPage = () => {
   const [watchlist, setWatchlist] = useState([
