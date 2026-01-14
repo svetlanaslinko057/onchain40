@@ -15,6 +15,8 @@ import SignalSnapshot from "./pages/SignalSnapshot";
 import AlertsPageNew from "./pages/AlertsPageNew";
 import StrategiesPage from "./pages/StrategiesPage";
 import WatchlistPage from "./pages/WatchlistPage";
+import ActorsPage from "./pages/ActorsPage";
+import ActorProfile from "./pages/ActorProfile";
 
 function App() {
   return (
