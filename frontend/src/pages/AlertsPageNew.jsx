@@ -463,7 +463,12 @@ const AlertsPage = () => {
                           )}
                         </div>
                         
-                        <div className="text-xs text-gray-500 mb-2">
+                        {/* Subtitle */}
+                        <div className="text-xs text-gray-600 mb-1">
+                          {alert.subtitle}
+                        </div>
+                        
+                        <div className="text-xs text-gray-500">
                           <span className="font-semibold">Source:</span> {alert.source.name} · {timeAgo(alert.timestamp)}
                         </div>
                       </div>
