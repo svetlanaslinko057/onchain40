@@ -439,9 +439,17 @@ const actorDetailedData = {
         { id: 'pantera', real_name: 'Pantera Capital', strategy_name: 'AI Narrative Accumulator', avgLeadTime: '+6.2h', frequency: '28%', tradesMatched: 16 },
       ],
       followedBy: [
-        { id: 'unknown-whale-1', strategy_name: 'High-Risk Flip Trader', avgLagTime: '+2.1h', frequency: '52%' },
+        { id: 'unknown-whale-1', real_name: 'Smart Whale #4721', strategy_name: 'High-Risk Flip Trader', avgLagTime: '+2.1h', frequency: '52%', tradesMatched: 28 },
       ],
-      cluster: { name: 'Meme/Momentum', phase: 'Active', size: 15 },
+      cluster: { name: 'Meme/Momentum', phase: 'Active', size: 15, dominantStrategy: 'Momentum' },
+      // ETAP 4: INFLUENCE SUMMARY
+      influenceSummary: {
+        role: 'Trend Follower',
+        ecosystem: 'Meme',
+        avgLag: '~4–6h behind leaders',
+        recommendation: 'Use for confirmation only. Do NOT use as primary signal. Best as a late-stage momentum indicator.',
+        strength: 'low',
+      },
     },
     cluster: {
       size: 8,
