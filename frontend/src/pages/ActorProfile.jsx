@@ -1935,7 +1935,7 @@ export default function ActorProfile() {
                             <Info className="w-3 h-3 text-gray-400 cursor-help" />
                           </TooltipTrigger>
                           <TooltipContent className="bg-gray-900 text-white max-w-xs">
-                            <p className="text-xs">These actors typically follow this one's moves. Indicates influence in the market.</p>
+                            <p className="text-xs">These actors typically follow this actor&apos;s moves. Indicates influence in the market.</p>
                           </TooltipContent>
                         </Tooltip>
                       </div>
