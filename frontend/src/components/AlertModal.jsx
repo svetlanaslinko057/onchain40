@@ -183,7 +183,7 @@ export default function AlertModal({ isOpen, onClose, defaultEntity = '' }) {
           <div className="p-3 bg-gray-50 rounded-xl border border-gray-100 mb-4">
             <div className="text-xs text-gray-500 mb-0.5">Alert Preview</div>
             <div className="text-sm font-medium text-gray-900">
-              Notify when <span className="font-bold">{entity}</span> shows{' '}
+              Notify when <span className="font-bold">{displayEntity}</span> shows{' '}
               <span className="font-bold text-gray-700">{conditions.find(c => c.value === condition)?.label.toLowerCase()}</span>{' '}
               with ≥{threshold} within{' '}
               <span className="font-bold">{timeframes.find(t => t.value === timeframe)?.label}</span>
