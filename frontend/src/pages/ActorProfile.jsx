@@ -637,6 +637,12 @@ const actorDetailedData = {
     confidence: 89,
     primaryChain: 'ETH',
     latency: 'Early',
+    edgeScore: 84,
+    exitConditions: [
+      { trigger: 'AI narrative bubble signs', action: 'Scale out of AI positions over 2 weeks', priority: 'high' },
+      { trigger: 'Fund rebalancing detected', action: 'Pause new entries for 48h', priority: 'medium' },
+      { trigger: 'Edge Score < 60', action: 'Reduce allocation by 40%', priority: 'high' },
+    ],
     cluster: {
       size: 9,
       confidence: 93,
@@ -747,6 +753,12 @@ const actorDetailedData = {
     confidence: 64,
     primaryChain: 'ETH',
     latency: 'Medium',
+    edgeScore: 45,
+    exitConditions: [
+      { trigger: 'Looking for directional alpha', action: 'Wrong actor — use narrative traders instead', priority: 'critical' },
+      { trigger: 'LP impermanent loss > 5%', action: 'Exit LP-related copies', priority: 'high' },
+      { trigger: 'Volatility regime change', action: 'MM edge disappears in trending markets', priority: 'medium' },
+    ],
     cluster: {
       size: 31,
       confidence: 82,
@@ -855,6 +867,12 @@ const actorDetailedData = {
     confidence: 38,
     primaryChain: 'SOL',
     latency: 'Late',
+    edgeScore: 15,
+    exitConditions: [
+      { trigger: 'Always', action: 'Do not follow this actor', priority: 'critical' },
+      { trigger: 'Any entry signal', action: 'Ignore — negative expected value', priority: 'critical' },
+      { trigger: 'Behavior change', action: 'Still avoid — track record too poor', priority: 'high' },
+    ],
     cluster: {
       size: 2,
       confidence: 67,
