@@ -544,6 +544,13 @@ export default function EntitiesPage() {
           )}
         </div>
       </div>
+      
+      {/* Alert Modal */}
+      <AlertModal 
+        isOpen={showAlertModal} 
+        onClose={() => setShowAlertModal(false)}
+        defaultEntity={alertEntity}
+      />
     </TooltipProvider>
   );
 }
