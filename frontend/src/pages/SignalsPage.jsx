@@ -839,6 +839,7 @@ export default function Watchlist() {
   const [riskSpikeFilter, setRiskSpikeFilter] = useState(false);
   const [bridgeAlignedFilter, setBridgeAlignedFilter] = useState(false);
   const [dormantFilter, setDormantFilter] = useState(false);
+  const [lifecycleFilter, setLifecycleFilter] = useState('all'); // all, new, active, cooling, archived
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState('overview');
