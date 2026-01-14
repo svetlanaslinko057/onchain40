@@ -2,7 +2,8 @@ import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Search, Star, Bell, Filter, TrendingUp, TrendingDown, 
-  ArrowUpRight, ChevronDown, X, Users, Zap, Target, Clock
+  ArrowUpRight, ChevronDown, X, Users, Zap, Target, Clock,
+  ArrowUpDown, Activity, Globe
 } from 'lucide-react';
 import Header from '../components/Header';
 import {
@@ -12,7 +13,16 @@ import {
   TooltipTrigger,
 } from "../components/ui/tooltip";
 
-// Mock actors data
+// Chain icons/colors
+const chainConfig = {
+  'ETH': { color: 'bg-blue-500', label: 'Ethereum' },
+  'SOL': { color: 'bg-purple-500', label: 'Solana' },
+  'BASE': { color: 'bg-blue-600', label: 'Base' },
+  'ARB': { color: 'bg-sky-500', label: 'Arbitrum' },
+  'OP': { color: 'bg-red-500', label: 'Optimism' },
+};
+
+// Mock actors data with enhanced fields
 const actorsData = [
   {
     id: 'vitalik',
@@ -28,6 +38,14 @@ const actorsData = [
     currentBehavior: 'Accumulating',
     behaviorTrend: 'Stable → Bullish',
     tokens: ['ETH', 'L2', 'AI'],
+    // NEW FIELDS
+    clusterSize: 4,
+    lastAction: { type: 'BUY', token: 'ARB', time: '2h ago', size: '$45K' },
+    primaryChain: 'ETH',
+    latency: 'Early',
+    hasActiveSignals: true,
+    signalsCount: 3,
+    lastActivityTime: Date.now() - 2 * 60 * 60 * 1000, // 2h ago
   },
   {
     id: 'alameda',
@@ -43,6 +61,13 @@ const actorsData = [
     currentBehavior: 'Rotating',
     behaviorTrend: 'Active trading',
     tokens: ['SOL', 'BTC', 'DeFi'],
+    clusterSize: 12,
+    lastAction: { type: 'SWAP', token: 'SOL→USDC', time: '45m ago', size: '$890K' },
+    primaryChain: 'SOL',
+    latency: 'Early',
+    hasActiveSignals: true,
+    signalsCount: 5,
+    lastActivityTime: Date.now() - 45 * 60 * 1000,
   },
   {
     id: 'dwf-labs',
@@ -58,6 +83,13 @@ const actorsData = [
     currentBehavior: 'Adding',
     behaviorTrend: 'Bullish bias',
     tokens: ['Meme', 'AI', 'Gaming'],
+    clusterSize: 8,
+    lastAction: { type: 'BUY', token: 'PEPE', time: '4h ago', size: '$120K' },
+    primaryChain: 'ETH',
+    latency: 'Medium',
+    hasActiveSignals: true,
+    signalsCount: 2,
+    lastActivityTime: Date.now() - 4 * 60 * 60 * 1000,
   },
   {
     id: 'a16z',
@@ -73,6 +105,13 @@ const actorsData = [
     currentBehavior: 'Accumulating',
     behaviorTrend: 'Stable',
     tokens: ['ETH', 'L2', 'Infra'],
+    clusterSize: 15,
+    lastAction: { type: 'BUY', token: 'OP', time: '1d ago', size: '$2.1M' },
+    primaryChain: 'ETH',
+    latency: 'Early',
+    hasActiveSignals: false,
+    signalsCount: 0,
+    lastActivityTime: Date.now() - 24 * 60 * 60 * 1000,
   },
   {
     id: 'jump-trading',
@@ -88,6 +127,13 @@ const actorsData = [
     currentBehavior: 'Distributing',
     behaviorTrend: 'Risk-off',
     tokens: ['BTC', 'ETH', 'Stables'],
+    clusterSize: 23,
+    lastAction: { type: 'SELL', token: 'ETH', time: '30m ago', size: '$340K' },
+    primaryChain: 'ETH',
+    latency: 'Late',
+    hasActiveSignals: true,
+    signalsCount: 1,
+    lastActivityTime: Date.now() - 30 * 60 * 1000,
   },
   {
     id: 'unknown-whale-1',
@@ -103,6 +149,13 @@ const actorsData = [
     currentBehavior: 'Exiting',
     behaviorTrend: 'Bearish',
     tokens: ['Meme', 'Shitcoins'],
+    clusterSize: 2,
+    lastAction: { type: 'SELL', token: 'BONK', time: '15m ago', size: '$89K' },
+    primaryChain: 'SOL',
+    latency: 'Late',
+    hasActiveSignals: false,
+    signalsCount: 0,
+    lastActivityTime: Date.now() - 15 * 60 * 1000,
   },
   {
     id: 'pantera',
@@ -118,6 +171,13 @@ const actorsData = [
     currentBehavior: 'Accumulating',
     behaviorTrend: 'Bullish',
     tokens: ['AI', 'DeFi', 'L2'],
+    clusterSize: 9,
+    lastAction: { type: 'BUY', token: 'TAO', time: '6h ago', size: '$1.2M' },
+    primaryChain: 'ETH',
+    latency: 'Early',
+    hasActiveSignals: true,
+    signalsCount: 4,
+    lastActivityTime: Date.now() - 6 * 60 * 60 * 1000,
   },
   {
     id: 'wintermute',
@@ -133,6 +193,13 @@ const actorsData = [
     currentBehavior: 'Rotating',
     behaviorTrend: 'Neutral',
     tokens: ['ETH', 'Stables', 'DeFi'],
+    clusterSize: 31,
+    lastAction: { type: 'BRIDGE', token: 'ETH→BASE', time: '1h ago', size: '$780K' },
+    primaryChain: 'ETH',
+    latency: 'Medium',
+    hasActiveSignals: false,
+    signalsCount: 0,
+    lastActivityTime: Date.now() - 60 * 60 * 1000,
   },
 ];
 
@@ -141,11 +208,27 @@ const strategyFilters = ['Accumulator', 'Smart Money', 'Momentum', 'Early DEX', 
 const riskFilters = ['Low', 'Medium', 'High'];
 const latencyFilters = ['Early', 'Medium', 'Late'];
 
+// Sort options
+const sortOptions = [
+  { value: 'activity', label: 'Newest activity' },
+  { value: 'pnl', label: 'PnL (highest)' },
+  { value: 'winRate', label: 'Win rate' },
+  { value: 'risk', label: 'Risk (lowest)' },
+  { value: 'signals', label: 'Active signals' },
+];
+
 // Confidence colors
 const confidenceColors = {
-  high: { bg: 'bg-emerald-500', text: 'text-emerald-500', label: 'High Confidence' },
-  medium: { bg: 'bg-amber-500', text: 'text-amber-500', label: 'Medium Confidence' },
-  low: { bg: 'bg-red-500', text: 'text-red-500', label: 'Low Confidence' },
+  high: { bg: 'bg-[#16C784]', text: 'text-[#16C784]', label: 'High Confidence' },
+  medium: { bg: 'bg-[#F5A524]', text: 'text-[#F5A524]', label: 'Medium Confidence' },
+  low: { bg: 'bg-[#EF4444]', text: 'text-[#EF4444]', label: 'Low Confidence' },
+};
+
+// Latency colors
+const latencyColors = {
+  'Early': 'bg-emerald-100 text-emerald-700',
+  'Medium': 'bg-amber-100 text-amber-700',
+  'Late': 'bg-red-100 text-red-700',
 };
 
 // Type badge colors
@@ -156,80 +239,113 @@ const typeBadgeColors = {
   'Cluster': 'bg-gray-100 text-gray-700',
 };
 
-// Actor Card Component
+// Action type colors
+const actionColors = {
+  'BUY': 'text-emerald-600',
+  'SELL': 'text-red-500',
+  'SWAP': 'text-blue-600',
+  'BRIDGE': 'text-purple-600',
+};
+
+// Actor Card Component - Enhanced
 const ActorCard = ({ actor, isFollowed, onToggleFollow }) => {
   const confidence = confidenceColors[actor.confidence];
+  const chain = chainConfig[actor.primaryChain] || { color: 'bg-gray-500', label: actor.primaryChain };
   
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-400 transition-all group">
+    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:border-gray-400 transition-all group h-full flex flex-col">
       {/* Confidence strip */}
       <div className={`h-1 ${confidence.bg}`} />
       
-      <div className="p-4">
+      <div className="p-4 flex flex-col flex-1">
         {/* Header */}
-        <div className="flex items-start justify-between mb-4">
+        <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
             {/* Avatar */}
-            <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center overflow-hidden">
+            <div className="w-11 h-11 rounded-xl bg-gray-100 flex items-center justify-center overflow-hidden">
               {actor.avatar ? (
                 <img src={actor.avatar} alt={actor.label} className="w-full h-full object-cover" />
               ) : (
-                <Users className="w-6 h-6 text-gray-400" />
+                <Users className="w-5 h-5 text-gray-400" />
               )}
             </div>
             <div>
-              <div className="font-bold text-gray-900">{actor.label}</div>
-              <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${typeBadgeColors[actor.type]}`}>
-                {actor.type}
-              </span>
+              <div className="font-bold text-gray-900 text-sm">{actor.label}</div>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className={`inline-block px-1.5 py-0.5 rounded text-xs font-medium ${typeBadgeColors[actor.type]}`}>
+                  {actor.type}
+                </span>
+                <span className="text-xs text-gray-400">•</span>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="text-xs text-gray-500">{actor.clusterSize} wallets</span>
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-gray-900 text-white">
+                    <p className="text-xs">Cluster of {actor.clusterSize} linked addresses</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
             </div>
           </div>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className={`text-xs font-medium ${confidence.text}`}>
-                {confidence.label.split(' ')[0]}
-              </div>
-            </TooltipTrigger>
-            <TooltipContent className="bg-gray-900 text-white">
-              <p className="text-xs">{confidence.label} based on historical performance</p>
-            </TooltipContent>
-          </Tooltip>
+          <div className="flex flex-col items-end gap-1">
+            <span className={`text-xs font-semibold ${confidence.text}`}>
+              {confidence.label.split(' ')[0]}
+            </span>
+            <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${latencyColors[actor.latency]}`}>
+              {actor.latency}
+            </span>
+          </div>
+        </div>
+
+        {/* Last Action - NEW */}
+        <div className="mb-3 p-2 bg-gray-50 rounded-lg flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Activity className="w-3.5 h-3.5 text-gray-400" />
+            <span className={`text-xs font-semibold ${actionColors[actor.lastAction.type]}`}>
+              {actor.lastAction.type}
+            </span>
+            <span className="text-xs text-gray-900 font-medium">{actor.lastAction.token}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-gray-500">{actor.lastAction.size}</span>
+            <span className="text-xs text-gray-400">{actor.lastAction.time}</span>
+          </div>
         </div>
 
         {/* Core Metrics - exactly 3 */}
-        <div className="grid grid-cols-3 gap-3 mb-4 p-3 bg-gray-50 rounded-xl">
-          <div>
+        <div className="grid grid-cols-3 gap-2 mb-3">
+          <div className="text-center p-2 bg-gray-50 rounded-lg">
             <div className="text-xs text-gray-500 mb-0.5">PnL</div>
-            <div className={`text-sm font-bold ${actor.pnl.startsWith('+') ? 'text-emerald-600' : 'text-red-500'}`}>
+            <div className={`text-sm font-bold ${actor.pnl.startsWith('+') ? 'text-[#16C784]' : 'text-[#EF4444]'}`}>
               {actor.pnl}
             </div>
           </div>
-          <div>
+          <div className="text-center p-2 bg-gray-50 rounded-lg">
             <div className="text-xs text-gray-500 mb-0.5">Win</div>
             <div className="text-sm font-bold text-gray-900">{actor.winRate}%</div>
           </div>
-          <div>
+          <div className="text-center p-2 bg-gray-50 rounded-lg">
             <div className="text-xs text-gray-500 mb-0.5">Risk</div>
             <div className={`text-sm font-bold ${
-              actor.riskScore < 30 ? 'text-emerald-600' : 
-              actor.riskScore < 60 ? 'text-amber-600' : 'text-red-500'
+              actor.riskScore < 30 ? 'text-[#16C784]' : 
+              actor.riskScore < 60 ? 'text-[#F5A524]' : 'text-[#EF4444]'
             }`}>
-              {actor.riskScore}/100
+              {actor.riskScore}
             </div>
           </div>
         </div>
 
         {/* Strategy fingerprint - max 3 chips */}
-        <div className="flex flex-wrap gap-1.5 mb-4">
+        <div className="flex flex-wrap gap-1 mb-3">
           {actor.strategies.slice(0, 3).map((strategy, i) => (
-            <span key={i} className="px-2 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-medium">
+            <span key={i} className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs font-medium">
               {strategy}
             </span>
           ))}
           {actor.strategies.length > 3 && (
             <Tooltip>
               <TooltipTrigger asChild>
-                <span className="px-2 py-1 bg-slate-100 text-slate-500 rounded-lg text-xs">
+                <span className="px-2 py-0.5 bg-slate-100 text-slate-400 rounded text-xs">
                   +{actor.strategies.length - 3}
                 </span>
               </TooltipTrigger>
@@ -240,23 +356,34 @@ const ActorCard = ({ actor, isFollowed, onToggleFollow }) => {
           )}
         </div>
 
-        {/* Behavior state */}
-        <div className="flex items-center justify-between mb-4 text-sm">
+        {/* Behavior state + Primary chain */}
+        <div className="flex items-center justify-between mb-3 text-xs">
           <div>
             <span className="text-gray-500">Current: </span>
             <span className="font-semibold text-gray-900">{actor.currentBehavior}</span>
           </div>
-          <div className="text-xs text-gray-500">{actor.behaviorTrend}</div>
+          <div className="flex items-center gap-1.5">
+            <div className={`w-2 h-2 rounded-full ${chain.color}`} />
+            <span className="text-gray-500">{chain.label}</span>
+          </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-2 pt-3 border-t border-gray-100">
+        {/* Signals indicator */}
+        {actor.hasActiveSignals && (
+          <div className="mb-3 flex items-center gap-2 text-xs">
+            <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+            <span className="text-emerald-600 font-medium">{actor.signalsCount} active signals</span>
+          </div>
+        )}
+
+        {/* Actions - pushed to bottom */}
+        <div className="flex items-center gap-2 pt-3 border-t border-gray-100 mt-auto">
           <Link 
             to={`/actors/${actor.id}`}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-gray-900 text-white rounded-xl text-sm font-semibold hover:bg-gray-800 transition-colors"
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-gray-900 text-white rounded-xl text-xs font-semibold hover:bg-gray-800 transition-colors"
           >
             View Actor
-            <ArrowUpRight className="w-4 h-4" />
+            <ArrowUpRight className="w-3.5 h-3.5" />
           </Link>
           <button
             onClick={() => onToggleFollow(actor.id)}
@@ -284,13 +411,17 @@ export default function ActorsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [followedOnly, setFollowedOnly] = useState(false);
+  const [activeSignalsOnly, setActiveSignalsOnly] = useState(false);
+  const [earlyOnly, setEarlyOnly] = useState(false);
   const [followedActors, setFollowedActors] = useState(['alameda', 'a16z']);
+  const [sortBy, setSortBy] = useState('activity');
   
   // Filters state
   const [selectedStrategies, setSelectedStrategies] = useState([]);
   const [selectedRisk, setSelectedRisk] = useState([]);
   const [selectedLatency, setSelectedLatency] = useState([]);
   const [minWinRate, setMinWinRate] = useState(0);
+  const [pnlPositiveOnly, setPnlPositiveOnly] = useState(false);
 
   const toggleFollow = (actorId) => {
     setFollowedActors(prev => 
@@ -316,9 +447,9 @@ export default function ActorsPage() {
     );
   };
 
-  // Filter actors
+  // Filter and sort actors
   const filteredActors = useMemo(() => {
-    return actorsData.filter(actor => {
+    let result = actorsData.filter(actor => {
       // Search
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
@@ -326,11 +457,18 @@ export default function ActorsPage() {
         const matchesStrategy = actor.strategies.some(s => s.toLowerCase().includes(query));
         const matchesToken = actor.tokens.some(t => t.toLowerCase().includes(query));
         const matchesType = actor.type.toLowerCase().includes(query);
-        if (!matchesLabel && !matchesStrategy && !matchesToken && !matchesType) return false;
+        const matchesAddress = actor.address.toLowerCase().includes(query);
+        if (!matchesLabel && !matchesStrategy && !matchesToken && !matchesType && !matchesAddress) return false;
       }
 
       // Followed only
       if (followedOnly && !followedActors.includes(actor.id)) return false;
+
+      // Active signals only
+      if (activeSignalsOnly && !actor.hasActiveSignals) return false;
+
+      // Early only
+      if (earlyOnly && actor.latency !== 'Early') return false;
 
       // Strategy filter
       if (selectedStrategies.length > 0) {
@@ -343,28 +481,59 @@ export default function ActorsPage() {
         if (!selectedRisk.includes(riskLevel)) return false;
       }
 
+      // Latency filter
+      if (selectedLatency.length > 0) {
+        if (!selectedLatency.includes(actor.latency)) return false;
+      }
+
       // Win rate filter
       if (minWinRate > 0 && actor.winRate < minWinRate) return false;
 
+      // PnL positive only
+      if (pnlPositiveOnly && !actor.pnl.startsWith('+')) return false;
+
       return true;
     });
-  }, [searchQuery, followedOnly, followedActors, selectedStrategies, selectedRisk, minWinRate]);
+
+    // Sort
+    result.sort((a, b) => {
+      switch (sortBy) {
+        case 'activity':
+          return a.lastActivityTime - b.lastActivityTime;
+        case 'pnl':
+          const pnlA = parseFloat(a.pnl.replace(/[^0-9.-]/g, ''));
+          const pnlB = parseFloat(b.pnl.replace(/[^0-9.-]/g, ''));
+          return pnlB - pnlA;
+        case 'winRate':
+          return b.winRate - a.winRate;
+        case 'risk':
+          return a.riskScore - b.riskScore;
+        case 'signals':
+          return b.signalsCount - a.signalsCount;
+        default:
+          return 0;
+      }
+    });
+
+    return result;
+  }, [searchQuery, followedOnly, followedActors, selectedStrategies, selectedRisk, selectedLatency, minWinRate, pnlPositiveOnly, activeSignalsOnly, earlyOnly, sortBy]);
 
   const clearFilters = () => {
     setSelectedStrategies([]);
     setSelectedRisk([]);
     setSelectedLatency([]);
     setMinWinRate(0);
+    setPnlPositiveOnly(false);
   };
 
-  const hasActiveFilters = selectedStrategies.length > 0 || selectedRisk.length > 0 || minWinRate > 0;
+  const hasActiveFilters = selectedStrategies.length > 0 || selectedRisk.length > 0 || selectedLatency.length > 0 || minWinRate > 0 || pnlPositiveOnly;
 
   return (
     <TooltipProvider>
       <div className="min-h-screen bg-gray-50">
         <Header />
         
-        <div className="px-4 py-6">
+        <div className="px-4 py-6 max-w-[1600px] mx-auto">
           {/* Hero Bar */}
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -373,50 +542,76 @@ export default function ActorsPage() {
             </div>
             
             {/* Right controls */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              {/* Active signals toggle */}
+              <button
+                onClick={() => setActiveSignalsOnly(!activeSignalsOnly)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-colors ${
+                  activeSignalsOnly 
+                    ? 'bg-emerald-100 text-emerald-700' 
+                    : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                <Zap className="w-3.5 h-3.5" />
+                Active signals
+              </button>
+
+              {/* Early only toggle */}
+              <button
+                onClick={() => setEarlyOnly(!earlyOnly)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-colors ${
+                  earlyOnly 
+                    ? 'bg-emerald-100 text-emerald-700' 
+                    : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                <Clock className="w-3.5 h-3.5" />
+                Early only
+              </button>
+
               {/* Followed toggle */}
               <button
                 onClick={() => setFollowedOnly(!followedOnly)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-colors ${
                   followedOnly 
                     ? 'bg-amber-100 text-amber-700' 
                     : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
                 }`}
               >
-                <Star className={`w-4 h-4 ${followedOnly ? 'fill-current' : ''}`} />
-                Followed only
+                <Star className={`w-3.5 h-3.5 ${followedOnly ? 'fill-current' : ''}`} />
+                Followed
               </button>
               
               {/* Filter button */}
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-colors ${
                   showFilters || hasActiveFilters
                     ? 'bg-gray-900 text-white' 
                     : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
                 }`}
               >
-                <Filter className="w-4 h-4" />
+                <Filter className="w-3.5 h-3.5" />
                 Filters
                 {hasActiveFilters && (
-                  <span className="w-5 h-5 bg-white text-gray-900 rounded-full text-xs font-bold flex items-center justify-center">
-                    {selectedStrategies.length + selectedRisk.length + (minWinRate > 0 ? 1 : 0)}
+                  <span className="w-4 h-4 bg-white text-gray-900 rounded-full text-xs font-bold flex items-center justify-center">
+                    {selectedStrategies.length + selectedRisk.length + selectedLatency.length + (minWinRate > 0 ? 1 : 0) + (pnlPositiveOnly ? 1 : 0)}
                   </span>
                 )}
               </button>
             </div>
           </div>
 
-          {/* Search Bar - ALWAYS ON TOP */}
-          <div className="mb-6">
-            <div className="relative">
+          {/* Search Bar + Sort */}
+          <div className="flex items-center gap-4 mb-6">
+            <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Search by behavior, strategy, token, address..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10 transition-all"
+                className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10 transition-all"
                 style={{ color: '#111827' }}
               />
               {searchQuery && (
@@ -427,6 +622,20 @@ export default function ActorsPage() {
                   <X className="w-4 h-4 text-gray-400" />
                 </button>
               )}
+            </div>
+
+            {/* Sort dropdown */}
+            <div className="flex items-center gap-2">
+              <ArrowUpDown className="w-4 h-4 text-gray-400" />
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 focus:outline-none focus:border-gray-900"
+              >
+                {sortOptions.map(opt => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -445,18 +654,18 @@ export default function ActorsPage() {
                 )}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                 {/* Strategy filters */}
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
                     Strategy
                   </label>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1.5">
                     {strategyFilters.map(strategy => (
                       <button
                         key={strategy}
                         onClick={() => toggleStrategy(strategy)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                        className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
                           selectedStrategies.includes(strategy)
                             ? 'bg-gray-900 text-white'
                             : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -486,6 +695,16 @@ export default function ActorsPage() {
                         className="w-full"
                       />
                     </div>
+                    <button
+                      onClick={() => setPnlPositiveOnly(!pnlPositiveOnly)}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
+                        pnlPositiveOnly
+                          ? 'bg-emerald-500 text-white'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      PnL positive only
+                    </button>
                   </div>
                 </div>
 
@@ -494,16 +713,16 @@ export default function ActorsPage() {
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
                     Risk
                   </label>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1.5">
                     {riskFilters.map(risk => (
                       <button
                         key={risk}
                         onClick={() => toggleRisk(risk)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                        className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
                           selectedRisk.includes(risk)
-                            ? risk === 'Low' ? 'bg-emerald-500 text-white' :
-                              risk === 'Medium' ? 'bg-amber-500 text-white' :
-                              'bg-red-500 text-white'
+                            ? risk === 'Low' ? 'bg-[#16C784] text-white' :
+                              risk === 'Medium' ? 'bg-[#F5A524] text-white' :
+                              'bg-[#EF4444] text-white'
                             : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                         }`}
                       >
@@ -518,7 +737,7 @@ export default function ActorsPage() {
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
                     Latency
                   </label>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1.5">
                     {latencyFilters.map(latency => (
                       <button
                         key={latency}
@@ -527,13 +746,33 @@ export default function ActorsPage() {
                             ? prev.filter(l => l !== latency) 
                             : [...prev, latency]
                         )}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                        className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
                           selectedLatency.includes(latency)
-                            ? 'bg-gray-900 text-white'
+                            ? latency === 'Early' ? 'bg-emerald-500 text-white' :
+                              latency === 'Medium' ? 'bg-amber-500 text-white' :
+                              'bg-red-500 text-white'
                             : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                         }`}
                       >
                         {latency}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Chain filter - NEW */}
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                    Primary Chain
+                  </label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {Object.entries(chainConfig).map(([chain, config]) => (
+                      <button
+                        key={chain}
+                        className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+                      >
+                        <div className={`w-2 h-2 rounded-full ${config.color}`} />
+                        {chain}
                       </button>
                     ))}
                   </div>
@@ -547,6 +786,8 @@ export default function ActorsPage() {
             <p className="text-sm text-gray-500">
               Showing <span className="font-semibold text-gray-900">{filteredActors.length}</span> actors
               {followedOnly && <span className="text-amber-600"> (followed only)</span>}
+              {activeSignalsOnly && <span className="text-emerald-600"> (with active signals)</span>}
+              {earlyOnly && <span className="text-emerald-600"> (early latency)</span>}
             </p>
           </div>
 
@@ -573,6 +814,8 @@ export default function ActorsPage() {
                   setSearchQuery('');
                   clearFilters();
                   setFollowedOnly(false);
+                  setActiveSignalsOnly(false);
+                  setEarlyOnly(false);
                 }}
                 className="px-4 py-2 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-gray-800"
               >
