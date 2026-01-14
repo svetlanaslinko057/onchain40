@@ -245,34 +245,34 @@ const EntityCard = ({ entity, cluster, isInActiveCluster, isDimmed, bridgeMode }
   const clusterData = cluster ? bridgeClusters.find(c => c.clusterId === cluster) : null;
   
   return (
-    <Link to={`/entity/${entity.id}`}>
-      <div className={`bg-white border rounded-xl p-4 transition-all cursor-pointer relative ${
-        isDimmed 
-          ? 'border-gray-100 opacity-40' 
-          : isInActiveCluster 
-            ? 'border-gray-900 ring-2 ring-gray-900/20' 
-            : 'border-gray-200 hover:border-gray-900'
-      }`}>
-        {/* Bridge badge */}
-        {bridgeMode && cluster && (
-          <div className="absolute top-3 right-3 flex items-center gap-1">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className={`flex items-center gap-1 px-2 py-1 rounded-md ${clusterData?.color || 'bg-gray-500'} text-white`}>
-                  <Link2 className="w-3 h-3" />
-                  <span className="text-xs font-bold">{cluster}</span>
-                </div>
-              </TooltipTrigger>
-              <TooltipContent className="bg-gray-900 text-white max-w-xs border border-white/20">
-                <p className="text-xs mb-1">
-                  Aligned with {(clusterData?.entities.length || 1) - 1} entities on {clusterData?.token} {clusterData?.direction}
-                </p>
-                <p className="text-xs text-gray-400">Confidence +{clusterData?.confidenceBoost}%</p>
-              </TooltipContent>
-            </Tooltip>
-          </div>
-        )}
+    <div className={`bg-white border rounded-xl p-4 transition-all relative ${
+      isDimmed 
+        ? 'border-gray-100 opacity-40' 
+        : isInActiveCluster 
+          ? 'border-gray-900 ring-2 ring-gray-900/20' 
+          : 'border-gray-200 hover:border-gray-900'
+    }`}>
+      {/* Bridge badge */}
+      {bridgeMode && cluster && (
+        <div className="absolute top-3 right-3 flex items-center gap-1">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className={`flex items-center gap-1 px-2 py-1 rounded-md ${clusterData?.color || 'bg-gray-500'} text-white`}>
+                <Link2 className="w-3 h-3" />
+                <span className="text-xs font-bold">{cluster}</span>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent className="bg-gray-900 text-white max-w-xs border border-white/20">
+              <p className="text-xs mb-1">
+                Aligned with {(clusterData?.entities.length || 1) - 1} entities on {clusterData?.token} {clusterData?.direction}
+              </p>
+              <p className="text-xs text-gray-400">Confidence +{clusterData?.confidenceBoost}%</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+      )}
 
+      <Link to={`/entity/${entity.id}`} className="block">
         <div className="flex items-center gap-3 mb-4">
           <img src={entity.logo} alt={entity.name} className="w-12 h-12 rounded-2xl" />
           <div className="flex-1">
@@ -305,6 +305,46 @@ const EntityCard = ({ entity, cluster, isInActiveCluster, isDimmed, bridgeMode }
             </TooltipContent>
           </Tooltip>
         </div>
+      </Link>
+      
+      {/* Quick Actions Row */}
+      <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+        <Link to={`/entity/${entity.id}`} className="text-xs font-semibold text-gray-600 hover:text-gray-900 transition-colors">
+          View details →
+        </Link>
+        
+        <div className="flex items-center gap-1">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                to="/watchlist"
+                onClick={(e) => e.stopPropagation()}
+                className="p-1.5 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+              >
+                <Eye className="w-3.5 h-3.5" />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="text-xs">Add to Watchlist</p>
+            </TooltipContent>
+          </Tooltip>
+          
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                to="/alerts"
+                onClick={(e) => e.stopPropagation()}
+                className="p-1.5 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+              >
+                <Bell className="w-3.5 h-3.5" />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="text-xs">Create Alert</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+      </div>
         
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
