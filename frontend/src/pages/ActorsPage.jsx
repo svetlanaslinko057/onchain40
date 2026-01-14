@@ -654,6 +654,48 @@ export default function ActorsPage() {
                   </span>
                 )}
               </button>
+              
+              {/* IDENTITY TOGGLE - Strategy vs Real Names */}
+              <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-xl p-1 ml-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => setShowRealNames(false)}
+                      className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                        !showRealNames 
+                          ? 'bg-indigo-100 text-indigo-700' 
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                      data-testid="show-strategies-btn"
+                    >
+                      <EyeOff className="w-3.5 h-3.5" />
+                      Strategies
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-gray-900 text-white max-w-xs">
+                    <p className="text-xs">Focus on strategy patterns, not personalities. Better for objective analysis.</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => setShowRealNames(true)}
+                      className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                        showRealNames 
+                          ? 'bg-gray-100 text-gray-700' 
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                      data-testid="show-real-names-btn"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      Real Names
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-gray-900 text-white max-w-xs">
+                    <p className="text-xs">Show known entity names for high-confidence identifications.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
             </div>
           </div>
 
