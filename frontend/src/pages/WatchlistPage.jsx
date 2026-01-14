@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Plus, Search, Eye, Trash2, Bell, TrendingUp, TrendingDown,
+  Plus, Eye, Trash2, Bell, TrendingUp, TrendingDown,
   AlertTriangle, CheckCircle, Activity, Clock, Link2, ArrowUpRight, 
   ArrowDownRight, ChevronDown, Wallet, Users, Coins, X, Settings,
   ChevronLeft, ChevronRight
 } from 'lucide-react';
 import Header from '../components/Header';
+import SearchInput from '../components/shared/SearchInput';
 
 // Add Address Modal Component
 const AddAddressModal = ({ isOpen, onClose, onAdd }) => {
@@ -411,16 +412,14 @@ const WatchlistPage = () => {
         <div className="bg-white rounded-lg border border-gray-200 p-4 mb-4">
           <div className="flex items-center justify-between">
             {/* Search */}
-            <div className="flex items-center gap-2 px-3.5 py-2 bg-gray-50 rounded-lg w-80">
-              <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />
-              <input
-                type="text"
-                placeholder="Search addresses..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-400"
-              />
-            </div>
+            <SearchInput
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search addresses..."
+              className="w-80"
+              testId="watchlist-search-input"
+              inputClassName="bg-gray-50"
+            />
 
             {/* Filters Toggle */}
             <div className="flex items-center gap-2">
