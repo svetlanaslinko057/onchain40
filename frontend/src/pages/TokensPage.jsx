@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Search, ChevronDown, ChevronUp, Clock, Users, Wallet, ArrowRightLeft, 
+  ChevronDown, ChevronUp, Clock, Users, Wallet, ArrowRightLeft, 
   BarChart3, Check, AlertTriangle, Zap, TrendingUp, TrendingDown, Bell, 
   Building, ExternalLink, Activity, ArrowUp, ArrowDown, Eye, X, Info
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts';
 import Header from '../components/Header';
+import SearchInput from '../components/shared/SearchInput';
 import {
   Tooltip,
   TooltipContent,
@@ -256,17 +257,14 @@ export default function TokensPage() {
       <div className="border-b border-gray-100 bg-gray-50/50">
         <div className="px-4 py-2">
           <div className="flex items-center gap-3">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" style={{pointerEvents: 'none', zIndex: 1}} />
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{color: '#111827', position: 'relative', zIndex: 2}}
-                className="pl-10 pr-3 py-1.5 text-sm bg-white border border-gray-200 rounded-lg w-40 focus:outline-none focus:border-gray-400"
-              />
-            </div>
+            <SearchInput
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search..."
+              className="w-40"
+              inputClassName="py-1.5 text-sm"
+              testId="tokens-search-input"
+            />
             <div className="flex items-center gap-1 overflow-x-auto">
               {filteredTokens.map((t) => (
                 <button
