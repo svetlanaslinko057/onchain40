@@ -1735,7 +1735,7 @@ export default function ActorProfile() {
                 </div>
               )}
 
-              {/* CORRELATION & INFLUENCE - NEW ETAP 3 */}
+              {/* CORRELATION & INFLUENCE - ETAP 4 ENHANCED */}
               {actor.correlation && (
                 <div className="bg-gradient-to-br from-violet-50 to-purple-50 border border-violet-200 rounded-2xl p-5">
                   <div className="flex items-center justify-between mb-4">
@@ -1749,17 +1749,73 @@ export default function ActorProfile() {
                       </TooltipTrigger>
                       <TooltipContent className="bg-gray-900 text-white max-w-xs">
                         <p className="text-xs">Behavioral patterns and timing relationships with other actors. Use to find earlier signals or avoid crowded trades.</p>
+                        <p className="text-xs text-gray-400 mt-1">Note: Behavioral correlation, not causal truth.</p>
                       </TooltipContent>
                     </Tooltip>
                   </div>
 
-                  {/* Cluster Info */}
+                  {/* ETAP 4: INFLUENCE SUMMARY - Key Decision Block */}
+                  {actor.correlation.influenceSummary && (
+                    <div className={`mb-4 p-4 rounded-xl border-2 ${
+                      actor.correlation.influenceSummary.strength === 'very high' ? 'bg-emerald-50 border-emerald-300' :
+                      actor.correlation.influenceSummary.strength === 'high' ? 'bg-green-50 border-green-200' :
+                      actor.correlation.influenceSummary.strength === 'medium' ? 'bg-amber-50 border-amber-200' :
+                      'bg-red-50 border-red-200'
+                    }`}>
+                      <div className="flex items-start gap-3">
+                        <div className={`p-2 rounded-lg ${
+                          actor.correlation.influenceSummary.strength === 'very high' ? 'bg-emerald-100' :
+                          actor.correlation.influenceSummary.strength === 'high' ? 'bg-green-100' :
+                          actor.correlation.influenceSummary.strength === 'medium' ? 'bg-amber-100' :
+                          'bg-red-100'
+                        }`}>
+                          {actor.correlation.influenceSummary.role.includes('Leader') ? (
+                            <TrendingUp className={`w-5 h-5 ${
+                              actor.correlation.influenceSummary.strength === 'very high' ? 'text-emerald-600' :
+                              actor.correlation.influenceSummary.strength === 'high' ? 'text-green-600' : 'text-amber-600'
+                            }`} />
+                          ) : actor.correlation.influenceSummary.role.includes('Follower') ? (
+                            <Users className="w-5 h-5 text-blue-600" />
+                          ) : (
+                            <Activity className="w-5 h-5 text-gray-600" />
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className={`text-sm font-bold ${
+                              actor.correlation.influenceSummary.strength === 'very high' ? 'text-emerald-700' :
+                              actor.correlation.influenceSummary.strength === 'high' ? 'text-green-700' :
+                              actor.correlation.influenceSummary.strength === 'medium' ? 'text-amber-700' :
+                              'text-red-700'
+                            }`}>
+                              {actor.correlation.influenceSummary.role}
+                            </span>
+                            <span className="text-xs text-gray-500">in {actor.correlation.influenceSummary.ecosystem}</span>
+                          </div>
+                          <p className="text-sm text-gray-700 mb-2">{actor.correlation.influenceSummary.recommendation}</p>
+                          <div className="flex items-center gap-3 text-xs text-gray-500">
+                            <span>Avg follower lag: <span className="font-medium text-gray-700">{actor.correlation.influenceSummary.avgLag}</span></span>
+                            {actor.influenceScore && (
+                              <span className="px-2 py-0.5 bg-white rounded-full border">
+                                Influence Score: <span className="font-bold text-violet-600">{actor.influenceScore}</span>
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Strategy Cluster */}
                   {actor.correlation.cluster && (
                     <div className="mb-4 p-3 bg-violet-100 rounded-xl">
                       <div className="flex items-center justify-between">
                         <div>
                           <span className="text-xs text-violet-600 font-medium">Strategy Cluster</span>
                           <div className="font-bold text-gray-900">{actor.correlation.cluster.name}</div>
+                          {actor.correlation.cluster.dominantStrategy && (
+                            <div className="text-xs text-gray-500 mt-0.5">Dominant: {actor.correlation.cluster.dominantStrategy}</div>
+                          )}
                         </div>
                         <div className="text-right">
                           <span className={`px-2 py-1 rounded text-xs font-bold ${
@@ -1776,12 +1832,20 @@ export default function ActorProfile() {
                     </div>
                   )}
 
-                  {/* Moves With */}
+                  {/* Moves With (Similar Behavior) - ENHANCED with overlap type */}
                   {actor.correlation.movesWith && actor.correlation.movesWith.length > 0 && (
                     <div className="mb-4">
                       <div className="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1">
                         <Link2 className="w-3.5 h-3.5" />
                         Moves With (Similar Behavior)
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="w-3 h-3 text-gray-400 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent className="bg-gray-900 text-white max-w-xs">
+                            <p className="text-xs">Behavioral similarity, not copying. These actors show correlated patterns without clear leader/follower relationship.</p>
+                          </TooltipContent>
+                        </Tooltip>
                       </div>
                       <div className="space-y-2">
                         {actor.correlation.movesWith.map((related, i) => (
@@ -1792,7 +1856,18 @@ export default function ActorProfile() {
                           >
                             <div>
                               <div className="font-medium text-gray-900 text-sm">{showRealNames ? related.real_name || related.strategy_name : related.strategy_name}</div>
-                              <div className="text-xs text-gray-500">{related.overlap}</div>
+                              <div className="flex items-center gap-2 mt-0.5">
+                                <span className="text-xs text-gray-500">{related.overlap}</span>
+                                {related.overlapType && (
+                                  <span className={`px-1.5 py-0.5 rounded text-xs ${
+                                    related.overlapType === 'timing' ? 'bg-blue-100 text-blue-600' :
+                                    related.overlapType === 'token' ? 'bg-purple-100 text-purple-600' :
+                                    'bg-gray-100 text-gray-600'
+                                  }`}>
+                                    {related.overlapType}
+                                  </span>
+                                )}
+                              </div>
                             </div>
                             <div className="flex items-center gap-2">
                               <div className="text-right">
@@ -1807,18 +1882,19 @@ export default function ActorProfile() {
                     </div>
                   )}
 
-                  {/* Front-runners - WHO ACTS BEFORE */}
+                  {/* Front-Runners - RENAMED in ETAP 4 */}
                   {actor.correlation.frontRunners && actor.correlation.frontRunners.length > 0 && (
                     <div className="mb-4">
-                      <div className="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1">
+                      <div className="text-xs font-semibold text-amber-700 mb-2 flex items-center gap-1">
                         <Zap className="w-3.5 h-3.5 text-amber-500" />
-                        Often Acts BEFORE This Actor
+                        Often Front-Runs This Actor
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Info className="w-3 h-3 text-gray-400 cursor-help" />
+                            <Info className="w-3 h-3 text-amber-400 cursor-help" />
                           </TooltipTrigger>
                           <TooltipContent className="bg-gray-900 text-white max-w-xs">
-                            <p className="text-xs">These actors typically move before this one. Consider following them for earlier signals.</p>
+                            <p className="text-xs font-medium text-amber-300 mb-1">⚠️ This actor often front-runs you</p>
+                            <p className="text-xs">These actors typically move BEFORE this one enters. Consider following them for earlier signals.</p>
                           </TooltipContent>
                         </Tooltip>
                       </div>
@@ -1833,8 +1909,13 @@ export default function ActorProfile() {
                               <div className="font-medium text-gray-900 text-sm">{showRealNames ? runner.real_name || runner.strategy_name : runner.strategy_name}</div>
                               <div className="text-xs text-amber-700">Leads by {runner.avgLeadTime}</div>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <div className="text-xs font-medium text-amber-600">{runner.frequency} of trades</div>
+                            <div className="flex items-center gap-3">
+                              <div className="text-right">
+                                <div className="text-xs font-medium text-amber-600">{runner.frequency} of trades</div>
+                                {runner.tradesMatched && (
+                                  <div className="text-xs text-gray-400">{runner.tradesMatched} matches</div>
+                                )}
+                              </div>
                               <ArrowUpRight className="w-4 h-4 text-amber-500" />
                             </div>
                           </Link>
