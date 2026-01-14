@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
   ArrowLeft, Star, Bell, Eye, Check, AlertTriangle, TrendingUp, TrendingDown,
-  Shield, Activity, Zap, Target, Clock, Info, ChevronDown, ChevronUp, X, Users
+  Shield, Activity, Zap, Target, Clock, Info, ChevronDown, ChevronUp, X, Users,
+  Wallet, ExternalLink, Copy, ArrowUpRight, Globe, Play
 } from 'lucide-react';
 import Header from '../components/Header';
 import {
@@ -12,7 +13,23 @@ import {
   TooltipTrigger,
 } from "../components/ui/tooltip";
 
-// Mock actor detailed data
+// Chain configs
+const chainConfig = {
+  'ETH': { color: 'bg-blue-500', label: 'Ethereum' },
+  'SOL': { color: 'bg-purple-500', label: 'Solana' },
+  'BASE': { color: 'bg-blue-600', label: 'Base' },
+  'ARB': { color: 'bg-sky-500', label: 'Arbitrum' },
+};
+
+// Action type colors
+const actionColors = {
+  'BUY': { bg: 'bg-emerald-100', text: 'text-emerald-700', icon: TrendingUp },
+  'SELL': { bg: 'bg-red-100', text: 'text-red-700', icon: TrendingDown },
+  'SWAP': { bg: 'bg-blue-100', text: 'text-blue-700', icon: Activity },
+  'BRIDGE': { bg: 'bg-purple-100', text: 'text-purple-700', icon: Globe },
+};
+
+// Mock actor detailed data with new fields
 const actorDetailedData = {
   'vitalik': {
     id: 'vitalik',
@@ -22,6 +39,49 @@ const actorDetailedData = {
     avatar: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
     strategy: 'Smart Money Trader',
     confidence: 87,
+    primaryChain: 'ETH',
+    latency: 'Early',
+    
+    // CLUSTER INFO - Source of Truth
+    cluster: {
+      size: 4,
+      confidence: 91,
+      wallets: [
+        { address: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045', role: 'Main', confidence: 100, lastActive: '2h ago' },
+        { address: '0x1234...5678', role: 'Cold Storage', confidence: 94, lastActive: '14d ago' },
+        { address: '0xabcd...ef01', role: 'Execution', confidence: 88, lastActive: '4h ago' },
+        { address: '0x9876...5432', role: 'Bridge', confidence: 82, lastActive: '1d ago' },
+      ],
+      linkReason: 'Co-spend patterns, shared funding source, timing correlation',
+    },
+    
+    // ACTIONABLE PLAYBOOK
+    playbook: {
+      currentAction: 'Accumulating',
+      tokensToWatch: ['ARB', 'OP', 'ETH'],
+      suggestedAction: 'Watch', // Watch / Entry / Reduce / Avoid
+      latencyStatus: 'Early',
+      confidenceLevel: 87,
+      reasoning: 'Actor accumulating L2 tokens ahead of expected catalysts. Entry timing favorable.',
+    },
+    
+    // TIMING EDGE
+    timingEdge: {
+      medianPrecedePrice: '4.2 hours',
+      successRateWithin6h: '71%',
+      lateEntryDropoff: '12 hours',
+      bestPerformsIn: 'Risk-On',
+    },
+    
+    // COPY FEED - Recent Actions
+    copyFeed: [
+      { id: 1, type: 'BUY', token: 'ARB', size: '$45K', time: '2h ago', price: '$1.42', txHash: '0xabc...123', entryDelay: '1.2h' },
+      { id: 2, type: 'SWAP', token: 'ETH→USDC', size: '$120K', time: '6h ago', price: '-', txHash: '0xdef...456', entryDelay: '-' },
+      { id: 3, type: 'BUY', token: 'OP', size: '$89K', time: '1d ago', price: '$2.18', txHash: '0xghi...789', entryDelay: '2.4h' },
+      { id: 4, type: 'BRIDGE', token: 'ETH→ARB', size: '$200K', time: '2d ago', price: '-', txHash: '0xjkl...012', entryDelay: '-' },
+      { id: 5, type: 'SELL', token: 'PEPE', size: '$28K', time: '3d ago', price: '$0.0000089', txHash: '0xmno...345', entryDelay: '-' },
+    ],
+    
     // Why follow
     whyFollow: [
       { positive: true, text: 'Profitable over 6 months (+$549K realized)' },
@@ -29,6 +89,7 @@ const actorDetailedData = {
       { positive: true, text: 'Aligned with current market regime (Risk-On)' },
       { positive: false, text: 'High frequency trader — latency risk (2.4h avg delay)' },
     ],
+    
     // Performance
     performance: {
       realizedPnl: '+$549K',
@@ -38,6 +99,7 @@ const actorDetailedData = {
       entryDelay: '2.4 hours',
       tradesAnalyzed: 468,
     },
+    
     // Strategy fingerprint
     strategyFingerprint: {
       dexUsage: 85,
@@ -47,14 +109,23 @@ const actorDetailedData = {
       entryTiming: 80,
     },
     strategies: ['Smart Money', 'DEX Heavy', 'Alpha Hunter', 'Narrative Rider'],
+    
+    // TOP EXPOSURES (lite positions)
+    topExposures: [
+      { token: 'ETH', direction: 'Increasing', allocation: '45%', change: '+5%' },
+      { token: 'ARB', direction: 'Increasing', allocation: '20%', change: '+12%' },
+      { token: 'OP', direction: 'Stable', allocation: '15%', change: '0%' },
+      { token: 'USDC', direction: 'Decreasing', allocation: '10%', change: '-8%' },
+    ],
+    
     // Asset Behavior Map
     assetBehavior: [
       { token: 'ETH', behavior: 'Accumulate', bias: 'Bullish', allocation: '45%' },
       { token: 'ARB', behavior: 'Trade', bias: 'Active', allocation: '20%' },
       { token: 'OP', behavior: 'Bullish bias', bias: 'Long', allocation: '15%' },
       { token: 'Meme', behavior: 'Quick flips', bias: 'Neutral', allocation: '10%' },
-      { token: 'Stables', behavior: 'Reserve', bias: 'Safe', allocation: '10%' },
     ],
+    
     // Risk & Flags
     riskFlags: {
       sanctions: false,
@@ -63,9 +134,10 @@ const actorDetailedData = {
       unverifiedContracts: 1,
       overallRisk: 12,
     },
-    // Current state
+    
     currentBehavior: 'Accumulating',
     behaviorTrend: 'Stable → Bullish',
+    
     // Active alerts
     activeAlerts: [
       { type: 'Behavior change', status: 'active' },
@@ -80,6 +152,36 @@ const actorDetailedData = {
     avatar: 'https://s2.coinmarketcap.com/static/img/exchanges/64x64/270.png',
     strategy: 'Accumulator & Momentum',
     confidence: 91,
+    primaryChain: 'SOL',
+    latency: 'Early',
+    cluster: {
+      size: 12,
+      confidence: 94,
+      wallets: [
+        { address: '0x28C6c06298d514Db089934071355E5743bf21d60', role: 'Main', confidence: 100, lastActive: '45m ago' },
+        { address: '0x2222...3333', role: 'Trading', confidence: 96, lastActive: '1h ago' },
+        { address: '0x4444...5555', role: 'Cold Storage', confidence: 91, lastActive: '7d ago' },
+      ],
+      linkReason: 'Shared funding, coordinated trading, timing patterns',
+    },
+    playbook: {
+      currentAction: 'Rotating',
+      tokensToWatch: ['SOL', 'JUP', 'PYTH'],
+      suggestedAction: 'Entry',
+      latencyStatus: 'Early',
+      confidenceLevel: 91,
+      reasoning: 'Actor rotating into SOL ecosystem with high conviction. Strong entry opportunity.',
+    },
+    timingEdge: {
+      medianPrecedePrice: '6.1 hours',
+      successRateWithin6h: '78%',
+      lateEntryDropoff: '18 hours',
+      bestPerformsIn: 'Risk-On',
+    },
+    copyFeed: [
+      { id: 1, type: 'SWAP', token: 'SOL→USDC', size: '$890K', time: '45m ago', price: '-', txHash: '0xabc...111', entryDelay: '-' },
+      { id: 2, type: 'BUY', token: 'JUP', size: '$340K', time: '4h ago', price: '$0.89', txHash: '0xdef...222', entryDelay: '1.8h' },
+    ],
     whyFollow: [
       { positive: true, text: 'Exceptional track record (+$2.4M realized)' },
       { positive: true, text: 'Very low risk profile (8/100)' },
@@ -102,11 +204,15 @@ const actorDetailedData = {
       entryTiming: 90,
     },
     strategies: ['Accumulator', 'Momentum', 'Narrative Rider', 'Long-term'],
+    topExposures: [
+      { token: 'SOL', direction: 'Increasing', allocation: '35%', change: '+15%' },
+      { token: 'BTC', direction: 'Stable', allocation: '30%', change: '0%' },
+      { token: 'JUP', direction: 'Increasing', allocation: '15%', change: '+22%' },
+    ],
     assetBehavior: [
       { token: 'SOL', behavior: 'Accumulate', bias: 'Very Bullish', allocation: '35%' },
       { token: 'BTC', behavior: 'Hold', bias: 'Long', allocation: '30%' },
       { token: 'DeFi', behavior: 'Rotate', bias: 'Active', allocation: '20%' },
-      { token: 'AI', behavior: 'Adding', bias: 'Bullish', allocation: '15%' },
     ],
     riskFlags: {
       sanctions: false,
@@ -117,59 +223,48 @@ const actorDetailedData = {
     },
     currentBehavior: 'Rotating',
     behaviorTrend: 'Active trading',
-    activeAlerts: [
-      { type: 'Strategy shift', status: 'active' },
-    ],
+    activeAlerts: [{ type: 'Strategy shift', status: 'active' }],
   },
 };
 
-// Default actor data
+// Default actor
 const defaultActor = {
   id: 'unknown',
   label: 'Unknown Actor',
-  address: '0x0000000000000000000000000000000000000000',
   type: 'Unknown',
-  avatar: null,
-  strategy: 'Unknown',
   confidence: 0,
+  cluster: { size: 0, confidence: 0, wallets: [], linkReason: '-' },
+  playbook: { currentAction: '-', tokensToWatch: [], suggestedAction: 'Avoid', latencyStatus: '-', confidenceLevel: 0, reasoning: '-' },
+  timingEdge: { medianPrecedePrice: '-', successRateWithin6h: '-', lateEntryDropoff: '-', bestPerformsIn: '-' },
+  copyFeed: [],
   whyFollow: [],
-  performance: {
-    realizedPnl: '-',
-    winRate: '-',
-    avgHoldTime: '-',
-    avgDrawdown: '-',
-    entryDelay: '-',
-    tradesAnalyzed: 0,
-  },
-  strategyFingerprint: {
-    dexUsage: 0,
-    holdDuration: 0,
-    riskTolerance: 0,
-    narrativeFocus: 0,
-    entryTiming: 0,
-  },
+  performance: { realizedPnl: '-', winRate: '-', avgHoldTime: '-', avgDrawdown: '-', entryDelay: '-', tradesAnalyzed: 0 },
+  strategyFingerprint: { dexUsage: 0, holdDuration: 0, riskTolerance: 0, narrativeFocus: 0, entryTiming: 0 },
   strategies: [],
+  topExposures: [],
   assetBehavior: [],
-  riskFlags: {
-    sanctions: false,
-    mixers: false,
-    riskyApprovals: 0,
-    unverifiedContracts: 0,
-    overallRisk: 50,
-  },
-  currentBehavior: 'Unknown',
+  riskFlags: { sanctions: false, mixers: false, riskyApprovals: 0, unverifiedContracts: 0, overallRisk: 50 },
+  currentBehavior: '-',
   behaviorTrend: '-',
   activeAlerts: [],
 };
 
-// Confidence colors
-const getConfidenceColor = (confidence) => {
-  if (confidence >= 70) return { bg: 'bg-emerald-500', text: 'text-emerald-500', label: 'High' };
-  if (confidence >= 40) return { bg: 'bg-amber-500', text: 'text-amber-500', label: 'Medium' };
-  return { bg: 'bg-red-500', text: 'text-red-500', label: 'Low' };
+// Suggested action colors
+const actionSuggestionColors = {
+  'Watch': 'bg-blue-100 text-blue-700 border-blue-200',
+  'Entry': 'bg-emerald-100 text-emerald-700 border-emerald-200',
+  'Reduce': 'bg-amber-100 text-amber-700 border-amber-200',
+  'Avoid': 'bg-red-100 text-red-700 border-red-200',
 };
 
-// Strategy Radar component
+// Confidence colors
+const getConfidenceColor = (confidence) => {
+  if (confidence >= 70) return { bg: 'bg-[#16C784]', text: 'text-[#16C784]', label: 'High' };
+  if (confidence >= 40) return { bg: 'bg-[#F5A524]', text: 'text-[#F5A524]', label: 'Medium' };
+  return { bg: 'bg-[#EF4444]', text: 'text-[#EF4444]', label: 'Low' };
+};
+
+// Strategy Radar
 const StrategyRadar = ({ fingerprint }) => {
   const items = [
     { key: 'dexUsage', label: 'DEX Usage' },
@@ -180,14 +275,14 @@ const StrategyRadar = ({ fingerprint }) => {
   ];
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       {items.map(item => (
         <div key={item.key}>
-          <div className="flex items-center justify-between text-sm mb-1">
+          <div className="flex items-center justify-between text-xs mb-1">
             <span className="text-gray-600">{item.label}</span>
             <span className="font-semibold text-gray-900">{fingerprint[item.key]}%</span>
           </div>
-          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
             <div 
               className="h-full bg-gray-900 rounded-full transition-all"
               style={{ width: `${fingerprint[item.key]}%` }}
@@ -204,12 +299,20 @@ export default function ActorProfile() {
   const [isFollowed, setIsFollowed] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [showRiskDetails, setShowRiskDetails] = useState(true);
+  const [showClusterDetails, setShowClusterDetails] = useState(false);
+  const [feedTimeframe, setFeedTimeframe] = useState('24h');
+  const [copiedAddress, setCopiedAddress] = useState(null);
 
-  // Get actor data
   const actor = actorDetailedData[actorId] || defaultActor;
   const confidenceColor = getConfidenceColor(actor.confidence);
+  const chain = chainConfig[actor.primaryChain] || { color: 'bg-gray-500', label: actor.primaryChain };
 
-  // Alert types for this actor
+  const handleCopyAddress = (address) => {
+    navigator.clipboard.writeText(address);
+    setCopiedAddress(address);
+    setTimeout(() => setCopiedAddress(null), 2000);
+  };
+
   const alertTypes = [
     { id: 'behavior_change', name: 'Behavior change', description: 'When trading pattern shifts' },
     { id: 'large_position', name: 'Large position entry', description: 'New significant position' },
@@ -223,7 +326,7 @@ export default function ActorProfile() {
       <div className="min-h-screen bg-gray-50">
         <Header />
         
-        <div className="px-4 py-6">
+        <div className="px-4 py-6 max-w-[1400px] mx-auto">
           {/* Back link */}
           <Link 
             to="/actors" 
@@ -234,40 +337,51 @@ export default function ActorProfile() {
           </Link>
 
           {/* Actor Header */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-6 mb-6">
+          <div className="bg-white border border-gray-200 rounded-2xl p-5 mb-6">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-4">
-                {/* Avatar */}
-                <div className="w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center overflow-hidden">
+                <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center overflow-hidden">
                   {actor.avatar ? (
                     <img src={actor.avatar} alt={actor.label} className="w-full h-full object-cover" />
                   ) : (
-                    <Users className="w-10 h-10 text-gray-400" />
+                    <Users className="w-8 h-8 text-gray-400" />
                   )}
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900 mb-1">{actor.label}</h1>
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-sm text-gray-500">Strategy:</span>
-                    <span className="font-semibold text-gray-900">{actor.strategy}</span>
+                  <div className="flex items-center gap-3 mb-1">
+                    <h1 className="text-xl font-bold text-gray-900">{actor.label}</h1>
+                    <span className="px-2 py-0.5 bg-gray-100 rounded text-xs font-medium text-gray-600">{actor.type}</span>
+                    <div className="flex items-center gap-1.5">
+                      <div className={`w-2 h-2 rounded-full ${chain.color}`} />
+                      <span className="text-xs text-gray-500">{chain.label}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${confidenceColor.bg}`} />
-                    <span className="text-sm font-medium text-gray-700">
-                      Confidence: <span className={confidenceColor.text}>{actor.confidence}%</span>
-                    </span>
+                  <div className="flex items-center gap-4 text-sm">
+                    <span className="text-gray-500">Strategy: <span className="font-semibold text-gray-900">{actor.strategy}</span></span>
+                    <span className="text-gray-300">|</span>
+                    <div className="flex items-center gap-1.5">
+                      <div className={`w-2 h-2 rounded-full ${confidenceColor.bg}`} />
+                      <span className={`font-semibold ${confidenceColor.text}`}>{actor.confidence}%</span>
+                      <span className="text-gray-500">confidence</span>
+                    </div>
                   </div>
+                  {/* Cluster info teaser */}
+                  <button 
+                    onClick={() => setShowClusterDetails(!showClusterDetails)}
+                    className="mt-2 flex items-center gap-2 text-xs text-gray-500 hover:text-gray-900 transition-colors"
+                  >
+                    <Users className="w-3.5 h-3.5" />
+                    <span>Cluster of <span className="font-semibold text-gray-700">{actor.cluster.size} wallets</span> ({actor.cluster.confidence}% confidence)</span>
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showClusterDetails ? 'rotate-180' : ''}`} />
+                  </button>
                 </div>
               </div>
 
-              {/* Actions */}
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setIsFollowed(!isFollowed)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
-                    isFollowed 
-                      ? 'bg-amber-100 text-amber-700' 
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    isFollowed ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
                   <Star className={`w-4 h-4 ${isFollowed ? 'fill-current' : ''}`} />
@@ -278,36 +392,222 @@ export default function ActorProfile() {
                   className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl text-sm font-semibold hover:bg-gray-200 transition-colors"
                 >
                   <Bell className="w-4 h-4" />
-                  Alert on changes
+                  Alerts
                 </button>
                 <Link
                   to="/watchlist"
                   className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl text-sm font-semibold hover:bg-gray-200 transition-colors"
                 >
                   <Eye className="w-4 h-4" />
-                  Add to Watchlist
+                  Watchlist
                 </Link>
               </div>
             </div>
+
+            {/* Cluster Details - Expandable */}
+            {showClusterDetails && (
+              <div className="mt-4 pt-4 border-t border-gray-100">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-semibold text-gray-900">Known Wallets (Source of Truth)</h3>
+                  <span className="text-xs text-gray-500">{actor.cluster.linkReason}</span>
+                </div>
+                <div className="space-y-2">
+                  {actor.cluster.wallets.map((wallet, i) => (
+                    <div key={i} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                      <div className="flex items-center gap-3">
+                        <Wallet className="w-4 h-4 text-gray-400" />
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <code className="text-sm font-mono text-gray-900">{wallet.address}</code>
+                            <button onClick={() => handleCopyAddress(wallet.address)} className="p-1 hover:bg-gray-200 rounded">
+                              {copiedAddress === wallet.address ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-gray-400" />}
+                            </button>
+                          </div>
+                          <div className="flex items-center gap-2 mt-0.5">
+                            <span className="px-1.5 py-0.5 bg-gray-200 rounded text-xs font-medium text-gray-600">{wallet.role}</span>
+                            <span className="text-xs text-gray-500">Last active: {wallet.lastActive}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs text-gray-500">{wallet.confidence}% conf</span>
+                        <Link to={`/wallets?address=${wallet.address}`} className="p-1 hover:bg-gray-200 rounded">
+                          <ArrowUpRight className="w-4 h-4 text-gray-400" />
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left Column */}
+            {/* Left Column - Main Content */}
             <div className="lg:col-span-2 space-y-6">
+              {/* ACTIONABLE PLAYBOOK - NEW TOP SECTION */}
+              <div className="bg-gray-900 text-white rounded-2xl p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <Play className="w-5 h-5 text-emerald-400" />
+                    <h2 className="text-lg font-bold">Actionable Playbook</h2>
+                  </div>
+                  <span className={`px-3 py-1 rounded-lg text-sm font-semibold border ${actionSuggestionColors[actor.playbook.suggestedAction]}`}>
+                    {actor.playbook.suggestedAction}
+                  </span>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="p-3 bg-white/10 rounded-xl">
+                    <div className="text-xs text-gray-400 mb-1">Current Action</div>
+                    <div className="text-lg font-bold">{actor.playbook.currentAction}</div>
+                  </div>
+                  <div className="p-3 bg-white/10 rounded-xl">
+                    <div className="text-xs text-gray-400 mb-1">Latency Status</div>
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                        actor.playbook.latencyStatus === 'Early' ? 'bg-emerald-500/20 text-emerald-400' :
+                        actor.playbook.latencyStatus === 'Medium' ? 'bg-amber-500/20 text-amber-400' :
+                        'bg-red-500/20 text-red-400'
+                      }`}>
+                        {actor.playbook.latencyStatus}
+                      </span>
+                      <span className="text-lg font-bold">{actor.playbook.confidenceLevel}%</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mb-4">
+                  <div className="text-xs text-gray-400 mb-2">Tokens to Watch</div>
+                  <div className="flex items-center gap-2">
+                    {actor.playbook.tokensToWatch.map((token, i) => (
+                      <Link 
+                        key={i} 
+                        to={`/tokens?search=${token}`}
+                        className="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-sm font-semibold transition-colors"
+                      >
+                        {token}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="p-3 bg-white/5 rounded-xl border border-white/10">
+                  <div className="text-xs text-gray-400 mb-1">Reasoning</div>
+                  <p className="text-sm">{actor.playbook.reasoning}</p>
+                </div>
+              </div>
+
+              {/* TIMING EDGE - NEW */}
+              <div className="bg-white border border-gray-200 rounded-2xl p-5">
+                <div className="flex items-center gap-2 mb-4">
+                  <Clock className="w-5 h-5 text-gray-700" />
+                  <h2 className="text-lg font-bold text-gray-900">Timing Edge</h2>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button className="p-1 hover:bg-gray-100 rounded"><Info className="w-4 h-4 text-gray-400" /></button>
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-gray-900 text-white max-w-xs">
+                      <p className="text-xs">How early this actor moves vs price action — key for following profitably</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                    <div className="text-xs text-emerald-600 mb-1">Precedes Price By</div>
+                    <div className="text-xl font-bold text-emerald-700">{actor.timingEdge.medianPrecedePrice}</div>
+                  </div>
+                  <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
+                    <div className="text-xs text-blue-600 mb-1">Success Rate (≤6h)</div>
+                    <div className="text-xl font-bold text-blue-700">{actor.timingEdge.successRateWithin6h}</div>
+                  </div>
+                  <div className="p-3 bg-amber-50 rounded-xl border border-amber-100">
+                    <div className="text-xs text-amber-600 mb-1">Late Entry Drops After</div>
+                    <div className="text-xl font-bold text-amber-700">{actor.timingEdge.lateEntryDropoff}</div>
+                  </div>
+                  <div className="p-3 bg-gray-50 rounded-xl border border-gray-200">
+                    <div className="text-xs text-gray-500 mb-1">Best Performs In</div>
+                    <div className="text-xl font-bold text-gray-900">{actor.timingEdge.bestPerformsIn}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* COPY FEED - NEW */}
+              <div className="bg-white border border-gray-200 rounded-2xl p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <Activity className="w-5 h-5 text-gray-700" />
+                    <h2 className="text-lg font-bold text-gray-900">Copy Feed</h2>
+                  </div>
+                  <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-0.5">
+                    {['24h', '7d', '30d'].map(tf => (
+                      <button
+                        key={tf}
+                        onClick={() => setFeedTimeframe(tf)}
+                        className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
+                          feedTimeframe === tf ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'
+                        }`}
+                      >
+                        {tf}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  {actor.copyFeed.map((action) => {
+                    const actionConfig = actionColors[action.type] || { bg: 'bg-gray-100', text: 'text-gray-700', icon: Activity };
+                    const Icon = actionConfig.icon;
+                    return (
+                      <div key={action.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <div className={`p-2 rounded-lg ${actionConfig.bg}`}>
+                            <Icon className={`w-4 h-4 ${actionConfig.text}`} />
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className={`font-semibold text-sm ${actionConfig.text}`}>{action.type}</span>
+                              <span className="font-medium text-gray-900">{action.token}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs text-gray-500">
+                              <span>{action.size}</span>
+                              {action.price !== '-' && <span>@ {action.price}</span>}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          {action.entryDelay !== '-' && (
+                            <div className="text-right">
+                              <div className="text-xs text-gray-500">Entry delay</div>
+                              <div className="text-sm font-semibold text-gray-900">{action.entryDelay}</div>
+                            </div>
+                          )}
+                          <div className="text-right">
+                            <div className="text-xs text-gray-400">{action.time}</div>
+                            <a href={`https://etherscan.io/tx/${action.txHash}`} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">
+                              View tx
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
               {/* Why Follow */}
               <div className="bg-white border border-gray-200 rounded-2xl p-5">
                 <h2 className="text-lg font-bold text-gray-900 mb-4">Why follow this actor</h2>
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   {actor.whyFollow.map((item, i) => (
                     <div key={i} className="flex items-start gap-3">
                       {item.positive ? (
-                        <Check className="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                        <Check className="w-5 h-5 text-[#16C784] mt-0.5 flex-shrink-0" />
                       ) : (
-                        <AlertTriangle className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" />
+                        <AlertTriangle className="w-5 h-5 text-[#F5A524] mt-0.5 flex-shrink-0" />
                       )}
-                      <span className={item.positive ? 'text-gray-900' : 'text-gray-600'}>
-                        {item.text}
-                      </span>
+                      <span className={item.positive ? 'text-gray-900' : 'text-gray-600'}>{item.text}</span>
                     </div>
                   ))}
                 </div>
@@ -316,62 +616,62 @@ export default function ActorProfile() {
               {/* Performance Snapshot */}
               <div className="bg-white border border-gray-200 rounded-2xl p-5">
                 <h2 className="text-lg font-bold text-gray-900 mb-4">Performance snapshot</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  <div className="p-4 bg-gray-50 rounded-xl">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  <div className="p-3 bg-gray-50 rounded-xl">
                     <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Realized PnL</div>
-                    <div className={`text-xl font-bold ${
-                      actor.performance.realizedPnl.startsWith('+') ? 'text-emerald-600' : 'text-red-500'
-                    }`}>
+                    <div className={`text-lg font-bold ${actor.performance.realizedPnl.startsWith('+') ? 'text-[#16C784]' : 'text-[#EF4444]'}`}>
                       {actor.performance.realizedPnl}
                     </div>
                   </div>
-                  <div className="p-4 bg-gray-50 rounded-xl">
+                  <div className="p-3 bg-gray-50 rounded-xl">
                     <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Win Rate</div>
-                    <div className="text-xl font-bold text-gray-900">{actor.performance.winRate}</div>
+                    <div className="text-lg font-bold text-gray-900">{actor.performance.winRate}</div>
                   </div>
-                  <div className="p-4 bg-gray-50 rounded-xl">
+                  <div className="p-3 bg-gray-50 rounded-xl">
                     <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Avg Hold Time</div>
-                    <div className="text-xl font-bold text-gray-900">{actor.performance.avgHoldTime}</div>
+                    <div className="text-lg font-bold text-gray-900">{actor.performance.avgHoldTime}</div>
                   </div>
-                  <div className="p-4 bg-gray-50 rounded-xl">
+                  <div className="p-3 bg-gray-50 rounded-xl">
                     <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Avg Drawdown</div>
-                    <div className="text-xl font-bold text-gray-900">{actor.performance.avgDrawdown}</div>
+                    <div className="text-lg font-bold text-gray-900">{actor.performance.avgDrawdown}</div>
                   </div>
-                  <div className="p-4 bg-gray-50 rounded-xl">
+                  <div className="p-3 bg-gray-50 rounded-xl">
                     <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Entry Delay</div>
-                    <div className="text-xl font-bold text-gray-900">{actor.performance.entryDelay}</div>
+                    <div className="text-lg font-bold text-gray-900">{actor.performance.entryDelay}</div>
                   </div>
-                  <div className="p-4 bg-gray-50 rounded-xl">
+                  <div className="p-3 bg-gray-50 rounded-xl">
                     <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Trades Analyzed</div>
-                    <div className="text-xl font-bold text-gray-900">{actor.performance.tradesAnalyzed}</div>
+                    <div className="text-lg font-bold text-gray-900">{actor.performance.tradesAnalyzed}</div>
                   </div>
                 </div>
               </div>
 
-              {/* Asset Behavior Map - NOT Portfolio */}
+              {/* Asset Behavior Map */}
               <div className="bg-white border border-gray-200 rounded-2xl p-5">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-bold text-gray-900">What this actor trades</h2>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <button className="p-1 hover:bg-gray-100 rounded">
-                        <Info className="w-4 h-4 text-gray-400" />
-                      </button>
+                      <button className="p-1 hover:bg-gray-100 rounded"><Info className="w-4 h-4 text-gray-400" /></button>
                     </TooltipTrigger>
                     <TooltipContent className="bg-gray-900 text-white max-w-xs">
                       <p className="text-xs">Asset Behavior Map — shows HOW this actor trades each asset, not just holdings</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {actor.assetBehavior.map((asset, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                    <Link 
+                      key={i} 
+                      to={`/tokens?search=${asset.token}`}
+                      className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                    >
                       <div className="flex items-center gap-3">
                         <span className="font-semibold text-gray-900 w-16">{asset.token}</span>
-                        <span className="text-sm text-gray-600">—</span>
+                        <span className="text-sm text-gray-500">—</span>
                         <span className="text-sm font-medium text-gray-700">{asset.behavior}</span>
                       </div>
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-3">
                         <span className={`px-2 py-1 rounded-lg text-xs font-medium ${
                           asset.bias.includes('Bullish') ? 'bg-emerald-100 text-emerald-700' :
                           asset.bias === 'Neutral' ? 'bg-gray-100 text-gray-600' :
@@ -379,9 +679,9 @@ export default function ActorProfile() {
                         }`}>
                           {asset.bias}
                         </span>
-                        <span className="text-sm text-gray-500 w-12 text-right">{asset.allocation}</span>
+                        <ArrowUpRight className="w-4 h-4 text-gray-400" />
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -407,7 +707,7 @@ export default function ActorProfile() {
                 </button>
 
                 {showRiskDetails && (
-                  <div className="px-5 pb-5 pt-0">
+                  <div className="px-5 pb-5">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="p-3 bg-gray-50 rounded-xl">
                         <div className="flex items-center justify-between">
@@ -415,9 +715,7 @@ export default function ActorProfile() {
                           {actor.riskFlags.sanctions ? (
                             <span className="text-red-500 font-semibold text-sm">Yes</span>
                           ) : (
-                            <span className="text-emerald-500 font-semibold text-sm flex items-center gap-1">
-                              <Check className="w-4 h-4" /> Clean
-                            </span>
+                            <span className="text-emerald-500 font-semibold text-sm flex items-center gap-1"><Check className="w-4 h-4" /> Clean</span>
                           )}
                         </div>
                       </div>
@@ -427,18 +725,14 @@ export default function ActorProfile() {
                           {actor.riskFlags.mixers ? (
                             <span className="text-red-500 font-semibold text-sm">Detected</span>
                           ) : (
-                            <span className="text-emerald-500 font-semibold text-sm flex items-center gap-1">
-                              <Check className="w-4 h-4" /> None
-                            </span>
+                            <span className="text-emerald-500 font-semibold text-sm flex items-center gap-1"><Check className="w-4 h-4" /> None</span>
                           )}
                         </div>
                       </div>
                       <div className="p-3 bg-gray-50 rounded-xl">
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-gray-600">Risky Approvals</span>
-                          <span className={`font-semibold text-sm ${
-                            actor.riskFlags.riskyApprovals > 0 ? 'text-amber-500' : 'text-emerald-500'
-                          }`}>
+                          <span className={`font-semibold text-sm ${actor.riskFlags.riskyApprovals > 0 ? 'text-amber-500' : 'text-emerald-500'}`}>
                             {actor.riskFlags.riskyApprovals}
                           </span>
                         </div>
@@ -446,9 +740,7 @@ export default function ActorProfile() {
                       <div className="p-3 bg-gray-50 rounded-xl">
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-gray-600">Unverified Contracts</span>
-                          <span className={`font-semibold text-sm ${
-                            actor.riskFlags.unverifiedContracts > 0 ? 'text-amber-500' : 'text-emerald-500'
-                          }`}>
+                          <span className={`font-semibold text-sm ${actor.riskFlags.unverifiedContracts > 0 ? 'text-amber-500' : 'text-emerald-500'}`}>
                             {actor.riskFlags.unverifiedContracts}
                           </span>
                         </div>
@@ -459,24 +751,43 @@ export default function ActorProfile() {
               </div>
             </div>
 
-            {/* Right Column */}
+            {/* Right Column - Sidebar */}
             <div className="space-y-6">
               {/* Current State */}
               <div className="bg-gray-900 text-white rounded-2xl p-5">
                 <h3 className="text-xs text-gray-400 uppercase tracking-wider mb-3">Current State</h3>
-                <div className="text-2xl font-bold mb-2">{actor.currentBehavior}</div>
-                <div className="text-sm text-gray-400">{actor.behaviorTrend}</div>
+                <div className="text-2xl font-bold mb-1">{actor.currentBehavior}</div>
+                <div className="text-sm text-gray-400 mb-4">{actor.behaviorTrend}</div>
+                
+                {/* Top Exposures - Lite Positions */}
+                <div className="pt-4 border-t border-white/10">
+                  <h4 className="text-xs text-gray-400 uppercase tracking-wider mb-3">Top Exposures</h4>
+                  <div className="space-y-2">
+                    {actor.topExposures?.map((exp, i) => (
+                      <div key={i} className="flex items-center justify-between">
+                        <span className="font-medium">{exp.token}</span>
+                        <div className="flex items-center gap-2">
+                          <span className={`text-xs ${
+                            exp.direction === 'Increasing' ? 'text-emerald-400' :
+                            exp.direction === 'Decreasing' ? 'text-red-400' : 'text-gray-400'
+                          }`}>
+                            {exp.direction === 'Increasing' ? '↑' : exp.direction === 'Decreasing' ? '↓' : '→'} {exp.change}
+                          </span>
+                          <span className="text-sm text-gray-400">{exp.allocation}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               {/* Strategy Fingerprint */}
               <div className="bg-white border border-gray-200 rounded-2xl p-5">
                 <h3 className="text-lg font-bold text-gray-900 mb-4">Strategy Fingerprint</h3>
                 <StrategyRadar fingerprint={actor.strategyFingerprint} />
-                
-                {/* Strategy tags */}
-                <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-100">
+                <div className="flex flex-wrap gap-1.5 mt-4 pt-4 border-t border-gray-100">
                   {actor.strategies.map((strategy, i) => (
-                    <span key={i} className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-medium">
+                    <span key={i} className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-medium">
                       {strategy}
                     </span>
                   ))}
@@ -487,12 +798,7 @@ export default function ActorProfile() {
               <div className="bg-white border border-gray-200 rounded-2xl p-5">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-bold text-gray-900">Alerts</h3>
-                  <button 
-                    onClick={() => setShowAlertModal(true)}
-                    className="text-sm text-gray-500 hover:text-gray-900"
-                  >
-                    Configure
-                  </button>
+                  <button onClick={() => setShowAlertModal(true)} className="text-sm text-gray-500 hover:text-gray-900">Configure</button>
                 </div>
                 
                 {actor.activeAlerts.length > 0 ? (
@@ -500,7 +806,7 @@ export default function ActorProfile() {
                     {actor.activeAlerts.map((alert, i) => (
                       <div key={i} className="flex items-center justify-between p-3 bg-emerald-50 rounded-xl">
                         <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-emerald-500 rounded-full" />
+                          <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
                           <span className="text-sm font-medium text-gray-900">{alert.type}</span>
                         </div>
                         <span className="text-xs text-emerald-600 font-medium uppercase">Active</span>
@@ -539,7 +845,7 @@ export default function ActorProfile() {
               
               <div className="p-5">
                 <p className="text-sm text-gray-500 mb-4">
-                  Select which events trigger notifications for <span className="font-semibold text-gray-900">{actor.label}</span>
+                  Select events for <span className="font-semibold text-gray-900">{actor.label}</span>
                 </p>
                 
                 <div className="space-y-2">
@@ -549,11 +855,7 @@ export default function ActorProfile() {
                         <div className="font-medium text-gray-900 text-sm">{alert.name}</div>
                         <div className="text-xs text-gray-500">{alert.description}</div>
                       </div>
-                      <input 
-                        type="checkbox" 
-                        defaultChecked={actor.activeAlerts.some(a => a.type === alert.name)}
-                        className="w-4 h-4 text-gray-900 rounded"
-                      />
+                      <input type="checkbox" defaultChecked={actor.activeAlerts.some(a => a.type === alert.name)} className="w-4 h-4 text-gray-900 rounded" />
                     </label>
                   ))}
                 </div>
