@@ -1327,13 +1327,6 @@ export default function Watchlist() {
             <div className="text-6xl mb-4">👀</div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">No addresses in watchlist</h3>
             <p className="text-gray-500 mb-6">Start tracking smart money by adding addresses to your watchlist</p>
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
-            >
-              <Plus className="w-4 h-4" />
-              Add First Address
-            </button>
           </GlassCard>
         ) : (
           <>
