@@ -52,8 +52,8 @@ export default function AlertModal({ isOpen, onClose, defaultEntity = '' }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Creating alert:', { entity, threshold, timeframe, condition });
-    onClose();
+    console.log('Creating alert:', { entity: displayEntity, threshold, timeframe, condition });
+    handleClose();
   };
 
   return (
@@ -61,7 +61,7 @@ export default function AlertModal({ isOpen, onClose, defaultEntity = '' }) {
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
+        onClick={handleClose}
       />
       
       {/* Modal - compact square shape */}
@@ -78,7 +78,7 @@ export default function AlertModal({ isOpen, onClose, defaultEntity = '' }) {
             </div>
           </div>
           <button 
-            onClick={onClose}
+            onClick={handleClose}
             className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
           >
             <X className="w-4 h-4 text-gray-600" />
