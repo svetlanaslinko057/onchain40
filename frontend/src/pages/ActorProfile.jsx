@@ -260,6 +260,16 @@ const actorDetailedData = {
     primaryChain: 'SOL',
     latency: 'Early',
     edgeScore: 86,
+    
+    // ETAP 4: INFLUENCE METRICS
+    influenceScore: 89,
+    influenceRole: 'Leader',
+    followers_count: 6,
+    leads_count: 2,
+    follows_count: 1,
+    avgFollowerLag: 4.5,
+    consistency: 0.85,
+    
     exitConditions: [
       { trigger: 'SOL drops below $80', action: 'Exit SOL-related positions', priority: 'high' },
       { trigger: 'Actor starts large distribution', action: 'Follow exit within 24h', priority: 'critical' },
@@ -267,16 +277,24 @@ const actorDetailedData = {
     ],
     correlation: {
       movesWith: [
-        { id: 'pantera', strategy_name: 'AI Narrative Accumulator', similarity: 76, overlap: 'Narrative timing' },
-        { id: 'vitalik', strategy_name: 'L2 Infrastructure Builder', similarity: 58, overlap: 'Macro positions' },
+        { id: 'pantera', real_name: 'Pantera Capital', strategy_name: 'AI Narrative Accumulator', similarity: 76, overlap: 'Narrative timing', overlapType: 'timing' },
+        { id: 'vitalik', real_name: 'Vitalik.eth', strategy_name: 'L2 Infrastructure Builder', similarity: 58, overlap: 'Macro positions', overlapType: 'size' },
       ],
       frontRunners: [
-        { id: 'a16z', strategy_name: 'Institutional Infrastructure Play', avgLeadTime: '+8.2h', frequency: '22%' },
+        { id: 'a16z', real_name: 'a16z Crypto', strategy_name: 'Institutional Infrastructure Play', avgLeadTime: '+8.2h', frequency: '22%', tradesMatched: 12 },
       ],
       followedBy: [
-        { id: 'dwf-labs', strategy_name: 'Meme Momentum Rider', avgLagTime: '+4.5h', frequency: '41%' },
+        { id: 'dwf-labs', real_name: 'DWF Labs', strategy_name: 'Meme Momentum Rider', avgLagTime: '+4.5h', frequency: '41%', tradesMatched: 24 },
       ],
-      cluster: { name: 'SOL Ecosystem', phase: 'Rotating', size: 8 },
+      cluster: { name: 'SOL Ecosystem', phase: 'Rotating', size: 8, dominantStrategy: 'Momentum' },
+      // ETAP 4: INFLUENCE SUMMARY
+      influenceSummary: {
+        role: 'Market Leader',
+        ecosystem: 'SOL',
+        avgLag: '~4–6h',
+        recommendation: 'Primary signal source for SOL ecosystem plays. High conviction moves are particularly reliable.',
+        strength: 'very high',
+      },
     },
     cluster: {
       size: 12,
