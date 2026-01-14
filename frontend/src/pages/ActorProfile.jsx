@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { 
   ArrowLeft, Star, Bell, Eye, Check, AlertTriangle, TrendingUp, TrendingDown,
   Shield, Activity, Zap, Target, Clock, Info, ChevronDown, ChevronUp, X, Users,
-  Wallet, ExternalLink, Copy, ArrowUpRight, Globe, Play
+  Wallet, ExternalLink, Copy, ArrowUpRight, Globe, Play, Gauge, LogOut
 } from 'lucide-react';
 import Header from '../components/Header';
 import {
