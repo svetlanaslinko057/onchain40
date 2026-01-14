@@ -1096,6 +1096,19 @@ export default function ActorProfile() {
                       <div className={`w-2 h-2 rounded-full ${chain.color}`} />
                       <span className="text-xs text-gray-500">{chain.label}</span>
                     </div>
+                    {/* EDGE SCORE BADGE */}
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-sm font-bold ${getEdgeScoreColor(actor.edgeScore)}`}>
+                          <Gauge className="w-3.5 h-3.5" />
+                          {actor.edgeScore}
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent className="bg-gray-900 text-white max-w-xs">
+                        <p className="text-xs font-semibold mb-1">Edge Score: {actor.edgeScore}/100</p>
+                        <p className="text-xs text-gray-300">Timing (30%) + ROI Adjusted (25%) + Stability (20%) + Risk (15%) + Signals (10%)</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                   <div className="flex items-center gap-4 text-sm">
                     <span className="text-gray-500">Strategy: <span className="font-semibold text-gray-900">{actor.strategy}</span></span>
