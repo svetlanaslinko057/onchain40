@@ -1041,7 +1041,10 @@ export default function Watchlist() {
         deltaSignals: [],
         riskLevel: 'low',
         bridgeAligned: false,
-        dormantDays: 0
+        dormantDays: 0,
+        timestamp: Date.now() - (1000 * 60 * 60 * 18), // 18 hours ago
+        muted: false,
+        tracking: false
       },
       {
         id: 9,
@@ -1059,7 +1062,10 @@ export default function Watchlist() {
         deltaSignals: [{ icon: 'spike', text: 'Increased activity' }],
         riskLevel: 'medium',
         bridgeAligned: false,
-        dormantDays: 0
+        dormantDays: 0,
+        timestamp: Date.now() - (1000 * 60 * 60 * 6), // 6 hours ago
+        muted: false,
+        tracking: false
       },
       {
         id: 10,
@@ -1078,7 +1084,10 @@ export default function Watchlist() {
         statusChange: '24h',
         riskLevel: 'medium',
         bridgeAligned: false,
-        dormantDays: 0
+        dormantDays: 0,
+        timestamp: Date.now() - (1000 * 60 * 60 * 12), // 12 hours ago
+        muted: false,
+        tracking: false
       },
       {
         id: 11,
@@ -1096,7 +1105,10 @@ export default function Watchlist() {
         deltaSignals: [],
         riskLevel: 'medium',
         bridgeAligned: false,
-        dormantDays: 0
+        dormantDays: 0,
+        timestamp: Date.now() - (1000 * 60 * 60 * 28), // 28 hours ago (cooling)
+        muted: false,
+        tracking: false
       },
       {
         id: 12,
