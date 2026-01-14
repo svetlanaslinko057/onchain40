@@ -1310,10 +1310,17 @@ export default function ActorProfile() {
   const [simCapital, setSimCapital] = useState(10000);
   const [simPeriod, setSimPeriod] = useState('30d');
   const [showTradeDetails, setShowTradeDetails] = useState(false);
+  
+  // HYBRID Identity Toggle: Default = Strategy names (anonymized)
+  const [showRealNames, setShowRealNames] = useState(false);
 
   const actor = actorDetailedData[actorId] || defaultActor;
   const confidenceColor = getConfidenceColor(actor.confidence);
   const chain = chainConfig[actor.primaryChain] || { color: 'bg-gray-500', label: actor.primaryChain };
+  
+  // HYBRID identity: show strategy_name by default, real_name when toggle is on
+  const displayName = showRealNames ? actor.real_name : actor.strategy_name;
+  const secondaryName = showRealNames ? actor.strategy_name : (actor.identity_confidence >= 0.8 ? actor.real_name : null);
 
   // Calculate simulated results
   const getSimulatedResults = () => {
