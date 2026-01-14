@@ -1171,39 +1171,28 @@ export default function Watchlist() {
             </div>
           </div>
 
-          {/* NEW SEARCH - Centered with proper spacing */}
+          {/* SEARCH - Simple and clean */}
           <div className="flex-1 max-w-md mx-auto">
-            <div className={`relative transition-all ${searchFocused ? 'scale-105' : 'scale-100'}`}>
-              <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none z-10 transition-colors ${
-                searchFocused ? 'text-blue-500' : 'text-gray-400'
-              }`} />
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" style={{pointerEvents: 'none', zIndex: 1}} />
               <input 
                 type="text" 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                onFocus={() => setSearchFocused(true)}
-                onBlur={() => setSearchFocused(false)}
                 placeholder="Search signals..." 
-                className={`w-full pl-11 pr-10 py-2.5 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 transition-all ${
-                  searchFocused 
-                    ? 'bg-white border-2 border-blue-500 shadow-lg shadow-blue-500/20' 
-                    : 'bg-gray-50 border-2 border-transparent hover:bg-white hover:border-gray-200'
-                } focus:outline-none`}
+                style={{color: '#111827', position: 'relative', zIndex: 2}}
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm bg-gray-50 border-2 border-transparent hover:bg-white hover:border-gray-200 focus:bg-white focus:border-blue-500 focus:outline-none transition-all"
               />
               {searchTerm && (
                 <button
                   onClick={() => setSearchTerm('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors z-10"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  style={{zIndex: 3}}
                 >
-                  <span className="text-gray-400 text-xs">✕</span>
+                  ✕
                 </button>
               )}
             </div>
-            {searchTerm && (
-              <div className="mt-1 text-xs text-gray-500 text-center">
-                {filteredWatchlist.length} result{filteredWatchlist.length !== 1 ? 's' : ''} found
-              </div>
-            )}
           </div>
           
           <div className="w-32"></div> {/* Spacer for balance */}
