@@ -414,6 +414,16 @@ const actorDetailedData = {
     primaryChain: 'ETH',
     latency: 'Medium',
     edgeScore: 52,
+    
+    // ETAP 4: INFLUENCE METRICS - FOLLOWER
+    influenceScore: 38,
+    influenceRole: 'Follower',
+    followers_count: 1,
+    leads_count: 0,
+    follows_count: 3,
+    avgFollowerLag: 2.1,
+    consistency: 0.52,
+    
     exitConditions: [
       { trigger: 'Meme narrative cools off', action: 'Exit meme positions immediately', priority: 'high' },
       { trigger: 'Actor win rate < 50%', action: 'Stop following entirely', priority: 'critical' },
@@ -421,12 +431,12 @@ const actorDetailedData = {
     ],
     correlation: {
       movesWith: [
-        { id: 'unknown-whale-1', strategy_name: 'High-Risk Flip Trader', similarity: 68, overlap: 'Meme momentum' },
-        { id: 'wintermute', strategy_name: 'DeFi Yield Optimizer', similarity: 52, overlap: 'MM operations' },
+        { id: 'unknown-whale-1', real_name: 'Smart Whale #4721', strategy_name: 'High-Risk Flip Trader', similarity: 68, overlap: 'Meme momentum', overlapType: 'token' },
+        { id: 'wintermute', real_name: 'Wintermute', strategy_name: 'DeFi Yield Optimizer', similarity: 52, overlap: 'MM operations', overlapType: 'timing' },
       ],
       frontRunners: [
-        { id: 'alameda', strategy_name: 'SOL Ecosystem Accumulator', avgLeadTime: '+4.5h', frequency: '41%' },
-        { id: 'pantera', strategy_name: 'AI Narrative Accumulator', avgLeadTime: '+6.2h', frequency: '28%' },
+        { id: 'alameda', real_name: 'Alameda Research', strategy_name: 'SOL Ecosystem Accumulator', avgLeadTime: '+4.5h', frequency: '41%', tradesMatched: 24 },
+        { id: 'pantera', real_name: 'Pantera Capital', strategy_name: 'AI Narrative Accumulator', avgLeadTime: '+6.2h', frequency: '28%', tradesMatched: 16 },
       ],
       followedBy: [
         { id: 'unknown-whale-1', strategy_name: 'High-Risk Flip Trader', avgLagTime: '+2.1h', frequency: '52%' },
