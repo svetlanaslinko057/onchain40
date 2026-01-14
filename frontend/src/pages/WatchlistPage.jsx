@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { 
   Plus, Search, Eye, Trash2, Bell, TrendingUp, TrendingDown,
   AlertTriangle, CheckCircle, Activity, Clock, Link2, ArrowUpRight, 
-  ArrowDownRight, ChevronDown, Wallet, Users, Coins, X
+  ArrowDownRight, ChevronDown, Wallet, Users, Coins, X, Settings,
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
 import Header from '../components/Header';
 
