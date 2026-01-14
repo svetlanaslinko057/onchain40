@@ -76,6 +76,7 @@ const actorsData = [
     hasActiveSignals: true,
     signalsCount: 5,
     lastActivityTime: Date.now() - 45 * 60 * 1000,
+    edgeScore: 86,
   },
   {
     id: 'dwf-labs',
@@ -98,6 +99,7 @@ const actorsData = [
     hasActiveSignals: true,
     signalsCount: 2,
     lastActivityTime: Date.now() - 4 * 60 * 60 * 1000,
+    edgeScore: 52,
   },
   {
     id: 'a16z',
@@ -120,6 +122,7 @@ const actorsData = [
     hasActiveSignals: false,
     signalsCount: 0,
     lastActivityTime: Date.now() - 24 * 60 * 60 * 1000,
+    edgeScore: 91,
   },
   {
     id: 'jump-trading',
