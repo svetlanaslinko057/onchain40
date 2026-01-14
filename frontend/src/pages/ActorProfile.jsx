@@ -1679,7 +1679,7 @@ export default function ActorProfile() {
                     <div className="grid grid-cols-2 gap-4 mb-4">
                       {/* Actor Results */}
                       <div className="bg-white rounded-xl p-4 border border-gray-200">
-                        <div className="text-xs text-gray-500 mb-1">Actor's Return</div>
+                        <div className="text-xs text-gray-500 mb-1">Actor&apos;s Return</div>
                         <div className={`text-2xl font-bold ${simResults.actorReturn >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
                           {simResults.actorReturn >= 0 ? '+' : ''}{simResults.actorReturn.toFixed(1)}%
                         </div>
