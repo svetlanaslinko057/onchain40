@@ -521,6 +521,25 @@ const actorDetailedData = {
       lateEntryDropoff: '1 hour',
       bestPerformsIn: 'High Volatility',
     },
+    followerReality: {
+      avgEntryDelay: '0.5h',
+      expectedSlippage: '3.8%',
+      modeledROI30d: { actor: '+22%', follower: '-5%' },
+      maxDDFollower: '34.2%',
+      crowdingFactor: 'Extreme',
+    },
+    edgeDecay: {
+      status: 'exhausted',
+      trend: 'HFT edge not replicable',
+      successRateTrend: 'N/A for followers',
+      crowdFollowing: '~45 followers',
+      lastUpdated: '30m ago',
+    },
+    doNotFollowIf: [
+      { condition: 'Always', reason: 'HFT strategies impossible to replicate' },
+      { condition: 'Entry delay > 5min', reason: 'Edge completely gone' },
+      { condition: 'During distribution', reason: 'Actor exiting, not entering' },
+    ],
     copyFeed: [
       { id: 1, type: 'SELL', token: 'ETH', size: '$340K', time: '30m ago', price: '$3,380', txHash: '0xjump...001', entryDelay: '-' },
       { id: 2, type: 'SELL', token: 'BTC', size: '$520K', time: '2h ago', price: '$67,200', txHash: '0xjump...002', entryDelay: '-' },
