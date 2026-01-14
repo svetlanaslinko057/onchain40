@@ -525,6 +525,9 @@ export default function EntitiesPage() {
                 isInActiveCluster={activeCluster && entity.cluster === activeCluster}
                 isDimmed={bridgeMode && activeCluster && entity.cluster !== activeCluster}
                 bridgeMode={bridgeMode}
+                onAddToWatchlist={handleAddToWatchlist}
+                onCreateAlert={handleCreateAlert}
+                isInWatchlist={watchlist.includes(entity.id)}
               />
             ))}
           </div>
