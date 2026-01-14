@@ -230,7 +230,9 @@ const actorDetailedData = {
   },
   'alameda': {
     id: 'alameda',
-    label: 'Alameda Research',
+    real_name: 'Alameda Research',
+    strategy_name: 'SOL Ecosystem Accumulator',
+    identity_confidence: 0.92,
     address: '0x28C6c06298d514Db089934071355E5743bf21d60',
     type: 'Fund',
     avatar: 'https://s2.coinmarketcap.com/static/img/exchanges/64x64/270.png',
@@ -243,6 +245,20 @@ const actorDetailedData = {
       { trigger: 'SOL drops below $80', action: 'Exit SOL-related positions', priority: 'high' },
       { trigger: 'Actor starts large distribution', action: 'Follow exit within 24h', priority: 'critical' },
       { trigger: 'Win rate drops below 60%', action: 'Reduce exposure by 30%', priority: 'medium' },
+    ],
+    correlation: {
+      movesWith: [
+        { id: 'pantera', strategy_name: 'AI Narrative Accumulator', similarity: 76, overlap: 'Narrative timing' },
+        { id: 'vitalik', strategy_name: 'L2 Infrastructure Builder', similarity: 58, overlap: 'Macro positions' },
+      ],
+      frontRunners: [
+        { id: 'a16z', strategy_name: 'Institutional Infrastructure Play', avgLeadTime: '+8.2h', frequency: '22%' },
+      ],
+      followedBy: [
+        { id: 'dwf-labs', strategy_name: 'Meme Momentum Rider', avgLagTime: '+4.5h', frequency: '41%' },
+      ],
+      cluster: { name: 'SOL Ecosystem', phase: 'Rotating', size: 8 },
+    },
     ],
     cluster: {
       size: 12,
