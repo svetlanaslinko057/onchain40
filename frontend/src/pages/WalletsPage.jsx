@@ -900,7 +900,7 @@ export default function WalletsPage() {
               </div>
               
               <p className="text-sm text-gray-600 mb-4">
-                Theoretical entry points based on wallet's recent actions. These are historical signals — not recommendations.
+                Theoretical entry points based on wallet recent actions. These are historical signals — not recommendations.
               </p>
 
               {/* Recent Signals */}
