@@ -298,6 +298,12 @@ const actorDetailedData = {
     confidence: 72,
     primaryChain: 'ETH',
     latency: 'Medium',
+    edgeScore: 52,
+    exitConditions: [
+      { trigger: 'Meme narrative cools off', action: 'Exit meme positions immediately', priority: 'high' },
+      { trigger: 'Actor win rate < 50%', action: 'Stop following entirely', priority: 'critical' },
+      { trigger: 'Market making spreads widen > 2%', action: 'Pause copy trading', priority: 'medium' },
+    ],
     cluster: {
       size: 8,
       confidence: 86,
@@ -408,6 +414,12 @@ const actorDetailedData = {
     confidence: 94,
     primaryChain: 'ETH',
     latency: 'Early',
+    edgeScore: 91,
+    exitConditions: [
+      { trigger: 'Major token unlock event', action: 'Reduce position 48h before unlock', priority: 'high' },
+      { trigger: 'Fund starts systematic distribution', action: 'Exit within 1 week', priority: 'critical' },
+      { trigger: 'L2 narrative exhaustion', action: 'Rotate to new thesis', priority: 'medium' },
+    ],
     cluster: {
       size: 15,
       confidence: 97,
@@ -514,6 +526,12 @@ const actorDetailedData = {
     confidence: 68,
     primaryChain: 'ETH',
     latency: 'Late',
+    edgeScore: 28,
+    exitConditions: [
+      { trigger: 'Any distribution signal', action: 'Do not follow — HFT exit timing impossible', priority: 'critical' },
+      { trigger: 'Gas prices > 50 gwei', action: 'Arb edge disappears', priority: 'high' },
+      { trigger: 'Cross-exchange spread < 0.1%', action: 'No profitable copy opportunity', priority: 'medium' },
+    ],
     cluster: {
       size: 23,
       confidence: 79,
