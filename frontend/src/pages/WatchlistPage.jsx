@@ -162,10 +162,8 @@ const WatchlistPage = () => {
       bridgeAligned: false,
       balance: '$45.2M',
       change24h: 5.4,
-      signalScore: 45,
-      changes: [],
-      dormant: false,
-      exposure: 'ETH-heavy'
+      watchScore: 45, // NOT signal score - attention weight
+      hasActiveSignals: false
     },
     {
       id: 2,
@@ -179,14 +177,8 @@ const WatchlistPage = () => {
       bridgeAligned: true,
       balance: '$2.8B',
       change24h: -2.1,
-      signalScore: 87,
-      changes: [
-        { type: 'behavior', text: 'Behavior changed <24h', icon: Activity },
-        { type: 'flow', text: 'Flow spike vs 7d', icon: TrendingUp },
-        { type: 'bridge', text: 'New alignment detected', icon: Link2 }
-      ],
-      dormant: false,
-      exposure: 'Multi-chain'
+      watchScore: 87,
+      hasActiveSignals: true
     },
     {
       id: 3,
@@ -200,12 +192,8 @@ const WatchlistPage = () => {
       bridgeAligned: false,
       balance: '$127.5M',
       change24h: 12.8,
-      signalScore: 72,
-      changes: [
-        { type: 'behavior', text: 'Behavior changed <24h', icon: Activity }
-      ],
-      dormant: false,
-      exposure: 'Stable-heavy'
+      watchScore: 72,
+      hasActiveSignals: false
     },
     {
       id: 4,
@@ -219,11 +207,8 @@ const WatchlistPage = () => {
       bridgeAligned: false,
       balance: '$890.2M',
       change24h: 0,
-      signalScore: 12,
-      changes: [],
-      dormant: true,
-      dormantDays: 14,
-      exposure: 'Rotating'
+      watchScore: 12,
+      hasActiveSignals: false
     },
     {
       id: 5,
@@ -237,12 +222,8 @@ const WatchlistPage = () => {
       bridgeAligned: true,
       balance: '$345.8M',
       change24h: -5.2,
-      signalScore: 58,
-      changes: [
-        { type: 'bridge', text: 'Aligned with Binance', icon: Link2 }
-      ],
-      dormant: false,
-      exposure: 'ETH-heavy'
+      watchScore: 58,
+      hasActiveSignals: true
     },
     {
       id: 6,
@@ -256,10 +237,8 @@ const WatchlistPage = () => {
       bridgeAligned: false,
       balance: '$1.2B',
       change24h: 1.8,
-      signalScore: 35,
-      changes: [],
-      dormant: false,
-      exposure: 'Multi-chain'
+      watchScore: 35,
+      hasActiveSignals: false
     }
   ]);
 
