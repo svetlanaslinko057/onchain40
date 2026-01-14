@@ -465,6 +465,9 @@ export default function ActorsPage() {
   const [followedActors, setFollowedActors] = useState(['alameda', 'a16z']);
   const [sortBy, setSortBy] = useState('edgeScore');
   
+  // HYBRID Identity Toggle: Default = Strategy names (anonymized)
+  const [showRealNames, setShowRealNames] = useState(false);
+  
   // Filters state
   const [selectedStrategies, setSelectedStrategies] = useState([]);
   const [selectedRisk, setSelectedRisk] = useState([]);
@@ -499,15 +502,16 @@ export default function ActorsPage() {
   // Filter and sort actors
   const filteredActors = useMemo(() => {
     let result = actorsData.filter(actor => {
-      // Search
+      // Search - now searches both real_name and strategy_name
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
-        const matchesLabel = actor.label.toLowerCase().includes(query);
+        const matchesRealName = actor.real_name.toLowerCase().includes(query);
+        const matchesStrategyName = actor.strategy_name.toLowerCase().includes(query);
         const matchesStrategy = actor.strategies.some(s => s.toLowerCase().includes(query));
         const matchesToken = actor.tokens.some(t => t.toLowerCase().includes(query));
         const matchesType = actor.type.toLowerCase().includes(query);
         const matchesAddress = actor.address.toLowerCase().includes(query);
-        if (!matchesLabel && !matchesStrategy && !matchesToken && !matchesType && !matchesAddress) return false;
+        if (!matchesRealName && !matchesStrategyName && !matchesStrategy && !matchesToken && !matchesType && !matchesAddress) return false;
       }
 
       // Followed only
