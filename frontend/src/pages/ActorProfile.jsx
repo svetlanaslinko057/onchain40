@@ -192,6 +192,12 @@ const actorDetailedData = {
     confidence: 91,
     primaryChain: 'SOL',
     latency: 'Early',
+    edgeScore: 86,
+    exitConditions: [
+      { trigger: 'SOL drops below $80', action: 'Exit SOL-related positions', priority: 'high' },
+      { trigger: 'Actor starts large distribution', action: 'Follow exit within 24h', priority: 'critical' },
+      { trigger: 'Win rate drops below 60%', action: 'Reduce exposure by 30%', priority: 'medium' },
+    ],
     cluster: {
       size: 12,
       confidence: 94,
