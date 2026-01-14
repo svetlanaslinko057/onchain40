@@ -30,7 +30,38 @@ const getEdgeScoreColor = (score) => {
   return 'text-red-500 bg-red-50 border-red-200';
 };
 
-// Mock actors data with HYBRID identity (real_name + strategy_name)
+// ETAP 4: Influence Role calculation
+// Leader: has more followers than leads, and followers_count is significant
+// Follower: follows more actors than has followers
+// Neutral: balanced or low activity
+const getInfluenceRole = (actor) => {
+  const { followers_count = 0, leads_count = 0, follows_count = 0 } = actor;
+  
+  // Calculate ratios
+  const leadsRatio = follows_count > 0 ? leads_count / follows_count : leads_count;
+  const followsRatio = leads_count > 0 ? follows_count / leads_count : follows_count;
+  
+  // Adaptive thresholds (based on actor data)
+  const significantFollowers = 3; // X threshold
+  const significantFollows = 2;   // Y threshold
+  
+  if (followers_count >= significantFollowers && leadsRatio > 1.2) {
+    return 'Leader';
+  }
+  if (follows_count >= significantFollows && followsRatio > 1.2) {
+    return 'Follower';
+  }
+  return 'Neutral';
+};
+
+// Influence Role badge config
+const influenceRoleConfig = {
+  'Leader': { bg: 'bg-emerald-100', text: 'text-emerald-700', icon: '🟢' },
+  'Follower': { bg: 'bg-amber-100', text: 'text-amber-700', icon: '🟡' },
+  'Neutral': { bg: 'bg-gray-100', text: 'text-gray-600', icon: '⚪' },
+};
+
+// Mock actors data with HYBRID identity + INFLUENCE metrics (ETAP 4)
 const actorsData = [
   {
     id: 'vitalik',
@@ -56,6 +87,13 @@ const actorsData = [
     signalsCount: 3,
     lastActivityTime: Date.now() - 2 * 60 * 60 * 1000,
     edgeScore: 78,
+    // ETAP 4: Influence metrics
+    influenceScore: 72,
+    followers_count: 4,      // Actors that follow this one
+    leads_count: 1,          // Actors this one front-runs
+    follows_count: 1,        // Actors this one follows
+    avgFollowerLag: 5.8,     // Average hours followers lag behind
+    consistency: 0.78,       // Pattern consistency (0-1)
   },
   {
     id: 'alameda',
@@ -81,6 +119,13 @@ const actorsData = [
     signalsCount: 5,
     lastActivityTime: Date.now() - 45 * 60 * 1000,
     edgeScore: 86,
+    // ETAP 4: Influence metrics - HIGH LEADER
+    influenceScore: 89,
+    followers_count: 6,
+    leads_count: 2,
+    follows_count: 1,
+    avgFollowerLag: 4.5,
+    consistency: 0.85,
   },
   {
     id: 'dwf-labs',
@@ -106,6 +151,13 @@ const actorsData = [
     signalsCount: 2,
     lastActivityTime: Date.now() - 4 * 60 * 60 * 1000,
     edgeScore: 52,
+    // ETAP 4: Influence metrics - FOLLOWER
+    influenceScore: 38,
+    followers_count: 1,
+    leads_count: 0,
+    follows_count: 3,
+    avgFollowerLag: 2.1,
+    consistency: 0.52,
   },
   {
     id: 'a16z',
@@ -131,6 +183,13 @@ const actorsData = [
     signalsCount: 0,
     lastActivityTime: Date.now() - 24 * 60 * 60 * 1000,
     edgeScore: 91,
+    // ETAP 4: Influence metrics - TOP LEADER
+    influenceScore: 94,
+    followers_count: 5,
+    leads_count: 3,
+    follows_count: 0,
+    avgFollowerLag: 6.2,
+    consistency: 0.91,
   },
   {
     id: 'jump-trading',
@@ -156,6 +215,13 @@ const actorsData = [
     signalsCount: 1,
     lastActivityTime: Date.now() - 30 * 60 * 1000,
     edgeScore: 28,
+    // ETAP 4: Influence metrics - NEUTRAL (HFT, not directional leader)
+    influenceScore: 45,
+    followers_count: 2,
+    leads_count: 2,
+    follows_count: 2,
+    avgFollowerLag: 1.2,
+    consistency: 0.62,
   },
   {
     id: 'unknown-whale-1',
@@ -181,6 +247,13 @@ const actorsData = [
     signalsCount: 0,
     lastActivityTime: Date.now() - 15 * 60 * 1000,
     edgeScore: 15,
+    // ETAP 4: Influence metrics - PURE FOLLOWER
+    influenceScore: 18,
+    followers_count: 0,
+    leads_count: 0,
+    follows_count: 4,
+    avgFollowerLag: 0,
+    consistency: 0.28,
   },
   {
     id: 'pantera',
@@ -206,6 +279,13 @@ const actorsData = [
     signalsCount: 4,
     lastActivityTime: Date.now() - 6 * 60 * 60 * 1000,
     edgeScore: 84,
+    // ETAP 4: Influence metrics - STRONG LEADER
+    influenceScore: 86,
+    followers_count: 5,
+    leads_count: 2,
+    follows_count: 1,
+    avgFollowerLag: 4.8,
+    consistency: 0.82,
   },
   {
     id: 'wintermute',
@@ -231,6 +311,13 @@ const actorsData = [
     signalsCount: 0,
     lastActivityTime: Date.now() - 60 * 60 * 1000,
     edgeScore: 45,
+    // ETAP 4: Influence metrics - NEUTRAL (MM, not directional)
+    influenceScore: 52,
+    followers_count: 1,
+    leads_count: 1,
+    follows_count: 1,
+    avgFollowerLag: 3.2,
+    consistency: 0.58,
   },
 ];
 
