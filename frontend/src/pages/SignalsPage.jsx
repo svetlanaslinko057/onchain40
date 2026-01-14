@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Plus, Search, Filter, Star, TrendingUp, TrendingDown, Eye, EyeOff, Trash2, 
+  Plus, Filter, Star, TrendingUp, TrendingDown, Eye, EyeOff, Trash2, 
   Wallet, ChevronLeft, ExternalLink, AlertTriangle, CheckCircle, Activity,
   Bell, BellRing, Settings, Coins, Users, Info, MoreVertical, Volume2, VolumeX,
   Repeat, Bookmark, BellPlus, Clock, Zap, Link2, HelpCircle
 } from 'lucide-react';
 import Header from '../components/Header';
+import SearchInput from '../components/shared/SearchInput';
 
 const GlassCard = ({ children, className = "", hover = false }) => (
   <div className={`glass-card ${hover ? 'glass-card-hover' : ''} ${className}`}>
@@ -1173,26 +1174,13 @@ export default function Watchlist() {
 
           {/* SEARCH - Simple and clean */}
           <div className="flex-1 max-w-md mx-auto">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" style={{pointerEvents: 'none', zIndex: 1}} />
-              <input 
-                type="text" 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search signals..." 
-                style={{color: '#111827', position: 'relative', zIndex: 2}}
-                className="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm bg-gray-50 border-2 border-transparent hover:bg-white hover:border-gray-200 focus:bg-white focus:border-blue-500 focus:outline-none transition-all"
-              />
-              {searchTerm && (
-                <button
-                  onClick={() => setSearchTerm('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  style={{zIndex: 3}}
-                >
-                  ✕
-                </button>
-              )}
-            </div>
+            <SearchInput
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search signals..."
+              testId="signals-search-input"
+              inputClassName="bg-gray-50 border-2 border-transparent hover:bg-white hover:border-gray-200 focus:bg-white focus:border-blue-500"
+            />
           </div>
           
           <div className="w-32"></div> {/* Spacer for balance */}
