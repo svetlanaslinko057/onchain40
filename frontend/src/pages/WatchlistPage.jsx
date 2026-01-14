@@ -268,6 +268,7 @@ const WatchlistPage = () => {
   const [filterRisk, setFilterRisk] = useState('all');
   const [showOnlyChanges, setShowOnlyChanges] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Quick summary stats
   const stats = {
