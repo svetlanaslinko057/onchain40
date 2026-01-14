@@ -143,6 +143,53 @@ const AddAddressModal = ({ isOpen, onClose, onAdd }) => {
   );
 };
 
+// === CONFIDENCE DECAY SYSTEM ===
+// Score decreases over time without confirmations
+const applyConfidenceDecay = (baseScore, timestamp, hasRecentActivity = false) => {
+  if (!timestamp) return baseScore;
+  
+  const now = Date.now();
+  const ageInHours = (now - timestamp) / (1000 * 60 * 60);
+  
+  // Decay rate: -2 points per hour without activity
+  // No decay if recent activity (< 6h) or hasRecentActivity flag
+  if (ageInHours < 6 || hasRecentActivity) {
+    return baseScore;
+  }
+  
+  const decayRate = 2; // points per hour
+  const decay = Math.floor((ageInHours - 6) * decayRate);
+  const decayedScore = Math.max(0, baseScore - decay);
+  
+  return {
+    score: decayedScore,
+    originalScore: baseScore,
+    decay: decay,
+    ageInHours: Math.floor(ageInHours),
+    decayed: decay > 0
+  };
+};
+
+// === SIGNAL LIFECYCLE SYSTEM ===
+// Auto-transition: New → Active → Cooling → Archived
+const getSignalLifecycle = (timestamp, score) => {
+  if (!timestamp) return 'active';
+  
+  const ageInHours = (Date.now() - timestamp) / (1000 * 60 * 60);
+  
+  // New: < 2 hours old
+  if (ageInHours < 2) return 'new';
+  
+  // Archived: > 72 hours OR score < 20
+  if (ageInHours > 72 || score < 20) return 'archived';
+  
+  // Cooling: 24-72 hours OR score dropped below 40
+  if (ageInHours > 24 || score < 40) return 'cooling';
+  
+  // Active: everything else
+  return 'active';
+};
+
 // === SIGNAL SCORE CALCULATION ENGINE ===
 // Weighted scoring system with explainable components
 const calculateSignalScore = (item) => {
