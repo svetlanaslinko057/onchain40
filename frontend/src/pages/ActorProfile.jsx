@@ -646,12 +646,27 @@ const actorDetailedData = {
       { condition: 'During distribution', reason: 'Actor exiting, not entering' },
     ],
     copyFeed: [
-      { id: 1, type: 'SELL', token: 'ETH', size: '$340K', time: '30m ago', price: '$3,380', txHash: '0xjump...001', entryDelay: '-' },
-      { id: 2, type: 'SELL', token: 'BTC', size: '$520K', time: '2h ago', price: '$67,200', txHash: '0xjump...002', entryDelay: '-' },
-      { id: 3, type: 'SWAP', token: 'ETH→USDC', size: '$890K', time: '4h ago', price: '-', txHash: '0xjump...003', entryDelay: '-' },
-      { id: 4, type: 'BRIDGE', token: 'USDC→ARB', size: '$1.2M', time: '6h ago', price: '-', txHash: '0xjump...004', entryDelay: '-' },
-      { id: 5, type: 'SELL', token: 'SOL', size: '$180K', time: '1d ago', price: '$142', txHash: '0xjump...005', entryDelay: '-' },
+      { id: 1, type: 'SELL', token: 'ETH', size: '$340K', time: '30m ago', price: '$3,380', txHash: '0xjump...001', entryDelay: '-', actorPnl: '+2.1%', followerPnl: '-1.2%' },
+      { id: 2, type: 'SELL', token: 'BTC', size: '$520K', time: '2h ago', price: '$67,200', txHash: '0xjump...002', entryDelay: '-', actorPnl: '+1.8%', followerPnl: '-0.8%' },
+      { id: 3, type: 'SWAP', token: 'ETH→USDC', size: '$890K', time: '4h ago', price: '-', txHash: '0xjump...003', entryDelay: '-', actorPnl: '-', followerPnl: '-' },
+      { id: 4, type: 'BRIDGE', token: 'USDC→ARB', size: '$1.2M', time: '6h ago', price: '-', txHash: '0xjump...004', entryDelay: '-', actorPnl: '-', followerPnl: '-' },
+      { id: 5, type: 'SELL', token: 'SOL', size: '$180K', time: '1d ago', price: '$142', txHash: '0xjump...005', entryDelay: '-', actorPnl: '+4.2%', followerPnl: '-2.8%' },
     ],
+    simulatedPortfolio: {
+      startingCapital: 10000,
+      periods: [
+        { period: '7d', actorReturn: 8.2, followerReturn: -2.4, slippageLoss: 3.8, delayLoss: 6.8 },
+        { period: '30d', actorReturn: 22.4, followerReturn: -5.2, slippageLoss: 8.4, delayLoss: 19.2 },
+        { period: '90d', actorReturn: 48.2, followerReturn: -12.8, slippageLoss: 18.2, delayLoss: 42.8 },
+      ],
+      trades: { total: 452, profitable: 281, avgWin: '+4.2%', avgLoss: '-3.8%' },
+      impactByDelay: [
+        { delay: '1h', returnLoss: '-85%', recommendation: 'Avoid' },
+        { delay: '2h', returnLoss: '-95%', recommendation: 'Avoid' },
+        { delay: '4h', returnLoss: '-100%', recommendation: 'Avoid' },
+        { delay: '6h+', returnLoss: '-100%+', recommendation: 'Avoid' },
+      ],
+    },
     whyFollow: [
       { positive: true, text: 'Strong overall PnL (+$1.1M realized)' },
       { positive: false, text: 'HFT strategies — impossible to replicate' },
