@@ -448,7 +448,10 @@ const WatchlistPage = () => {
             <Eye className="w-12 h-12 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-bold text-gray-900 mb-2">No addresses in watchlist</h3>
             <p className="text-gray-500 text-sm mb-4">Start tracking wallets by adding addresses</p>
-            <button className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-semibold hover:bg-gray-800 transition-all">
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-semibold hover:bg-gray-800 transition-all"
+            >
               <Plus className="w-4 h-4" />
               Add first address
             </button>
