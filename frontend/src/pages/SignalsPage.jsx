@@ -8,8 +8,6 @@ import {
 } from 'lucide-react';
 import Header from '../components/Header';
 
-const API_BASE = process.env.REACT_APP_BACKEND_URL + '/api';
-
 const GlassCard = ({ children, className = "", hover = false }) => (
   <div className={`glass-card ${hover ? 'glass-card-hover' : ''} ${className}`}>
     {children}
