@@ -972,6 +972,8 @@ const defaultActor = {
   label: 'Unknown Actor',
   type: 'Unknown',
   confidence: 0,
+  edgeScore: 0,
+  exitConditions: [],
   cluster: { size: 0, confidence: 0, wallets: [], linkReason: '-' },
   playbook: { currentAction: '-', tokensToWatch: [], suggestedAction: 'Avoid', latencyStatus: '-', confidenceLevel: 0, reasoning: '-' },
   timingEdge: { medianPrecedePrice: '-', successRateWithin6h: '-', lateEntryDropoff: '-', bestPerformsIn: '-' },
