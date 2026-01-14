@@ -203,6 +203,25 @@ const actorDetailedData = {
       lateEntryDropoff: '18 hours',
       bestPerformsIn: 'Risk-On',
     },
+    followerReality: {
+      avgEntryDelay: '4.8h',
+      expectedSlippage: '1.2%',
+      modeledROI30d: { actor: '+24%', follower: '+14%' },
+      maxDDFollower: '8.2%',
+      crowdingFactor: 'Medium',
+    },
+    edgeDecay: {
+      status: 'stable',
+      trend: 'Consistent alpha generation',
+      successRateTrend: '+5% vs last month',
+      crowdFollowing: '~340 followers',
+      lastUpdated: '45m ago',
+    },
+    doNotFollowIf: [
+      { condition: 'SOL < $100', reason: 'Actor exits SOL positions in bear' },
+      { condition: 'Position size > $500K', reason: 'Market impact too high to replicate' },
+      { condition: 'After major narrative shift', reason: 'Actor needs 24-48h to reposition' },
+    ],
     copyFeed: [
       { id: 1, type: 'SWAP', token: 'SOL→USDC', size: '$890K', time: '45m ago', price: '-', txHash: '0xabc...111', entryDelay: '-' },
       { id: 2, type: 'BUY', token: 'JUP', size: '$340K', time: '4h ago', price: '$0.89', txHash: '0xdef...222', entryDelay: '1.8h' },
