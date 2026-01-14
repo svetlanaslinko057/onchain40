@@ -299,6 +299,7 @@ const AlertsPage = () => {
   const [severityFilter, setSeverityFilter] = useState('all');
   const [showOnlyUnread, setShowOnlyUnread] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [mutePopover, setMutePopover] = useState(null); // { alertId, position }
 
   // Stats
   const unreadCount = alerts.filter(a => !a.read).length;
