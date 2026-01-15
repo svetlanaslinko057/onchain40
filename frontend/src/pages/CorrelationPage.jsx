@@ -413,16 +413,25 @@ export default function CorrelationPage() {
   }, [processedActors, expandedView]);
   
   const graphData = useMemo(() => {
-    const nodes = filteredActors.map(actor => ({
-      id: actor.id,
-      name: showRealNames ? actor.real_name : actor.strategy_name,
-      strategy: actor.strategy,
-      influenceScore: actor.influenceScore,
-      role: actor.role,
-      color: STRATEGY_COLORS[actor.strategy] || STRATEGY_COLORS.Default,
-      val: actor.role === 'Leader' ? 10 + actor.influenceScore * 0.2 : 5 + actor.influenceScore * 0.1,
-      ...actor,
-    }));
+    const nodes = filteredActors.map((actor, idx) => {
+      // Initial positions in a circle for better starting layout
+      const angle = (idx / filteredActors.length) * 2 * Math.PI;
+      const radius = 150;
+      
+      return {
+        id: actor.id,
+        name: showRealNames ? actor.real_name : actor.strategy_name,
+        strategy: actor.strategy,
+        influenceScore: actor.influenceScore,
+        role: actor.role,
+        color: STRATEGY_COLORS[actor.strategy] || STRATEGY_COLORS.Default,
+        val: actor.role === 'Leader' ? 10 + actor.influenceScore * 0.2 : 5 + actor.influenceScore * 0.1,
+        // Initial position in circle
+        x: Math.cos(angle) * radius,
+        y: Math.sin(angle) * radius,
+        ...actor,
+      };
+    });
     
     const links = [];
     const nodeIds = new Set(nodes.map(n => n.id));
