@@ -224,6 +224,12 @@ Build a comprehensive crypto analytics platform for tracking on-chain liquidity 
 - ✅ **ETAP 3**: Front-runner detection
 - ✅ Documentation update (README, NEXT-TASKS, PAGES)
 
+#### Week 6 (Current)
+- ✅ **ETAP 4.1**: ActorsPage with Influence Score sorting, Leader/Follower/Neutral badges
+- ✅ **ETAP 4.2**: ActorProfile enhanced Correlation & Influence block with Influence Summary
+- ✅ **ETAP 4.3**: NEW /actors/correlation page with Influence Graph, Leaderboard, Strategy Flow Map
+- ✅ Test Report: 100% frontend pass (iteration_4.json)
+
 ---
 
 ## Pending Work
