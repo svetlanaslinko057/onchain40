@@ -350,18 +350,32 @@ export default function CorrelationPage() {
   
   // Generate nodes for ReactFlow
   const initialNodes = useMemo(() => {
+    // Use deterministic offset based on actor id hash for consistent layout
+    const hashCode = (str) => {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      return Math.abs(hash);
+    };
+    
     return filteredActors.map((actor, idx) => {
       const cluster = strategyClusters[actor.strategy] || strategyClusters['Smart Money'];
-      // Add some offset within cluster based on index
+      // Use deterministic offset based on actor id
+      const actorHash = hashCode(actor.id);
       const offsetX = (idx % 3) * 120;
       const offsetY = Math.floor(idx / 3) * 100;
+      const microOffsetX = (actorHash % 40);
+      const microOffsetY = ((actorHash >> 4) % 40);
       
       return {
         id: actor.id,
         type: 'actor',
         position: { 
-          x: cluster.x + offsetX + Math.random() * 40, 
-          y: cluster.y + offsetY + Math.random() * 40 
+          x: cluster.x + offsetX + microOffsetX, 
+          y: cluster.y + offsetY + microOffsetY 
         },
         data: {
           label: showRealNames ? actor.real_name : actor.strategy_name,
