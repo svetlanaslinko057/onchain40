@@ -645,23 +645,29 @@ export default function CorrelationPage() {
           {/* Main Grid */}
           <div className="grid grid-cols-12 gap-4">
             <div className="col-span-12 lg:col-span-8 bg-gray-900 rounded-2xl overflow-hidden relative" style={{ height: '550px' }}>
-              <ForceGraph2D
-                ref={graphRef}
-                graphData={graphData}
-                nodeCanvasObject={nodeCanvasRenderer}
-                linkCanvasObject={linkCanvasRenderer}
-                nodeRelSize={1}
-                onNodeClick={handleNodeClick}
-                onNodeHover={setHoveredNode}
-                onBackgroundClick={() => setSelectedActor(null)}
-                cooldownTicks={100}
-                linkDirectionalParticles={mode !== 'clusters' ? 2 : 0}
-                linkDirectionalParticleWidth={2}
-                linkDirectionalParticleSpeed={0.006}
-                d3AlphaDecay={0.02}
-                d3VelocityDecay={0.25}
-                backgroundColor="#111827"
-              />
+              {graphData.nodes.length > 0 ? (
+                <ForceGraph2D
+                  ref={graphRef}
+                  graphData={graphData}
+                  nodeCanvasObject={nodeCanvasRenderer}
+                  linkCanvasObject={linkCanvasRenderer}
+                  nodeRelSize={6}
+                  onNodeClick={handleNodeClick}
+                  onNodeHover={setHoveredNode}
+                  onBackgroundClick={() => setSelectedActor(null)}
+                  cooldownTicks={100}
+                  linkDirectionalParticles={mode !== 'clusters' ? 2 : 0}
+                  linkDirectionalParticleWidth={2}
+                  linkDirectionalParticleSpeed={0.006}
+                  d3AlphaDecay={0.02}
+                  d3VelocityDecay={0.25}
+                  backgroundColor="#111827"
+                  width={800}
+                  height={550}
+                />
+              ) : (
+                <div className="flex items-center justify-center h-full text-gray-500">Loading graph...</div>
+              )}
               <div className="absolute bottom-3 left-3 text-xs text-gray-500 bg-gray-800/80 px-2 py-1 rounded">
                 Scroll to zoom • Drag to pan • Click node
               </div>
