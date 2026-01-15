@@ -1,7 +1,6 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import ForceGraph2D from 'react-force-graph-2d';
-import ForceGraph3D from 'react-force-graph-3d';
+import { ForceGraph2D, ForceGraph3D } from 'react-force-graph';
 import Header from '../components/Header';
 import { 
   Filter, TrendingUp, Users, Zap, Crown, 
