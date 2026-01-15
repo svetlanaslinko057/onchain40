@@ -65,6 +65,23 @@ Build a comprehensive crypto analytics platform for tracking on-chain liquidity 
 - [x] "Followed By" tracking
 - [x] Cluster phase indicators
 
+#### ETAP 4 - Influence Graph & Strategy Intelligence ✅
+- [x] Influence Score calculation (followers_count, leads_count, follows_count)
+- [x] Leader/Follower/Neutral role badges on ActorsPage
+- [x] Sort by Influence option
+- [x] Crown indicators for Leaders
+- [x] Enhanced Correlation & Influence block on ActorProfile:
+  - [x] Influence Summary with role, ecosystem, recommendation
+  - [x] "Often Front-Runs This Actor" section with trade matches
+  - [x] "This Actor is Often Followed By" section
+  - [x] Overlap type badges (timing, token, size)
+- [x] NEW: /actors/correlation page with:
+  - [x] Interactive Influence Graph (ReactFlow)
+  - [x] Influence Leaderboard (sorted by influence, not PnL)
+  - [x] Strategy Flow Map (strategy × market phase matrix)
+  - [x] Chain/Strategy/Role filters
+  - [x] Strategies/Real Names toggle
+
 ---
 
 ### Signals Module (IMPLEMENTED ✅)
