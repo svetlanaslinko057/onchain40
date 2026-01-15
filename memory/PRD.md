@@ -75,12 +75,18 @@ Build a comprehensive crypto analytics platform for tracking on-chain liquidity 
   - [x] "Often Front-Runs This Actor" section with trade matches
   - [x] "This Actor is Often Followed By" section
   - [x] Overlap type badges (timing, token, size)
-- [x] NEW: /actors/correlation page with:
-  - [x] Interactive Influence Graph (ReactFlow)
-  - [x] Influence Leaderboard (sorted by influence, not PnL)
-  - [x] Strategy Flow Map (strategy × market phase matrix)
-  - [x] Chain/Strategy/Role filters
-  - [x] Strategies/Real Names toggle
+- [x] NEW: /actors/correlation page (REBUILT with react-force-graph-2d):
+  - [x] 3 Graph Modes: Market Influence, Copy Trading, Strategy Clusters
+  - [x] Force-directed layout (Canvas/WebGL)
+  - [x] Two-level filtering (auto 15 nodes + Expand option)
+  - [x] Node size = clamped influenceScore (20-60)
+  - [x] Fixed strategy color palette
+  - [x] Directed edges (front-run=yellow thick, follow=purple thin)
+  - [x] Undirected edges in Clusters mode (opacity=strength)
+  - [x] Leader gold border
+  - [x] Copy Metrics panel (Lead Time, Slippage Risk, Best Entry)
+  - [x] Influence Leaderboard
+  - [x] Strategy Flow Map
 
 ---
 
