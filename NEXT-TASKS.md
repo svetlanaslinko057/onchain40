@@ -292,6 +292,12 @@ Add user accounts to persist:
 - [x] ETAP 1: Edge Score + Exit Conditions
 - [x] ETAP 2: Simulated Portfolio (Copy-Mechanics)
 - [x] ETAP 3: Actor Anonymization + Correlation
+- [x] **ETAP 4: Influence Graph & Strategy Intelligence**
+  - [x] ActorsPage: Influence Score sorting, Leader/Follower/Neutral badges, Crown indicators
+  - [x] ActorProfile: Enhanced Correlation & Influence block with Influence Summary
+  - [x] NEW PAGE: `/actors/correlation` with Interactive Influence Graph (ReactFlow)
+  - [x] Influence Leaderboard (sorted by influence, not PnL)
+  - [x] Strategy Flow Map (strategy × market phase matrix)
 - [x] P1: Watchlist & Alerts integration (Tokens, Entities)
 - [x] Bug Fix: SearchInput component (recurring issue)
 - [x] Bug Fix: AlertModal entity pre-fill
