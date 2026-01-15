@@ -17,6 +17,7 @@ import StrategiesPage from "./pages/StrategiesPage";
 import WatchlistPage from "./pages/WatchlistPage";
 import ActorsPage from "./pages/ActorsPage";
 import ActorProfile from "./pages/ActorProfile";
+import CorrelationPage from "./pages/CorrelationPage";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path="/alerts" element={<AlertsPageNew />} />
         <Route path="/strategies" element={<StrategiesPage />} />
         <Route path="/actors" element={<ActorsPage />} />
+        <Route path="/actors/correlation" element={<CorrelationPage />} />
         <Route path="/actors/:actorId" element={<ActorProfile />} />
         
         {/* Detail Pages */}
