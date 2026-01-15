@@ -467,6 +467,16 @@ export default function CorrelationPage() {
     return { nodes, links };
   }, [filteredActors, mode, showRealNames]);
   
+  // Auto-fit on load and when data changes
+  useEffect(() => {
+    if (graphRef.current && graphData.nodes.length > 0) {
+      // Wait for initial render
+      setTimeout(() => {
+        graphRef.current.zoomToFit(400, 50);
+      }, 500);
+    }
+  }, [graphData.nodes.length]);
+  
   useEffect(() => {
     if (graphRef.current) {
       const fg = graphRef.current;
