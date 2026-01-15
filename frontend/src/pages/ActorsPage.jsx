@@ -818,6 +818,16 @@ export default function ActorsPage() {
                   </TooltipContent>
                 </Tooltip>
               </div>
+              
+              {/* ETAP 4: Influence Graph Link */}
+              <Link
+                to="/actors/correlation"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium bg-violet-100 text-violet-700 hover:bg-violet-200 transition-colors ml-2"
+                data-testid="influence-graph-link"
+              >
+                <GitBranch className="w-3.5 h-3.5" />
+                Influence Graph
+              </Link>
             </div>
           </div>
 
