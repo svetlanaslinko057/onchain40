@@ -1,0 +1,109 @@
+{
+  "summary": "ETAP 4 - Influence Graph & Strategy Intelligence testing completed. All core features working correctly. Minor ReactFlow edge warning in console (non-blocking).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "CorrelationPage - ReactFlow Graph",
+        "issues": ["Console warnings: ReactFlow edge creation fails with 'Couldn't create edge for source handle id: null'. This is because custom ActorNode component lacks Handle components. Edges still render but without proper connection points. Non-blocking but should be fixed for cleaner implementation."]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/test_reports/iteration_4.json"
+  ],
+  "action_items": [
+    "OPTIONAL: Add ReactFlow Handle components to ActorNode in CorrelationPage.jsx to eliminate console warnings"
+  ],
+  "critical_code_review_comments": [
+    "ActorsPage: getInfluenceRole() correctly calculates Leader/Follower/Neutral based on followers_count, leads_count, follows_count",
+    "ActorsPage: influenceRoleConfig correctly maps roles to colors (Leader=emerald/green, Follower=amber, Neutral=gray)",
+    "ActorsPage: sortOptions includes 'influence' option that sorts by influenceScore",
+    "ActorProfile: correlation.influenceSummary block renders role, ecosystem, recommendation, avgLag correctly",
+    "ActorProfile: frontRunners and followedBy sections display with lead/lag times and trade counts",
+    "CorrelationPage: ReactFlow graph renders 8 actor nodes with strategy-based colors",
+    "CorrelationPage: InfluenceLeaderboard shows actors sorted by influenceScore",
+    "CorrelationPage: StrategyFlowMap matrix displays activity by strategy × market phase"
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A - frontend only testing",
+    "frontend": "100%"
+  },
+  "seed_data_creation": "N/A - all data is MOCKED on frontend",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "ETAP 4 Influence Graph & Strategy Intelligence fully tested. All mock data is in frontend components (ActorsPage.jsx, ActorProfile.jsx, CorrelationPage.jsx). ReactFlow @xyflow/react library is installed and working.",
+  "features_tested": {
+    "ActorsPage_Influence_Graph_Button": {
+      "status": "PASS",
+      "details": "Purple 'Influence Graph' button with GitBranch icon exists with data-testid='influence-graph-link', navigates to /actors/correlation"
+    },
+    "ActorsPage_Leader_Follower_Neutral_Badges": {
+      "status": "PASS",
+      "details": "All three role badges display correctly on actor cards - Leader (emerald/green), Follower (amber), Neutral (gray)"
+    },
+    "ActorsPage_Influence_Sort": {
+      "status": "PASS",
+      "details": "Sort dropdown includes 'Influence' option, sorting by influenceScore works correctly"
+    },
+    "ActorsPage_Strategies_RealNames_Toggle": {
+      "status": "PASS",
+      "details": "Toggle buttons with data-testid='show-strategies-btn' and 'show-real-names-btn' work correctly"
+    },
+    "ActorProfile_Influence_Summary": {
+      "status": "PASS",
+      "details": "Influence Summary block shows role (Early Leader/Market Leader/Trend Follower), ecosystem, recommendation text, avg follower lag, and Influence Score"
+    },
+    "ActorProfile_FrontRunners_Section": {
+      "status": "PASS",
+      "details": "'Often Front-Runs This Actor' section displays with actor name, lead time, frequency, and trades matched"
+    },
+    "ActorProfile_FollowedBy_Section": {
+      "status": "PASS",
+      "details": "'This Actor is Often Followed By' section displays with actor name, lag time, frequency, and trades matched"
+    },
+    "CorrelationPage_Load": {
+      "status": "PASS",
+      "details": "Page loads at /actors/correlation with 'Influence Graph' title"
+    },
+    "CorrelationPage_ReactFlow_Graph": {
+      "status": "PASS",
+      "details": "ReactFlow graph renders with 8 actor nodes, colored by strategy, with influence scores displayed"
+    },
+    "CorrelationPage_Influence_Leaderboard": {
+      "status": "PASS",
+      "details": "Influence Leaderboard shows actors sorted by influence score with rank badges (gold/silver/bronze)"
+    },
+    "CorrelationPage_Strategy_Flow_Map": {
+      "status": "PASS",
+      "details": "Strategy Flow Map matrix displays 5 strategies × 4 phases with activity counts and color intensity"
+    },
+    "CorrelationPage_Chain_Filter": {
+      "status": "PASS",
+      "details": "Chain filter dropdown with options: All Chains, ETH, SOL, BASE, ARB - filters work correctly"
+    },
+    "CorrelationPage_Strategy_Filter": {
+      "status": "PASS",
+      "details": "Strategy filter dropdown with options: All Strategies, Smart Money, Infrastructure, Momentum, Meme, Market Maker, DeFi"
+    },
+    "CorrelationPage_Role_Filter": {
+      "status": "PASS",
+      "details": "Role filter dropdown with options: All Roles, Leader, Follower, Neutral"
+    },
+    "CorrelationPage_Identity_Toggle": {
+      "status": "PASS",
+      "details": "Strategies/Real Names toggle button switches between strategy_name and real_name display"
+    },
+    "CorrelationPage_Node_Click": {
+      "status": "PASS",
+      "details": "Clicking on a node shows 'Selected Actor' panel with details and 'View Full Profile' link"
+    }
+  },
+  "mocked_data_note": "All actor data, correlation data, and influence metrics are MOCKED in frontend components - actorsData in ActorsPage.jsx, actorDetailedData in ActorProfile.jsx, actorsData in CorrelationPage.jsx"
+}
