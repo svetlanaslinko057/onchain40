@@ -1,45 +1,44 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ForceGraph2D from 'react-force-graph-2d';
+import ForceGraph3D from 'react-force-graph-3d';
 import Header from '../components/Header';
 import { 
-  Filter, ChevronDown, TrendingUp, Users, Zap, Crown, 
+  Filter, TrendingUp, Users, Zap, Crown, 
   GitBranch, ArrowRight, Eye, X, Activity, Target, 
-  Expand, Layers, Copy, Network, EyeOff, Info
+  Expand, Layers, Copy, Network, EyeOff, Box, Square,
+  ZoomIn, RotateCcw
 } from 'lucide-react';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../components/ui/tooltip';
 
 // ==================== CONSTANTS ====================
 
-// Fixed strategy color palette (consistent with UI)
+// Fixed strategy color palette
 const STRATEGY_COLORS = {
-  'Smart Money': '#22c55e',      // green
-  'Infrastructure': '#6366f1',   // indigo
-  'Momentum': '#f59e0b',         // orange/amber
-  'Meme': '#ec4899',             // pink
-  'Market Maker': '#06b6d4',     // cyan
-  'High Risk': '#ef4444',        // red
-  'DeFi': '#8b5cf6',             // purple
-  'Default': '#64748b',          // gray
+  'Smart Money': '#22c55e',
+  'Infrastructure': '#6366f1',
+  'Momentum': '#f59e0b',
+  'Meme': '#ec4899',
+  'Market Maker': '#06b6d4',
+  'High Risk': '#ef4444',
+  'DeFi': '#8b5cf6',
+  'Default': '#64748b',
 };
 
-// Role colors
 const ROLE_CONFIG = {
   'Leader': { bg: 'bg-emerald-100', text: 'text-emerald-700', icon: '🟢', color: '#22c55e' },
   'Follower': { bg: 'bg-amber-100', text: 'text-amber-700', icon: '🟡', color: '#f59e0b' },
   'Neutral': { bg: 'bg-gray-100', text: 'text-gray-600', icon: '⚪', color: '#64748b' },
 };
 
-// Graph modes
 const GRAPH_MODES = [
-  { id: 'influence', label: 'Market Influence', icon: Crown, description: 'Who leads, who moves first' },
-  { id: 'copy', label: 'Copy Trading', icon: Copy, description: 'Who to copy, entry timing' },
-  { id: 'clusters', label: 'Strategy Clusters', icon: Layers, description: 'Group rotation patterns' },
+  { id: 'influence', label: 'Market Influence', icon: Crown, description: 'Who leads the market' },
+  { id: 'copy', label: 'Copy Trading', icon: Copy, description: 'Who to copy, timing' },
+  { id: 'clusters', label: 'Strategy Clusters', icon: Layers, description: 'Group patterns' },
 ];
 
 // ==================== MOCK DATA ====================
 
-// Comprehensive actor data with all metrics
 const actorsData = [
   {
     id: 'a16z',
@@ -48,17 +47,15 @@ const actorsData = [
     strategy: 'Infrastructure',
     chain: 'ETH',
     edgeScore: 91,
-    // Raw metrics for Influence Score calculation
     followers_count: 5,
-    avg_follower_lag: 6.2,  // hours
+    avg_follower_lag: 6.2,
     consistency: 0.91,
     market_impact: 0.85,
-    // Relationships
     frontRuns: ['alameda'],
     followedBy: ['vitalik', 'pantera'],
     correlations: [
-      { id: 'vitalik', strength: 0.72, type: 'similar' },
-      { id: 'pantera', strength: 0.68, type: 'similar' },
+      { id: 'vitalik', strength: 0.72 },
+      { id: 'pantera', strength: 0.68 },
     ],
   },
   {
@@ -75,8 +72,8 @@ const actorsData = [
     frontRuns: ['dwf-labs'],
     followedBy: [],
     correlations: [
-      { id: 'pantera', strength: 0.76, type: 'similar' },
-      { id: 'dwf-labs', strength: 0.52, type: 'follows' },
+      { id: 'pantera', strength: 0.76 },
+      { id: 'dwf-labs', strength: 0.52 },
     ],
   },
   {
@@ -93,8 +90,8 @@ const actorsData = [
     frontRuns: ['vitalik', 'dwf-labs'],
     followedBy: [],
     correlations: [
-      { id: 'a16z', strength: 0.68, type: 'similar' },
-      { id: 'vitalik', strength: 0.71, type: 'similar' },
+      { id: 'a16z', strength: 0.68 },
+      { id: 'vitalik', strength: 0.71 },
     ],
   },
   {
@@ -111,8 +108,8 @@ const actorsData = [
     frontRuns: [],
     followedBy: ['pantera'],
     correlations: [
-      { id: 'a16z', strength: 0.72, type: 'similar' },
-      { id: 'pantera', strength: 0.71, type: 'similar' },
+      { id: 'a16z', strength: 0.72 },
+      { id: 'pantera', strength: 0.71 },
     ],
   },
   {
@@ -129,7 +126,7 @@ const actorsData = [
     frontRuns: [],
     followedBy: [],
     correlations: [
-      { id: 'jump-trading', strength: 0.64, type: 'similar' },
+      { id: 'jump-trading', strength: 0.64 },
     ],
   },
   {
@@ -146,7 +143,7 @@ const actorsData = [
     frontRuns: [],
     followedBy: [],
     correlations: [
-      { id: 'wintermute', strength: 0.64, type: 'similar' },
+      { id: 'wintermute', strength: 0.64 },
     ],
   },
   {
@@ -163,7 +160,7 @@ const actorsData = [
     frontRuns: [],
     followedBy: ['alameda', 'pantera'],
     correlations: [
-      { id: 'unknown-whale-1', strength: 0.68, type: 'similar' },
+      { id: 'unknown-whale-1', strength: 0.68 },
     ],
   },
   {
@@ -180,63 +177,48 @@ const actorsData = [
     frontRuns: [],
     followedBy: ['vitalik'],
     correlations: [
-      { id: 'dwf-labs', strength: 0.68, type: 'similar' },
+      { id: 'dwf-labs', strength: 0.68 },
     ],
   },
 ];
 
 // ==================== UTILITIES ====================
 
-// Normalize value to 0-1 range
 const normalize = (value, min, max) => {
   if (max === min) return 0.5;
   return Math.max(0, Math.min(1, (value - min) / (max - min)));
 };
 
-// Calculate normalized Influence Score (0-100)
 const calculateInfluenceScore = (actor, allActors) => {
-  // Get min/max for normalization
   const maxFollowers = Math.max(...allActors.map(a => a.followers_count));
   const maxLag = Math.max(...allActors.map(a => a.avg_follower_lag || 24));
   
   const followers_norm = normalize(actor.followers_count, 0, maxFollowers);
   const lag_norm = actor.avg_follower_lag > 0 
-    ? 1 - normalize(actor.avg_follower_lag, 0, maxLag) // Inverse: less lag = better
+    ? 1 - normalize(actor.avg_follower_lag, 0, maxLag)
     : 0;
   const consistency_norm = actor.consistency;
   const impact_norm = actor.market_impact;
   
-  const score = (
+  return Math.round((
     (followers_norm * 0.35) +
     (lag_norm * 0.25) +
     (consistency_norm * 0.25) +
     (impact_norm * 0.15)
-  ) * 100;
-  
-  return Math.round(score);
+  ) * 100);
 };
 
-// Determine role based on influence metrics
 const getRole = (actor) => {
   const leadsCount = actor.frontRuns?.length || 0;
   const followedByCount = actor.followedBy?.length || 0;
   
-  const leadsRatio = followedByCount > 0 ? leadsCount / followedByCount : leadsCount;
-  const followsRatio = leadsCount > 0 ? followedByCount / leadsCount : followedByCount;
-  
-  if (actor.followers_count >= 3 && leadsRatio >= 0.5) return 'Leader';
-  if (followedByCount >= 2 && followsRatio > 1.2) return 'Follower';
+  if (actor.followers_count >= 3 && leadsCount >= 0) return 'Leader';
+  if (followedByCount >= 2) return 'Follower';
   return 'Neutral';
-};
-
-// Clamp node size
-const clampSize = (influenceScore, min = 20, max = 60) => {
-  return Math.max(min, Math.min(max, min + (influenceScore / 100) * (max - min)));
 };
 
 // ==================== COMPONENTS ====================
 
-// Mode selector tabs
 const ModeSelector = ({ mode, setMode }) => (
   <div className="flex bg-gray-100 rounded-xl p-1 gap-1">
     {GRAPH_MODES.map(m => (
@@ -262,29 +244,29 @@ const ModeSelector = ({ mode, setMode }) => (
   </div>
 );
 
-// Influence Leaderboard
-const InfluenceLeaderboard = ({ actors, showRealNames, onSelectActor }) => {
+const InfluenceLeaderboard = ({ actors, showRealNames, onSelectActor, selectedId }) => {
   const sorted = [...actors].sort((a, b) => b.influenceScore - a.influenceScore);
   
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-4">
       <div className="flex items-center gap-2 mb-3">
         <Crown className="w-5 h-5 text-amber-500" />
-        <h3 className="font-bold text-gray-900">Influence Leaderboard</h3>
+        <h3 className="font-bold text-gray-900">Influence Leaders</h3>
       </div>
-      <p className="text-xs text-gray-500 mb-3">Market movers (not by PnL)</p>
       
-      <div className="space-y-1.5">
-        {sorted.slice(0, 10).map((actor, idx) => (
+      <div className="space-y-1">
+        {sorted.slice(0, 8).map((actor, idx) => (
           <button 
             key={actor.id}
             onClick={() => onSelectActor(actor)}
-            className="w-full flex items-center gap-2.5 p-2 rounded-lg hover:bg-gray-50 transition-colors text-left"
+            className={`w-full flex items-center gap-2 p-2 rounded-lg transition-colors text-left ${
+              selectedId === actor.id ? 'bg-violet-100 border border-violet-300' : 'hover:bg-gray-50'
+            }`}
           >
             <div className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${
               idx === 0 ? 'bg-amber-400 text-amber-900' :
               idx === 1 ? 'bg-gray-300 text-gray-700' :
-              idx === 2 ? 'bg-amber-600 text-amber-100' :
+              idx === 2 ? 'bg-amber-600 text-white' :
               'bg-gray-100 text-gray-500'
             }`}>
               {idx + 1}
@@ -293,13 +275,12 @@ const InfluenceLeaderboard = ({ actors, showRealNames, onSelectActor }) => {
               <div className="font-medium text-sm text-gray-900 truncate">
                 {showRealNames ? actor.real_name : actor.strategy_name}
               </div>
-              <div className="text-xs text-gray-400">{actor.strategy}</div>
             </div>
-            <div className="text-right">
-              <div className="font-bold text-violet-600 text-sm">{actor.influenceScore}</div>
-              <div className={`text-xs px-1.5 py-0.5 rounded ${ROLE_CONFIG[actor.role].bg} ${ROLE_CONFIG[actor.role].text}`}>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-violet-600 text-sm">{actor.influenceScore}</span>
+              <span className={`text-xs px-1.5 py-0.5 rounded ${ROLE_CONFIG[actor.role].bg} ${ROLE_CONFIG[actor.role].text}`}>
                 {actor.role}
-              </div>
+              </span>
             </div>
           </button>
         ))}
@@ -308,18 +289,101 @@ const InfluenceLeaderboard = ({ actors, showRealNames, onSelectActor }) => {
   );
 };
 
-// Strategy Flow Map
+const SelectedActorPanel = ({ actor, showRealNames, onClose, mode }) => {
+  if (!actor) return null;
+  
+  return (
+    <div className="bg-white border-2 border-violet-300 rounded-xl p-4 shadow-lg">
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-xs font-medium text-violet-600 uppercase">Selected</span>
+        <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded">
+          <X className="w-4 h-4 text-gray-400" />
+        </button>
+      </div>
+      
+      <div className="flex items-center gap-3 mb-4">
+        <div 
+          className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg border-2 border-white shadow-md"
+          style={{ backgroundColor: STRATEGY_COLORS[actor.strategy] || STRATEGY_COLORS.Default }}
+        >
+          {actor.influenceScore}
+        </div>
+        <div className="flex-1">
+          <div className="font-bold text-gray-900">
+            {showRealNames ? actor.real_name : actor.strategy_name}
+          </div>
+          <div className="flex items-center gap-2 text-xs text-gray-500">
+            <span>{actor.strategy}</span>
+            <span>•</span>
+            <span className={ROLE_CONFIG[actor.role].text}>
+              {ROLE_CONFIG[actor.role].icon} {actor.role}
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      {/* Metrics Grid */}
+      <div className="grid grid-cols-2 gap-2 mb-4">
+        <div className="bg-gray-50 rounded-lg p-2">
+          <div className="text-xs text-gray-500">Edge Score</div>
+          <div className="font-bold text-gray-900">{actor.edgeScore}</div>
+        </div>
+        <div className="bg-gray-50 rounded-lg p-2">
+          <div className="text-xs text-gray-500">Followers</div>
+          <div className="font-bold text-gray-900">{actor.followers_count}</div>
+        </div>
+        {mode === 'copy' && (
+          <>
+            <div className="bg-amber-50 rounded-lg p-2">
+              <div className="text-xs text-amber-600">Avg Lead</div>
+              <div className="font-bold text-amber-700">{actor.avg_follower_lag || 0}h</div>
+            </div>
+            <div className="bg-emerald-50 rounded-lg p-2">
+              <div className="text-xs text-emerald-600">Consistency</div>
+              <div className="font-bold text-emerald-700">{Math.round(actor.consistency * 100)}%</div>
+            </div>
+          </>
+        )}
+      </div>
+      
+      {/* Relationships */}
+      {(actor.frontRuns?.length > 0 || actor.followedBy?.length > 0) && (
+        <div className="border-t border-gray-100 pt-3 mb-4 space-y-2">
+          {actor.frontRuns?.length > 0 && (
+            <div className="text-xs">
+              <span className="text-amber-600 font-medium">Front-runs:</span>
+              <span className="text-gray-600 ml-1">{actor.frontRuns.join(', ')}</span>
+            </div>
+          )}
+          {actor.followedBy?.length > 0 && (
+            <div className="text-xs">
+              <span className="text-violet-600 font-medium">Followed by:</span>
+              <span className="text-gray-600 ml-1">{actor.followedBy.join(', ')}</span>
+            </div>
+          )}
+        </div>
+      )}
+      
+      <Link 
+        to={`/actors/${actor.id}`}
+        className="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors text-sm font-medium"
+      >
+        View Profile <ArrowRight className="w-4 h-4" />
+      </Link>
+    </div>
+  );
+};
+
 const StrategyFlowMap = () => {
-  const phases = ['Accumulating', 'Active', 'Rotating', 'Distributing'];
+  const phases = ['Accum', 'Active', 'Rotate', 'Dist'];
   const strategies = ['Smart Money', 'Infrastructure', 'Momentum', 'Meme', 'Market Maker'];
   
-  // Mock activity matrix
   const matrix = {
-    'Smart Money': { 'Accumulating': 3, 'Active': 1, 'Rotating': 0, 'Distributing': 0 },
-    'Infrastructure': { 'Accumulating': 2, 'Active': 0, 'Rotating': 1, 'Distributing': 0 },
-    'Momentum': { 'Accumulating': 1, 'Active': 2, 'Rotating': 1, 'Distributing': 0 },
-    'Meme': { 'Accumulating': 0, 'Active': 1, 'Rotating': 0, 'Distributing': 1 },
-    'Market Maker': { 'Accumulating': 0, 'Active': 0, 'Rotating': 2, 'Distributing': 0 },
+    'Smart Money': [3, 1, 0, 0],
+    'Infrastructure': [2, 0, 1, 0],
+    'Momentum': [1, 2, 1, 0],
+    'Meme': [0, 1, 0, 1],
+    'Market Maker': [0, 0, 2, 0],
   };
   
   const getIntensity = (count) => {
@@ -333,138 +397,33 @@ const StrategyFlowMap = () => {
     <div className="bg-white border border-gray-200 rounded-xl p-4">
       <div className="flex items-center gap-2 mb-3">
         <Activity className="w-5 h-5 text-violet-500" />
-        <h3 className="font-bold text-gray-900">Strategy Flow Map</h3>
+        <h3 className="font-bold text-gray-900">Strategy Flow</h3>
       </div>
-      <p className="text-xs text-gray-500 mb-3">Activity by strategy × phase</p>
       
-      <div className="overflow-x-auto">
-        <table className="w-full text-xs">
-          <thead>
-            <tr>
-              <th className="text-left p-1.5 text-gray-500 font-medium"></th>
-              {phases.map(p => (
-                <th key={p} className="p-1.5 text-gray-500 font-medium text-center w-14">{p.slice(0, 4)}</th>
+      <table className="w-full text-xs">
+        <thead>
+          <tr>
+            <th className="text-left p-1 text-gray-400"></th>
+            {phases.map(p => (
+              <th key={p} className="p-1 text-gray-500 font-medium text-center">{p}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {strategies.map(s => (
+            <tr key={s}>
+              <td className="p-1 font-medium text-gray-600 text-xs truncate max-w-[80px]">{s.split(' ')[0]}</td>
+              {matrix[s].map((count, i) => (
+                <td key={i} className="p-0.5">
+                  <div className={`w-7 h-7 mx-auto rounded flex items-center justify-center font-bold text-xs ${getIntensity(count)}`}>
+                    {count || ''}
+                  </div>
+                </td>
               ))}
             </tr>
-          </thead>
-          <tbody>
-            {strategies.map(s => (
-              <tr key={s}>
-                <td className="p-1.5 font-medium text-gray-700 text-xs whitespace-nowrap">{s}</td>
-                {phases.map(p => (
-                  <td key={p} className="p-1">
-                    <div className={`w-8 h-8 mx-auto rounded flex items-center justify-center font-bold text-xs ${getIntensity(matrix[s]?.[p] || 0)}`}>
-                      {matrix[s]?.[p] || 0}
-                    </div>
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-};
-
-// Copy Trading Metrics Panel (for Copy mode)
-const CopyTradingPanel = ({ selectedActor }) => {
-  if (!selectedActor) return null;
-  
-  const metrics = {
-    avgLeadTime: selectedActor.avg_follower_lag ? `${selectedActor.avg_follower_lag.toFixed(1)}h` : 'N/A',
-    followerSuccess: '+11%',  // Mock
-    slippageRisk: selectedActor.influenceScore > 70 ? 'Low' : selectedActor.influenceScore > 40 ? 'Medium' : 'High',
-    bestEntryWindow: selectedActor.avg_follower_lag ? `0-${Math.round(selectedActor.avg_follower_lag / 2)}h` : 'N/A',
-  };
-  
-  return (
-    <div className="bg-gradient-to-br from-violet-50 to-purple-50 border border-violet-200 rounded-xl p-4">
-      <div className="flex items-center gap-2 mb-3">
-        <Copy className="w-5 h-5 text-violet-600" />
-        <h3 className="font-bold text-gray-900">Copy Metrics</h3>
-      </div>
-      
-      <div className="grid grid-cols-2 gap-3">
-        <div className="bg-white rounded-lg p-2.5">
-          <div className="text-xs text-gray-500">Avg Lead Time</div>
-          <div className="font-bold text-gray-900">{metrics.avgLeadTime}</div>
-        </div>
-        <div className="bg-white rounded-lg p-2.5">
-          <div className="text-xs text-gray-500">Follower Success</div>
-          <div className="font-bold text-emerald-600">{metrics.followerSuccess}</div>
-        </div>
-        <div className="bg-white rounded-lg p-2.5">
-          <div className="text-xs text-gray-500">Slippage Risk</div>
-          <div className={`font-bold ${
-            metrics.slippageRisk === 'Low' ? 'text-emerald-600' :
-            metrics.slippageRisk === 'Medium' ? 'text-amber-600' : 'text-red-600'
-          }`}>{metrics.slippageRisk}</div>
-        </div>
-        <div className="bg-white rounded-lg p-2.5">
-          <div className="text-xs text-gray-500">Best Entry</div>
-          <div className="font-bold text-gray-900">{metrics.bestEntryWindow}</div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Selected Actor Panel
-const SelectedActorPanel = ({ actor, showRealNames, onClose }) => {
-  if (!actor) return null;
-  
-  return (
-    <div className="bg-white border border-violet-200 rounded-xl p-4">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="font-bold text-gray-900">Selected Actor</h3>
-        <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded">
-          <X className="w-4 h-4 text-gray-400" />
-        </button>
-      </div>
-      
-      <div className="flex items-center gap-3 mb-3">
-        <div 
-          className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold"
-          style={{ backgroundColor: STRATEGY_COLORS[actor.strategy] || STRATEGY_COLORS.Default }}
-        >
-          {actor.influenceScore}
-        </div>
-        <div className="flex-1">
-          <div className="font-bold text-gray-900">
-            {showRealNames ? actor.real_name : actor.strategy_name}
-          </div>
-          <div className="text-xs text-gray-500">{actor.strategy}</div>
-        </div>
-      </div>
-      
-      <div className="grid grid-cols-2 gap-2 mb-3 text-xs">
-        <div className="bg-gray-50 rounded p-2">
-          <div className="text-gray-500">Edge Score</div>
-          <div className="font-bold text-gray-900">{actor.edgeScore}</div>
-        </div>
-        <div className="bg-gray-50 rounded p-2">
-          <div className="text-gray-500">Role</div>
-          <div className={`font-bold ${ROLE_CONFIG[actor.role].text}`}>
-            {ROLE_CONFIG[actor.role].icon} {actor.role}
-          </div>
-        </div>
-        <div className="bg-gray-50 rounded p-2">
-          <div className="text-gray-500">Followers</div>
-          <div className="font-bold text-gray-900">{actor.followers_count}</div>
-        </div>
-        <div className="bg-gray-50 rounded p-2">
-          <div className="text-gray-500">Consistency</div>
-          <div className="font-bold text-gray-900">{Math.round(actor.consistency * 100)}%</div>
-        </div>
-      </div>
-      
-      <Link 
-        to={`/actors/${actor.id}`}
-        className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors text-sm font-medium"
-      >
-        View Full Profile <ArrowRight className="w-4 h-4" />
-      </Link>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
@@ -473,14 +432,14 @@ const SelectedActorPanel = ({ actor, showRealNames, onClose }) => {
 
 export default function CorrelationPage() {
   const [mode, setMode] = useState('influence');
+  const [use3D, setUse3D] = useState(false);
   const [showRealNames, setShowRealNames] = useState(false);
   const [selectedActor, setSelectedActor] = useState(null);
   const [expandedView, setExpandedView] = useState(false);
-  const [chainFilter, setChainFilter] = useState('All');
-  const [strategyFilter, setStrategyFilter] = useState('All');
+  const [hoveredNode, setHoveredNode] = useState(null);
   const graphRef = useRef();
   
-  // Process actors with calculated metrics
+  // Process actors
   const processedActors = useMemo(() => {
     return actorsData.map(actor => ({
       ...actor,
@@ -489,35 +448,22 @@ export default function CorrelationPage() {
     }));
   }, []);
   
-  // Filter actors for graph (two-level filtering)
+  // Filter actors
   const filteredActors = useMemo(() => {
     let result = processedActors;
     
-    // Apply UI filters
-    if (chainFilter !== 'All') {
-      result = result.filter(a => a.chain === chainFilter);
-    }
-    if (strategyFilter !== 'All') {
-      result = result.filter(a => a.strategy === strategyFilter);
-    }
-    
-    // Auto-limit (unless expanded)
     if (!expandedView) {
-      // Keep actors that match: influenceScore > 50 OR Leader OR strong correlation
       result = result.filter(a => 
-        a.influenceScore > 50 || 
+        a.influenceScore > 40 || 
         a.role === 'Leader' ||
         a.correlations?.some(c => c.strength > 0.5)
       );
-      
-      // Limit to max 15
-      result = result.slice(0, 15);
     }
     
     return result;
-  }, [processedActors, chainFilter, strategyFilter, expandedView]);
+  }, [processedActors, expandedView]);
   
-  // Build graph data based on mode
+  // Build graph data
   const graphData = useMemo(() => {
     const nodes = filteredActors.map(actor => ({
       id: actor.id,
@@ -525,10 +471,11 @@ export default function CorrelationPage() {
       strategy: actor.strategy,
       influenceScore: actor.influenceScore,
       role: actor.role,
-      edgeScore: actor.edgeScore,
       color: STRATEGY_COLORS[actor.strategy] || STRATEGY_COLORS.Default,
-      size: clampSize(actor.influenceScore),
-      // Full actor data for click handling
+      // Size based on influence - leaders bigger
+      val: actor.role === 'Leader' 
+        ? 8 + actor.influenceScore * 0.15 
+        : 4 + actor.influenceScore * 0.08,
       ...actor,
     }));
     
@@ -536,9 +483,8 @@ export default function CorrelationPage() {
     const nodeIds = new Set(nodes.map(n => n.id));
     
     if (mode === 'influence' || mode === 'copy') {
-      // Directed edges: front-runs and follows
+      // Directed edges
       filteredActors.forEach(actor => {
-        // Front-run edges (yellow, thicker)
         actor.frontRuns?.forEach(targetId => {
           if (nodeIds.has(targetId)) {
             links.push({
@@ -547,12 +493,11 @@ export default function CorrelationPage() {
               type: 'frontrun',
               color: '#f59e0b',
               width: 3,
-              label: mode === 'copy' ? `Leads by ${actor.avg_follower_lag || '?'}h` : null,
+              curvature: 0.2,
             });
           }
         });
         
-        // Follow edges (purple, thinner)
         actor.followedBy?.forEach(sourceId => {
           if (nodeIds.has(sourceId)) {
             links.push({
@@ -561,14 +506,14 @@ export default function CorrelationPage() {
               type: 'follow',
               color: '#8b5cf6',
               width: 1.5,
+              curvature: 0.15,
             });
           }
         });
       });
-    } else if (mode === 'clusters') {
-      // Undirected edges based on correlation strength
+    } else {
+      // Clusters mode - undirected by correlation
       const addedPairs = new Set();
-      
       filteredActors.forEach(actor => {
         actor.correlations?.forEach(corr => {
           if (nodeIds.has(corr.id) && corr.strength > 0.3) {
@@ -579,8 +524,9 @@ export default function CorrelationPage() {
                 source: actor.id,
                 target: corr.id,
                 type: 'correlation',
-                color: `rgba(139, 92, 246, ${corr.strength})`, // Opacity = strength
-                width: corr.strength * 3,
+                color: `rgba(139, 92, 246, ${corr.strength})`,
+                width: corr.strength * 4,
+                strength: corr.strength,
               });
             }
           }
@@ -591,52 +537,120 @@ export default function CorrelationPage() {
     return { nodes, links };
   }, [filteredActors, mode, showRealNames]);
   
-  // Node canvas renderer
-  const nodeCanvasRenderer = useCallback((node, ctx, globalScale) => {
-    const size = node.size / 2;
-    const fontSize = 10 / globalScale;
+  // Custom force configuration
+  useEffect(() => {
+    if (graphRef.current) {
+      const fg = graphRef.current;
+      
+      // Configure forces based on mode
+      if (mode === 'influence' || mode === 'copy') {
+        // Leaders closer to center, followers on orbit
+        fg.d3Force('charge')?.strength(node => 
+          node.role === 'Leader' ? -300 : -150
+        );
+        fg.d3Force('link')?.distance(link => 
+          link.type === 'frontrun' ? 80 : 120
+        );
+      } else {
+        // Clusters mode - group by strategy
+        fg.d3Force('charge')?.strength(-180);
+        fg.d3Force('link')?.distance(link => 
+          60 + 150 * (1 - (link.strength || 0.5))
+        );
+      }
+      
+      fg.d3ReheatSimulation();
+    }
+  }, [mode, graphData]);
+  
+  // Handle node click
+  const handleNodeClick = useCallback((node) => {
+    const actor = processedActors.find(a => a.id === node.id);
+    setSelectedActor(actor);
     
-    // Draw node circle
+    if (graphRef.current) {
+      if (use3D) {
+        graphRef.current.cameraPosition(
+          { x: node.x, y: node.y, z: 200 },
+          node,
+          1000
+        );
+      } else {
+        graphRef.current.centerAt(node.x, node.y, 500);
+        graphRef.current.zoom(3, 500);
+      }
+    }
+  }, [processedActors, use3D]);
+  
+  // Reset view
+  const handleReset = useCallback(() => {
+    if (graphRef.current) {
+      if (use3D) {
+        graphRef.current.cameraPosition({ x: 0, y: 0, z: 500 }, { x: 0, y: 0, z: 0 }, 1000);
+      } else {
+        graphRef.current.centerAt(0, 0, 500);
+        graphRef.current.zoom(1, 500);
+      }
+    }
+    setSelectedActor(null);
+  }, [use3D]);
+  
+  // 2D Node canvas renderer
+  const nodeCanvasRenderer = useCallback((node, ctx, globalScale) => {
+    const size = Math.sqrt(node.val) * 4;
+    const isSelected = selectedActor?.id === node.id;
+    const isHovered = hoveredNode?.id === node.id;
+    
+    // Glow for selected/hovered
+    if (isSelected || isHovered) {
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, size + 4, 0, 2 * Math.PI);
+      ctx.fillStyle = isSelected ? 'rgba(139, 92, 246, 0.3)' : 'rgba(255, 255, 255, 0.2)';
+      ctx.fill();
+    }
+    
+    // Main circle
     ctx.beginPath();
     ctx.arc(node.x, node.y, size, 0, 2 * Math.PI);
     ctx.fillStyle = node.color;
     ctx.fill();
     
-    // Draw border for leaders
+    // Leader golden ring
     if (node.role === 'Leader') {
       ctx.strokeStyle = '#fbbf24';
       ctx.lineWidth = 3 / globalScale;
       ctx.stroke();
     }
     
-    // Draw influence score
+    // Score text
     ctx.fillStyle = '#fff';
-    ctx.font = `bold ${fontSize * 1.2}px Sans-Serif`;
+    ctx.font = `bold ${12 / globalScale}px Arial`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(node.influenceScore, node.x, node.y);
     
-    // Draw label below
-    if (globalScale > 0.5) {
-      ctx.fillStyle = '#374151';
-      ctx.font = `${fontSize}px Sans-Serif`;
-      const label = node.name.length > 15 ? node.name.slice(0, 15) + '...' : node.name;
-      ctx.fillText(label, node.x, node.y + size + 10 / globalScale);
+    // Label on hover/zoom
+    if (globalScale > 1.5 || isHovered || isSelected) {
+      ctx.fillStyle = '#1f2937';
+      ctx.font = `${10 / globalScale}px Arial`;
+      const label = node.name.length > 18 ? node.name.slice(0, 16) + '...' : node.name;
+      ctx.fillText(label, node.x, node.y + size + 12 / globalScale);
       
-      // Draw role badge
+      // Role badge
       ctx.fillStyle = ROLE_CONFIG[node.role]?.color || '#64748b';
-      ctx.font = `bold ${fontSize * 0.8}px Sans-Serif`;
-      ctx.fillText(node.role, node.x, node.y + size + 20 / globalScale);
+      ctx.font = `bold ${8 / globalScale}px Arial`;
+      ctx.fillText(node.role, node.x, node.y + size + 22 / globalScale);
     }
-  }, []);
+  }, [selectedActor, hoveredNode]);
   
-  // Link canvas renderer
+  // Link renderer
   const linkCanvasRenderer = useCallback((link, ctx, globalScale) => {
     if (!link.source.x || !link.target.x) return;
     
     const start = link.source;
     const end = link.target;
     
+    // Draw line
     ctx.beginPath();
     ctx.moveTo(start.x, start.y);
     ctx.lineTo(end.x, end.y);
@@ -644,32 +658,30 @@ export default function CorrelationPage() {
     ctx.lineWidth = link.width / globalScale;
     
     if (link.type === 'follow') {
-      ctx.setLineDash([5 / globalScale, 5 / globalScale]);
+      ctx.setLineDash([4 / globalScale, 4 / globalScale]);
     } else {
       ctx.setLineDash([]);
     }
-    
     ctx.stroke();
     ctx.setLineDash([]);
     
-    // Draw arrow for directed edges
+    // Arrow for directed edges
     if (link.type === 'frontrun' || link.type === 'follow') {
       const angle = Math.atan2(end.y - start.y, end.x - start.x);
-      const arrowLength = 8 / globalScale;
-      const targetRadius = (end.size || 20) / 2;
-      
-      const arrowX = end.x - Math.cos(angle) * targetRadius;
-      const arrowY = end.y - Math.sin(angle) * targetRadius;
+      const targetSize = Math.sqrt(end.val || 5) * 4;
+      const arrowX = end.x - Math.cos(angle) * (targetSize + 4);
+      const arrowY = end.y - Math.sin(angle) * (targetSize + 4);
+      const arrowLen = 8 / globalScale;
       
       ctx.beginPath();
       ctx.moveTo(arrowX, arrowY);
       ctx.lineTo(
-        arrowX - arrowLength * Math.cos(angle - Math.PI / 6),
-        arrowY - arrowLength * Math.sin(angle - Math.PI / 6)
+        arrowX - arrowLen * Math.cos(angle - Math.PI / 6),
+        arrowY - arrowLen * Math.sin(angle - Math.PI / 6)
       );
       ctx.lineTo(
-        arrowX - arrowLength * Math.cos(angle + Math.PI / 6),
-        arrowY - arrowLength * Math.sin(angle + Math.PI / 6)
+        arrowX - arrowLen * Math.cos(angle + Math.PI / 6),
+        arrowY - arrowLen * Math.sin(angle + Math.PI / 6)
       );
       ctx.closePath();
       ctx.fillStyle = link.color;
@@ -677,168 +689,211 @@ export default function CorrelationPage() {
     }
   }, []);
   
-  // Handle node click
-  const handleNodeClick = useCallback((node) => {
-    setSelectedActor(node);
-    if (graphRef.current) {
-      graphRef.current.centerAt(node.x, node.y, 500);
-      graphRef.current.zoom(2, 500);
-    }
-  }, []);
+  // Common graph props
+  const graphProps = {
+    ref: graphRef,
+    graphData: graphData,
+    nodeRelSize: 1,
+    onNodeClick: handleNodeClick,
+    onNodeHover: setHoveredNode,
+    onBackgroundClick: () => setSelectedActor(null),
+    cooldownTicks: 100,
+    linkDirectionalParticles: mode !== 'clusters' ? 2 : 0,
+    linkDirectionalParticleWidth: 2,
+    linkDirectionalParticleSpeed: 0.006,
+    linkCurvature: link => link.curvature || 0,
+    d3AlphaDecay: 0.02,
+    d3VelocityDecay: 0.25,
+  };
   
   return (
     <TooltipProvider>
       <div className="min-h-screen bg-gray-50">
         <Header />
         
-        <main className="max-w-[1800px] mx-auto px-6 py-6">
+        <main className="max-w-[1800px] mx-auto px-6 py-4">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-4">
             <div>
               <div className="flex items-center gap-3">
-                <Network className="w-8 h-8 text-violet-600" />
-                <h1 className="text-2xl font-bold text-gray-900">Influence Graph</h1>
+                <Network className="w-7 h-7 text-violet-600" />
+                <h1 className="text-xl font-bold text-gray-900">Influence Graph</h1>
               </div>
-              <p className="text-gray-500 mt-1">
-                Visualize market leaders, followers, and strategy patterns
+              <p className="text-sm text-gray-500">
+                Who leads, who follows, who to copy
               </p>
             </div>
             
-            {/* Identity Toggle */}
-            <button
-              onClick={() => setShowRealNames(!showRealNames)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-gray-200 hover:border-gray-300 transition-colors"
-            >
-              {showRealNames ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-              <span className="text-sm font-medium">{showRealNames ? 'Real Names' : 'Strategies'}</span>
-            </button>
+            <div className="flex items-center gap-2">
+              {/* 2D/3D Toggle */}
+              <div className="flex bg-gray-100 rounded-lg p-0.5">
+                <button
+                  onClick={() => setUse3D(false)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition ${
+                    !use3D ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500'
+                  }`}
+                >
+                  <Square className="w-3.5 h-3.5" /> 2D
+                </button>
+                <button
+                  onClick={() => setUse3D(true)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition ${
+                    use3D ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500'
+                  }`}
+                >
+                  <Box className="w-3.5 h-3.5" /> 3D
+                </button>
+              </div>
+              
+              {/* Identity Toggle */}
+              <button
+                onClick={() => setShowRealNames(!showRealNames)}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-gray-200 hover:border-gray-300 text-sm"
+              >
+                {showRealNames ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                {showRealNames ? 'Real' : 'Strategy'}
+              </button>
+            </div>
           </div>
           
-          {/* Mode Selector */}
-          <div className="flex items-center justify-between mb-6">
+          {/* Controls Bar */}
+          <div className="flex items-center justify-between mb-4">
             <ModeSelector mode={mode} setMode={setMode} />
             
-            {/* Filters & Actions */}
-            <div className="flex items-center gap-3">
-              {/* Chain filter */}
-              <select
-                value={chainFilter}
-                onChange={(e) => setChainFilter(e.target.value)}
-                className="px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white"
-              >
-                <option value="All">All Chains</option>
-                <option value="ETH">ETH</option>
-                <option value="SOL">SOL</option>
-              </select>
-              
-              {/* Strategy filter */}
-              <select
-                value={strategyFilter}
-                onChange={(e) => setStrategyFilter(e.target.value)}
-                className="px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white"
-              >
-                <option value="All">All Strategies</option>
-                {Object.keys(STRATEGY_COLORS).filter(s => s !== 'Default').map(s => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-              
-              {/* Expand toggle */}
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => setExpandedView(!expandedView)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition ${
                   expandedView 
                     ? 'bg-violet-100 text-violet-700' 
-                    : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+                    : 'bg-white border border-gray-200 text-gray-600'
                 }`}
               >
-                <Expand className="w-4 h-4" />
-                {expandedView ? 'Focused View' : 'Expand Graph'}
+                <Expand className="w-3.5 h-3.5" />
+                {expandedView ? 'Focused' : 'Expand'}
+              </button>
+              
+              <button
+                onClick={handleReset}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                Reset
               </button>
             </div>
           </div>
           
           {/* Legend */}
-          <div className="flex items-center gap-6 mb-4 px-4 py-2 bg-white rounded-lg border border-gray-100 text-xs text-gray-500">
-            <span className="font-medium text-gray-700">Legend:</span>
+          <div className="flex items-center gap-4 mb-3 px-3 py-2 bg-white rounded-lg border text-xs text-gray-500">
             <span className="flex items-center gap-1.5">
-              <div className="w-4 h-1 bg-amber-400 rounded"></div>
+              <div className="w-4 h-0.5 bg-amber-400 rounded"></div>
               <Zap className="w-3 h-3 text-amber-500" /> Front-runs
             </span>
             <span className="flex items-center gap-1.5">
-              <div className="w-4 h-0.5 bg-violet-400" style={{ borderTop: '2px dashed #8b5cf6' }}></div>
+              <div className="w-4 border-t-2 border-dashed border-violet-400"></div>
               <Users className="w-3 h-3 text-violet-500" /> Follows
             </span>
             <span className="flex items-center gap-1.5">
-              <Crown className="w-3 h-3 text-amber-400" /> Leader (gold border)
+              <Crown className="w-3 h-3 text-amber-400" /> Leader
             </span>
             <span className="ml-auto text-gray-400">
-              Showing {filteredActors.length} actors
-              {!expandedView && ' (auto-filtered)'}
+              {filteredActors.length} actors
             </span>
           </div>
           
-          {/* Main content */}
-          <div className="grid grid-cols-12 gap-6">
-            {/* Graph */}
-            <div className="col-span-12 lg:col-span-8 bg-gray-900 rounded-2xl overflow-hidden" style={{ height: '600px' }}>
-              <ForceGraph2D
-                ref={graphRef}
-                graphData={graphData}
-                nodeCanvasObject={nodeCanvasRenderer}
-                linkCanvasObject={linkCanvasRenderer}
-                nodeRelSize={1}
-                linkDirectionalParticles={mode !== 'clusters' ? 2 : 0}
-                linkDirectionalParticleWidth={2}
-                linkDirectionalParticleSpeed={0.005}
-                onNodeClick={handleNodeClick}
-                onBackgroundClick={() => setSelectedActor(null)}
-                cooldownTicks={100}
-                d3AlphaDecay={0.02}
-                d3VelocityDecay={0.3}
-                backgroundColor="#111827"
-                width={undefined}
-                height={600}
-              />
+          {/* Main Grid */}
+          <div className="grid grid-cols-12 gap-4">
+            {/* Graph Container */}
+            <div className="col-span-12 lg:col-span-8 bg-gray-900 rounded-2xl overflow-hidden relative" style={{ height: '550px' }}>
+              {use3D ? (
+                <ForceGraph3D
+                  {...graphProps}
+                  nodeThreeObject={node => {
+                    const size = Math.sqrt(node.val) * 3;
+                    const geometry = new window.THREE.SphereGeometry(size);
+                    const material = new window.THREE.MeshBasicMaterial({ 
+                      color: node.color,
+                      transparent: true,
+                      opacity: 0.9,
+                    });
+                    return new window.THREE.Mesh(geometry, material);
+                  }}
+                  nodeLabel={node => `
+                    <div style="background:#1f2937;padding:8px 12px;border-radius:8px;color:white;font-size:12px;">
+                      <div style="font-weight:bold;">${node.name}</div>
+                      <div style="color:#9ca3af;font-size:11px;">${node.strategy}</div>
+                      <div style="margin-top:4px;">
+                        <span style="color:#a78bfa;">Influence: ${node.influenceScore}</span>
+                        <span style="margin-left:8px;color:${ROLE_CONFIG[node.role].color}">${node.role}</span>
+                      </div>
+                    </div>
+                  `}
+                  linkColor={link => link.color}
+                  linkWidth={link => link.width}
+                  linkOpacity={0.8}
+                  backgroundColor="#111827"
+                />
+              ) : (
+                <ForceGraph2D
+                  {...graphProps}
+                  nodeCanvasObject={nodeCanvasRenderer}
+                  linkCanvasObject={linkCanvasRenderer}
+                  backgroundColor="#111827"
+                />
+              )}
+              
+              {/* Zoom hint */}
+              <div className="absolute bottom-3 left-3 text-xs text-gray-500 bg-gray-800/80 px-2 py-1 rounded">
+                Scroll to zoom • Drag to pan • Click node to focus
+              </div>
             </div>
             
-            {/* Right sidebar */}
+            {/* Sidebar */}
             <div className="col-span-12 lg:col-span-4 space-y-4">
-              {/* Selected Actor */}
               <SelectedActorPanel 
                 actor={selectedActor} 
                 showRealNames={showRealNames}
                 onClose={() => setSelectedActor(null)}
+                mode={mode}
               />
               
-              {/* Copy Trading Metrics (only in copy mode) */}
-              {mode === 'copy' && selectedActor && (
-                <CopyTradingPanel selectedActor={selectedActor} />
-              )}
-              
-              {/* Leaderboard */}
               <InfluenceLeaderboard 
                 actors={processedActors} 
                 showRealNames={showRealNames}
-                onSelectActor={setSelectedActor}
+                onSelectActor={(actor) => {
+                  setSelectedActor(actor);
+                  // Find node and center on it
+                  const node = graphData.nodes.find(n => n.id === actor.id);
+                  if (node && graphRef.current) {
+                    if (use3D) {
+                      graphRef.current.cameraPosition(
+                        { x: node.x || 0, y: node.y || 0, z: 200 },
+                        node,
+                        1000
+                      );
+                    } else {
+                      setTimeout(() => {
+                        graphRef.current.centerAt(node.x || 0, node.y || 0, 500);
+                        graphRef.current.zoom(2.5, 500);
+                      }, 100);
+                    }
+                  }
+                }}
+                selectedId={selectedActor?.id}
               />
               
-              {/* Strategy Flow Map */}
               <StrategyFlowMap />
             </div>
           </div>
           
-          {/* Strategy Colors Legend */}
-          <div className="mt-6 p-4 bg-white border border-gray-200 rounded-xl">
-            <h3 className="font-bold text-gray-900 mb-3">Strategy Colors</h3>
-            <div className="flex flex-wrap gap-3">
-              {Object.entries(STRATEGY_COLORS).filter(([k]) => k !== 'Default').map(([strategy, color]) => (
-                <div key={strategy} className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-200">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: color }}></div>
-                  <span className="text-sm font-medium text-gray-700">{strategy}</span>
-                </div>
-              ))}
-            </div>
+          {/* Strategy Colors */}
+          <div className="mt-4 flex flex-wrap gap-2">
+            {Object.entries(STRATEGY_COLORS).filter(([k]) => k !== 'Default').map(([strategy, color]) => (
+              <div key={strategy} className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-white border text-xs">
+                <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: color }}></div>
+                <span className="text-gray-600">{strategy}</span>
+              </div>
+            ))}
           </div>
         </main>
       </div>
